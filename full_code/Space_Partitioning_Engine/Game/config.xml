@@ -1,0 +1,55 @@
+<!-- Config file for the game -->
+
+<config>
+  <app>
+    <title>Mythology-Parade</title>
+    <organization>Misioneros-Studio</organization>
+  </app>
+	
+  <renderer>
+    <vsync value="true"/>
+  </renderer>
+
+  <window>
+    <resolution width="1280" height="720" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <gui>
+    <atlas_0 file="gui/ui.png"/>
+    <atlas_1 file="gui/Portaits.png"/>
+  </gui>
+
+  <fonts>
+    <default_font file="fonts/cinzel_family/Cinzel/Cinzel-Regular.ttf"/>
+  </fonts>
+
+  <console>
+    <input position_x="0" position_y="300" position_w="1024" position_h="21" red="0" blue="100" green="0" alpha="255"/>
+    <background position_x="0" position_y="0" position_w="1024" position_h="300" red="0" blue="0" green="0" alpha="255"/>
+    <output position_x="0" position_y="0" position_w="1024" position_h="18" d_area_x="0" d_area_y="-100000" d_area_w="0" d_area_h="200000"/>
+  </console>
+
+  <title_scene/>
+
+  <scene/>
+  
+  <map>
+    <folder>maps/</folder>
+  </map>
+
+  <minimap>
+    <measurements width="230" corner="bottom_right" margin="5"/>
+  </minimap> 
+  
+  <entity_manager>
+    
+    <buildings file="assets/buildings/buildings.tmx"/>
+      
+    
+  </entity_manager>
+
+</config>
