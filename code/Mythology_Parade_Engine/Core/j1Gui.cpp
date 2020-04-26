@@ -7,9 +7,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Gui.h"
-#include "j1Minimap.h"
 #include "Console.h"
-#include "j1Audio.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -100,11 +98,6 @@ bool j1Gui::PostUpdate()
 			it._Ptr->_Myval->PostUpdate();
 		}
 	}
-
-	iPoint rect_position = App->minimap->WorldToMinimap(-App->render->camera.x, -App->render->camera.y);
-	if(App->minimap->active==true)
-		App->render->DrawQuad({ rect_position.x, rect_position.y, (int)(App->render->camera.w * App->minimap->scale),(int)(App->render->camera.h * App->minimap->scale) }, 255, 255, 255, 255, 
-			false, false);
 
 	return true;
 }
@@ -769,7 +762,6 @@ bool ButtonUI::PreUpdate() {
 	else pushed = false;
 	if (pushed && !App->gui->lockClick && !isLocked)
 	{
-		App->audio->PlayFx(1,click_sfx);
 		//Button clicked
 		if (listener)
 		{

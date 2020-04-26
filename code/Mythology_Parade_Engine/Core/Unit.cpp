@@ -7,14 +7,7 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), _isSelected(false), moveSpeed(60)
 {
 	
-	if (App->entityManager->getPlayer())
-	{
-		displayDebug = App->entityManager->getPlayer()->displayDebug;
-	}
-	else
-	{
-		displayDebug = false;
-	}
+	displayDebug = false;
 
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
@@ -90,12 +83,6 @@ void Unit::MoveToTarget()
 	if (App->GetDT() >= 0.5f) 
 	{
 		speed = 0.f;
-	}
-
- 
-	if (Mix_Playing(3) == 0) 
-	{
-		App->entityManager->FxUnits(3, App->entityManager->Walking_troops, position.x, position.y);
 	}
 
 	iPoint targetIso = App->map->MapToWorld(targetPosition.x, targetPosition.y);

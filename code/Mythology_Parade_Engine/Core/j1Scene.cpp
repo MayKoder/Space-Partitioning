@@ -3,15 +3,12 @@
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
-#include "j1Audio.h"
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1PathFinding.h"
 #include "j1Gui.h"
 #include "j1Fonts.h"
 #include "EntityManager.h"
-#include "j1Minimap.h"
 #include "CombatUnit.h"
 #include "j1Scene.h"
 
@@ -43,11 +40,9 @@ bool j1Scene::Start()
 	{
 		int w, h;
 		uchar* data = NULL;
-		if (App->map->CreateWalkabilityMap(w, h, &data))
-			App->pathfinding->SetMap(w, h, data);
+		App->map->CreateWalkabilityMap(w, h, &data);
 
 		mapLimitsRect = App->map->GetMapRect();
-		App->pathfinding->maxPathLenght = App->map->GetMapMaxLenght();
 		App->entityManager->LoadBuildingsBlitRect();
 
 		RELEASE_ARRAY(data);
@@ -61,32 +56,18 @@ bool j1Scene::Start()
 	debugBlue_tex = App->tex->Load("maps/path2.png");
 	debugRed_tex = App->tex->Load("maps/cantBuild.png");
 
-	App->audio->CleanFxs();
-
-	App->gui->sfx_UI[(int)UI_Audio::SAVE] = App->audio->LoadFx("audio/ui/Save.wav");
-	App->gui->sfx_UI[(int)UI_Audio::LOAD] = App->audio->LoadFx("audio/ui/load.wav");
-	App->gui->sfx_UI[(int)UI_Audio::CONFIRMATION] = App->audio->LoadFx("audio/ui/Click_Standard2.wav");
-	App->gui->sfx_UI[(int)UI_Audio::OPTIONS] = App->audio->LoadFx("audio/ui/Settings_Click.wav");
-	App->gui->sfx_UI[(int)UI_Audio::RESTART] = App->audio->LoadFx("audio/ui/Restart.wav");
-	App->gui->sfx_UI[(int)UI_Audio::SURRENDER] = App->audio->LoadFx("audio/ui/Surrender.wav");
-	App->gui->sfx_UI[(int)UI_Audio::EXIT] = App->audio->LoadFx("audio/ui/Exit.wav");
-	App->gui->sfx_UI[(int)UI_Audio::CLOSE] = App->audio->LoadFx("audio/ui/Close_Menu.wav");
-
 
 	close_menus = CloseSceneMenus::None;
 
 	paused_game = false;
 
 
-	//iPoint position;
-	//iPoint size;
-	//position = App->map->WorldToMap(0, 0);
-	//size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
-	//quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
+	iPoint position;
+	iPoint size;
+	position = App->map->WorldToMap(0, 0);
+	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
+	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
 	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
-
-	//Creating players
-	App->entityManager->CreatePlayerEntity();
 
 	return true;
 }
@@ -95,85 +76,7 @@ bool j1Scene::Start()
 bool j1Scene::PreUpdate()
 {
 	// debug pathfing ------------------
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
-	{
-		//TMP: Temporal pathfinding debug
-		std::list<Entity*> list = App->entityManager->getPlayer()->GetEntitiesSelected();
-
-		if(list.size() > 0)
-		{
-			float n = App->entityManager->getPlayer()->GetEntitiesSelected().size();
-			float x = 0, y = 0;
-
-			for (std::list<Entity*>::iterator it = list.begin(); it != list.end(); it++)
-			{
-				x += it._Ptr->_Myval->position.x;
-				y += it._Ptr->_Myval->position.y;
-			}
-
-			x /= n;
-			y /= n;
-
-			iPoint origin = App->map->WorldToMap((int)x, (int)y);
-			iPoint ending = App->map->GetMousePositionOnMap();
-
-
-			int posX, posY;
-			App->input->GetMousePosition(posX, posY);
-			iPoint p = App->render->ScreenToWorld(posX, posY);
-			p = App->render->ScreenToWorld(posX, posY);
-
-			CivilizationType playerCiv = App->entityManager->getPlayer()->civilization;
-			bool attacking = false;
-
-			for (std::list<Entity*>::iterator it = App->entityManager->entities[EntityType::UNIT].begin(); it != App->entityManager->entities[EntityType::UNIT].end(); it++)
-			{
-				SDL_Rect collider = it._Ptr->_Myval->getCollisionRect();
-				if (it._Ptr->_Myval->civilization != playerCiv && EntityManager::IsPointInsideQuad(collider, p.x, p.y))
-				{
-					Unit* unt = nullptr;
-					for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-					{
-						unt = (Unit*)sel._Ptr->_Myval;
-						unt->enemyTarget = (Unit*)it._Ptr->_Myval;
-						attacking = true;
-					}
-				}
-			}
-
-			if (!attacking)
-			{
-				Unit* unt = nullptr;
-				for (std::list<Entity*>::iterator sel = list.begin(); sel != list.end(); sel++)
-				{
-					unt = (Unit*)sel._Ptr->_Myval;
-					unt->enemyTarget = nullptr;
-				}
-			}
-
-			if (origin != ending)
-				App->pathfinding->RequestPath(origin, ending, list);
-
-		}
-
-	}
-
-
-	// Move Camera if click on the minimap
-	int mouse_x, mouse_y;
-	if (((App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) || (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)) && paused_game == false)
-	{
-		App->input->GetMousePosition(mouse_x, mouse_y);
-		SDL_Rect minimap = { App->minimap->position.x +15, App->minimap->position.y + 7, App->minimap->width - 28, App->minimap->height -15};
-
-		if ((mouse_x > minimap.x) && (mouse_x < minimap.x + minimap.w) && (mouse_y > minimap.y) && (mouse_y < minimap.y + minimap.h))
-		{
-			iPoint minimap_mouse_position = App->minimap->ScreenToMinimapToWorld(mouse_x, mouse_y);
-			App->render->camera.x = -(minimap_mouse_position.x - App->render->camera.w * 0.5f);
-			App->render->camera.y = -(minimap_mouse_position.y - App->render->camera.h * 0.5f);
-		}
-	}
-
+	
 	return true;
 }
 
@@ -248,9 +151,7 @@ bool j1Scene::Update(float dt)
 
 
 	//Quad draw
-
-	//if (App->input->drawDebug)
-	//	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
+	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
 
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
@@ -302,9 +203,7 @@ bool j1Scene::CleanUp()
 void j1Scene::BackToTitleMenu() {
 	destroy = true;
 	App->map->destroy = true;
-	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
-	App->minimap->destroy = true;
 	//App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
 
 	//App->change_scene = true;
@@ -315,9 +214,7 @@ void j1Scene::RestartGame() {
 	App->restart_scene = true;
 	destroy = true;
 	App->map->destroy = true;
-	App->pathfinding->destroy = true;
 	App->entityManager->destroy = true;
-	App->minimap->destroy = true;
 }
 
 // Called to get the rect of the sprite of the portrait
@@ -357,40 +254,6 @@ SDL_Rect j1Scene::GetSpritePortrait(int type_of_portrait, UnitType unit_type) {
 	}
 	return sprite;
 
-}
-
-// Called to get the rect of the sprite of the portrait of the building
-SDL_Rect j1Scene::GetSpritePortraitBuilding(int type_of_portrait, BuildingType building_type, CivilizationType civilization) {
-	SDL_Rect sprite = { 0,0,0,0 };
-	if (type_of_portrait == 0) {
-		switch (building_type) {
-		case BuildingType::FORTRESS:
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 2,431,76,105 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 323,431,76,105 };
-			break;
-		case BuildingType::MONASTERY:
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 82,431,76,105 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 403,431,76,105 };
-			break;
-		case BuildingType::ENCAMPMENT:
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 162,431,76,105 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 483,431,76,105 };
-			break;
-		case BuildingType::TEMPLE:
-			if (civilization == CivilizationType::VIKING)
-				sprite = { 242,431,76,105 };
-			else if (civilization == CivilizationType::GREEK)
-				sprite = { 563,431,76,105 };
-			break;
-		}
-	}
-	return sprite;
 }
 
 void j1Scene::OnClick(UI* element, float argument)

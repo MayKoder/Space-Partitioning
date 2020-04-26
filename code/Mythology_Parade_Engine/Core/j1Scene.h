@@ -90,6 +90,8 @@ public:
 	bool paused_game;
 	bool godMode;
 
+	QuadTree* quadTree;
+
 	CloseSceneMenus close_menus;
 };
 

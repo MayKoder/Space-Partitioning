@@ -38,21 +38,11 @@ public:
 	int GetDamage() { return damage; }
 	int GetMaxCap() { return maxCap; }
 
-	void StartProducing(int time, std::string thing_producing);
-	void StartResearching(int time, std::string thing_producing);
-
-
-	void CreateUnit();
-
 private:
 
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
-
-	void Draw_Construction_Bar(int blitWidth, int bar_used = 0);
 	bool Draw(float dt);
-
-	void FinishProduction(std::string thing_produced);
 
 	//Stats
 	int defenses;

@@ -10,7 +10,6 @@ enum CivilizationType;
 
 enum class EntityType
 {
-	PLAYER,
 	UNIT,
 	BUILDING
 };

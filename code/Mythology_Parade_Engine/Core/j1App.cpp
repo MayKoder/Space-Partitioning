@@ -8,11 +8,8 @@
 #include "j1Input.h"
 #include "j1Render.h"
 #include "j1Textures.h"
-#include "j1Audio.h"
 #include "j1Scene.h"
-#include "j1Minimap.h"
 #include "j1Map.h"
-#include "j1Pathfinding.h"
 #include "j1Fonts.h"
 #include "j1Gui.h"
 #include "Console.h"
@@ -29,11 +26,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	win = new j1Window();
 	render = new j1Render();
 	tex = new j1Textures();
-	audio = new j1Audio();
 	scene = new j1Scene();
-	minimap = new j1Minimap();
 	map = new j1Map();
-	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	gui = new j1Gui();
 	console = new Console();
@@ -44,16 +38,13 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
-	AddModule(audio);
 	AddModule(map);
-	AddModule(pathfinding);
 	AddModule(font);
 
 
 	// scene last
 	AddModule(scene);
 
-	AddModule(minimap);
 	AddModule(gui);
 	AddModule(console);
 

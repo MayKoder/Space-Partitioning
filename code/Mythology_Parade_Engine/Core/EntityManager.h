@@ -8,8 +8,6 @@
 #include "Entity.h"
 #include"j1Input.h"
 #include"j1Map.h"
-#include"j1Pathfinding.h"
-#include"j1Audio.h"
 
 #include<vector>
 #include <algorithm>
@@ -17,7 +15,6 @@
 //Can delete
 #include "j1Scene.h"
 #include"j1Textures.h"
-#include "Player.h"
 
 
 
@@ -136,27 +133,6 @@ public:
 private:
 	int buildingTestIndex = 0;
 
-public:
-	SDL_Rect constructorSpriteRect;
-	SDL_Rect destructedSpriteRect;
-	SDL_Rect construction_bar_back;
-	SDL_Rect construction_bar_empty;
-	SDL_Rect construction_bar_front;
-	SDL_Rect life_bar_front;
-	SDL_Rect research_bar_front;
-
-	int Building_destruction;
-	int Building_placed;
-	int Decrease_Faith;
-	int Getting_resources;
-	int hit_1;
-	int Increase_faith;
-	int increase_prayers;
-	int increase_sacrifice;
-	int Walking_troops;
-	int CreateMonk_sound;
-	int CreateAssasin_sound;
-	int Research_sound;
 
 };
 #endif // !_ENTITYMANAGER_H
