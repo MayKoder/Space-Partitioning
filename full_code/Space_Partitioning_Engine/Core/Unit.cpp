@@ -6,13 +6,9 @@
 Unit::Unit(UnitType type, iPoint pos): unitType(type), _isSelected(false), moveSpeed(60)
 {
 	
-	displayDebug = false;
-
 	collisionRect = { 0, 0, 30, -55 };
 	unitType = type;
 	position = {(float)pos.x, (float)pos.y};
-
-	flipState = SDL_FLIP_NONE;
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
 
@@ -22,9 +18,6 @@ Unit::Unit(UnitType type, iPoint pos): unitType(type), _isSelected(false), moveS
 	switch (type)
 	{
 	case UnitType::MONK:
-		time_production = 90;
-		time_research = 0;
-		researched = true;
 		Init(1);
 		break;
 	}
@@ -141,33 +134,9 @@ bool Unit::Draw(float dt)
 	collisionRect.x = position.x - (collisionRect.w / 2);
 	collisionRect.y = position.y;
 
-	App->render->Blit(texture, position.x - blitRect.x / 2, position.y - blitRect.y, blitRect, &spriteRect, 1.f, flipState);
-
-	//App->render->DrawQuad({(int)position.x, (int)position.y, 2, 2}, 0, 255, 0);
-
-	if (displayDebug) 
-	{
-		if (entPath.size() > 0)
-		{
-			for (uint i = 0; i < entPath.size(); ++i)
-			{
-				iPoint pos = App->map->MapToWorld(entPath.at(i).x, entPath.at(i).y);
-				App->render->Blit(App->scene->debugBlue_tex, pos.x, pos.y);
-			}
-		}
-		App->render->DrawQuad(collisionRect, 0, 255, 0, 50);
-	}
+	App->render->DrawQuad({ (int)position.x, (int)position.y, blitRect.x, blitRect.y }, 255, 255, 255);
 
 	return true;
-}
-
-void Unit::Action(Entity* entity)
-{
-
-	switch (unitType)
-	{
-		//Monks action are controled by Monastery so, its functionality is there ( on Monastery Building )
-	}
 }
 
 

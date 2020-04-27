@@ -9,9 +9,6 @@ Building::Building(BuildingType type, iPoint pos, BuildingInfo info)
 	first_time_constructing = true;
 	buildingType = type;
 
-	displayDebug = false;
-
-
 	original_spriteRect = spriteRect = info.spriteRect;
 	blitRect = info.blitSize;
 
@@ -66,14 +63,6 @@ bool Building::Update(float dt)
 
 bool Building::Draw(float dt)
 {
-	//lengh = 4, lenght is the number of tiles this building uses
-	//App->render->DrawQuad({position.x, position.y + (tileHeight /2) * (height + 1), texturewidth, -textureHeight}, 255, 250, 20);
-	App->render->Blit(texture, position.x, position.y + ((App->map->data.tile_height / 2) * tileLenght) - blitRect.y, {blitRect.x, blitRect.y}, &spriteRect);
-
-	if (displayDebug)
-	{
-		App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
-	}
-
+	App->render->DrawQuad({(int)position.x, (int)position.y, blitRect.x, blitRect.y}, 255, 255, 255);
 	return true;
 }

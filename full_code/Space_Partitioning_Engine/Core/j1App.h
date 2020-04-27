@@ -17,7 +17,6 @@ class j1Scene;
 class j1Map;
 class j1Fonts;
 class j1Gui;
-class Console;
 class EntityManager;
 
 class j1App
@@ -52,11 +51,6 @@ public:
 	const char* GetOrganization() const;
 	float GetDT() const;
 
-	void LoadGame(const char* file);
-	void SaveGame(const char* file) const;
-	void GetSaveGames(std::list<std::string>& list_to_fill) const;
-
-
 private:
 
 	// Load config file
@@ -77,11 +71,6 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
-	// Load / Save
-	bool LoadGameNow();
-	bool SavegameNow();
-
-
 	//Called when restarting a scene (restart button)
 	bool RestartScene();
 
@@ -96,7 +85,6 @@ public:
 	j1Map*				map = NULL;
 	j1Fonts*			font = NULL;
 	j1Gui*				gui = NULL;
-	Console*			console = NULL;
 	EntityManager*		entityManager = NULL;
  
 	bool				restart_scene = false;
@@ -109,11 +97,6 @@ private:
 
 	std::string			title;
 	std::string			organization;
-
-	mutable bool		want_to_save = false;
-	bool				want_to_load = false;
-	std::string			load_game;
-	mutable std::string	save_game;
 
 	j1PerfTimer			ptimer;
 	uint64				frame_count = 0;

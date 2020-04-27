@@ -5,8 +5,6 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
-struct SDL_Texture;
-enum CivilizationType;
 
 enum class EntityType
 {
@@ -63,23 +61,9 @@ public:
 		return true;
 	}
 
-	//Called when loading the game
-	virtual bool Load(pugi::xml_node&)
-	{
-		return true;
-	}
-
-	//Called when saving the game
-	virtual bool Save(pugi::xml_node&) const
-	{
-		return true;
-	}
-
 public:
 
 	EntityType type;
-
-	SDL_Texture* texture; //Change it to Character_TMX
 	fPoint position;
 
 	//Rect in the spritesheet
@@ -88,21 +72,12 @@ public:
 	//W and H for the blit
 	iPoint blitRect;
 
-	//Side
-	CivilizationType civilization;
-
-	//Copy of node
-	pugi::xml_node entity_node;
-
-	bool displayDebug;
-
 	SDL_Rect getCollisionRect()
 	{
 		return collisionRect;
 	}
 
 protected:
-	SDL_RendererFlip flipState;
 	SDL_Rect collisionRect;
 };
 #endif // !ENTITY_H

@@ -281,14 +281,14 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
-bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
+bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 {
 	//This method needs to be upgraded to a generic display type
-	SDL_Rect quad = { node->x , node->y , node->w,  node->h };
+	SDL_Rect quad = { node.x , node.y , node.w,  node.h };
 
 	switch (type)
 	{
-	case NORMAL:
+	case ORTHOGRAPHIC:
 		App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
 		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
 
@@ -308,11 +308,11 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode* node)
 
 	}
 
-	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+	if (node.isDivided) 
 	{
-		if (node->childs[i])
+		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 		{
-			DrawQuadTree(type, node->childs[i]);
+			DrawQuadTree(type, node.childs[i]);
 		}
 	}
 	return true;

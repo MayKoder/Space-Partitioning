@@ -12,7 +12,6 @@
 #include "j1Map.h"
 #include "j1Fonts.h"
 #include "j1Gui.h"
-#include "Console.h"
 #include "EntityManager.h"
 #include "j1App.h"
 
@@ -30,7 +29,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	map = new j1Map();
 	font = new j1Fonts();
 	gui = new j1Gui();
-	console = new Console();
 	entityManager = new EntityManager();
 
 	// Ordered for awake / Start / Update
@@ -46,7 +44,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 
 	AddModule(gui);
-	AddModule(console);
 
 	// entities
 	AddModule(entityManager);
@@ -188,12 +185,6 @@ void j1App::PrepareUpdate()
 // ---------------------------------------------
 void j1App::FinishUpdate()
 {
-	if(want_to_save == true)
-		SavegameNow();
-
-	if(want_to_load == true)
-		LoadGameNow();
-
 	// Framerate calculations --
 
 	if(last_sec_frame_time.Read() > 1000)
@@ -335,107 +326,6 @@ float j1App::GetDT() const
 const char* j1App::GetOrganization() const
 {
 	return organization.c_str();
-}
-
-// Load / Save
-void j1App::LoadGame(const char* file)
-{
-	// we should be checking if that file actually exist
-	// from the "GetSaveGames" list
-	want_to_load = true;
-	//load_game.create("%s%s", fs->GetSaveDirectory(), file);
-}
-
-// ---------------------------------------
-void j1App::SaveGame(const char* file) const
-{
-	// we should be checking if that file actually exist
-	// from the "GetSaveGames" list ... should we overwrite ?
-
-	want_to_save = true;
-	save_game.append(file);
-}
-
-// ---------------------------------------
-void j1App::GetSaveGames(std::list<std::string>& list_to_fill) const
-{
-	// need to add functionality to file_system module for this to work
-}
-
-bool j1App::LoadGameNow()
-{
-	bool ret = false;
-
-	pugi::xml_document data;
-	pugi::xml_node root;
-
-	pugi::xml_parse_result result = data.load_file(load_game.c_str());
-
-	if(result != NULL)
-	{
-		LOG("Loading new Game State from %s...", load_game.c_str());
-
-		root = data.child("game_state");
-
-		ret = true;
-		j1Module* item = NULL;
-
-
-		for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
-		{
-			ret = it._Ptr->_Myval->Load(root.child(it._Ptr->_Myval->name.c_str()));
-			item = it._Ptr->_Myval;
-		}
-
-
-		data.reset();
-		if(ret == true)
-			LOG("...finished loading");
-		else
-			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->name.c_str() : "unknown");
-	}
-	else
-		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.c_str(), result.description());
-
-	want_to_load = false;
-	return ret;
-}
-
-bool j1App::SavegameNow()
-{
-	bool ret = true;
-
-	LOG("Saving Game State to %s...", save_game.c_str());
-
-	// xml object were we will store all data
-	pugi::xml_document data;
-	pugi::xml_node root;
-	
-	root = data.append_child("game_state");
-
-	j1Module* item = NULL;
-
-	for (std::list<j1Module*>::iterator it = modules.begin(); it != modules.end() && ret == true; it++)
-	{
-		ret = it._Ptr->_Myval->Save(root.append_child(it._Ptr->_Myval->name.c_str()));
-		item = it._Ptr->_Myval;
-	}
-
-	if(ret == true)
-	{
-		std::stringstream stream;
-		data.save(stream);
-
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
-		LOG("... finished saving", save_game.c_str());
-	}
-	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->name.c_str() : "unknown");
-
-	data.reset();
-	want_to_save = false;
-	return ret;
 }
 
 bool j1App::RestartScene() {

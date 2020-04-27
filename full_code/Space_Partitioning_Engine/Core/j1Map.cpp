@@ -51,7 +51,7 @@ void j1Map::Draw()
 			continue;
 
 		//Approach 2.0
-		for (int a = A.x+A.y - 2; a <= B.x + B.y - 5 /* or 2*/; a++) 
+		for (int a = A.x+A.y - 2; a <= B.x + B.y + 2/* or 2*/; a++) 
 		{
 			for (int b = A.x - A.y - 2; b <= B.x - B.y +2; b++) 
 			{
@@ -82,9 +82,6 @@ void j1Map::Draw()
 	}
 
 	App->entityManager->DrawEverything();
-	//LOG("%i", blits);
-	//double endTime = timer.ReadMs();
-	//LOG("%f", endTime- startTime);
 }
 
 int Properties::Get(const char* value, int default_value)

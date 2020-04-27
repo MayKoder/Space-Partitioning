@@ -7,7 +7,6 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1Gui.h"
-#include "Console.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -80,24 +79,11 @@ bool j1Gui::PreUpdate()
 // Called after all Updates
 bool j1Gui::PostUpdate()
 {
-	if (App->console->console_active == true) {
-		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
-		{
-			if (it._Ptr->_Myval->GetPriority() != 2)
-				it._Ptr->_Myval->PostUpdate();
-		}
-		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
-		{
-			if (it._Ptr->_Myval->GetPriority() == 2)
-				it._Ptr->_Myval->PostUpdate();
-		}
-	}
-	else {
+
 		for (std::list<UI*>::iterator it = UIs.begin(); it != UIs.end(); it++)
 		{
 			it._Ptr->_Myval->PostUpdate();
 		}
-	}
 
 	return true;
 }
@@ -288,12 +274,6 @@ void j1Gui::DeleteFocus() {
 void j1Gui::ClearUI()
 {
 	UIs.clear();
-}
-
-void j1Gui::ReturnConsole() {
-	if (App->console->console_active == true) {
-		App->console->ActivateConsole();
-	}
 }
 
 void j1Gui::WorkWithTextInput(std::string text) {

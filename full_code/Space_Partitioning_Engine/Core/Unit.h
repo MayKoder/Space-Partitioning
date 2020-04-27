@@ -40,10 +40,6 @@ private:
 public: 
 	//Unit Type
 	UnitType unitType;
-	int time_production;
-	int time_research;
-	bool researched;
-	Unit* enemyTarget;
 
 public:
 	Unit(UnitType, iPoint);
@@ -59,7 +55,6 @@ public:
 	bool isSelected();
 
 	virtual bool Draw(float dt);
-	virtual void Action(Entity*);
 
 	void MoveToTarget();
 
@@ -74,8 +69,6 @@ protected:
 	std::vector<iPoint> entPath;
 
 	float timeToDespawn;
-	//void SetTarget();
-	//void CheckState();
 	
 };
 

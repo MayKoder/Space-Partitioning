@@ -83,10 +83,12 @@ private:
 public:
 	SDL_Texture* debugBlue_tex;
 	SDL_Texture* debugRed_tex;
+	SDL_Texture* fpsText;
+
 	bool paused_game;
 	bool godMode;
 
-	QuadTree* quadTree;
+	QuadTree quadTree;
 };
 
 #endif // __j1SCENE_H__

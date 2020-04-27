@@ -2,15 +2,15 @@
 
 //Code by https://github.com/MayKoder
 
-#ifndef __j1QUADTREE_H__
-#define __j1QUADTREE_H__
+#ifndef __j1AABBTREE_H__
+#define __j1AABBTREE_H__
 
 #include<list>
 #include<vector>
 #include"p2Point.h"
 
-#define QUADNODE_CHILD_NUMBER 4
-#define IN_RANGE_QUADTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
+#define AABBNODE_CHILD_NUMBER 2
+#define IN_RANGE_AABBTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 enum TreeType
 {
@@ -26,44 +26,44 @@ struct Rect
 	int x, y, w, h;
 };
 
-class QuadTree;
-struct QuadNode
+class AABBTree;
+struct AABBNode
 {
-	QuadNode();
-	~QuadNode();
+	AABBNode();
+	~AABBNode();
 
-	void Init(QuadTree*, QuadNode*, int, int, int, int);
+	void Init(AABBTree*, AABBNode*, int, int, int, int);
 
 	//Positions
 	int x, y, w, h;
 	bool isDivided;
 
 	//Pointers
-	QuadTree* root;
-	QuadNode* parent;
-	std::vector<QuadNode> childs;
+	AABBTree* root;
+	AABBNode* parent;
+	std::vector<AABBNode> childs;
 
 	//Data
 	std::list<iPoint> data;
 
 	void SetRect(int&, int&, int&, int&);
 
-	Rect GetRect() { return {x, y, w, h}; };
+	Rect GetRect() { return { x, y, w, h }; };
 	std::list<iPoint>* GetContent() { return &data; }
 
-	static void SubDivide(QuadNode&, int);
+	static void SubDivide(AABBNode&, int);
 };
 
-class QuadTree
+class AABBTree
 {
 public:
 
-	QuadTree();
-	~QuadTree();
+	AABBTree();
+	~AABBTree();
 
 	void Init(TreeType, int, int, int, int);
 
-	QuadNode baseNode;
+	AABBNode baseNode;
 	TreeType type;
 
 	int tile_width = 0;
@@ -73,7 +73,7 @@ public:
 
 	//Delete and free all the tree memory
 	void Clear();
-	void FindLoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
+	void FindLoadNodesToList(std::list<AABBNode*>*, AABBNode*, Point, Point);
 	static bool QuadNodeOverLap(Rect, Rect);
 	static Point CoordsToIsometricInt(Point, Point);
 

@@ -2,17 +2,21 @@
 
 //Code by https://github.com/MayKoder
 
-QuadNode::QuadNode(QuadTree* s_root, QuadNode* s_parent, int s_x, int s_y, int s_w, int s_h)
+
+QuadNode::QuadNode() : isDivided(false), root(nullptr), parent(nullptr)
+{
+	//Positions
+	x = y = w = h = 0;
+}
+void QuadNode::Init(QuadTree* s_root, QuadNode* s_parent, int s_x, int s_y, int s_w, int s_h)
 {
 	root = s_root;
 	parent = s_parent;
 	x = s_x; y = s_y;
 	w = s_w; h = s_h;
 
-	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-	{
-		childs[i] = nullptr;
-	}
+	childs.reserve(QUADNODE_CHILD_NUMBER);
+
 	isDivided = false;
 
 }
@@ -20,14 +24,10 @@ QuadNode::QuadNode(QuadTree* s_root, QuadNode* s_parent, int s_x, int s_y, int s
 QuadNode::~QuadNode()
 {
 	//It's called by ~j1QuadTree and deletes all the childs of the base, entering in a recursive loop deleting all the childs of the tree
-	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-	{
-		if (childs[i])
-			delete childs[i];
-	}
+	childs.clear();
 }
 
-void QuadNode::SetRect(int s_x, int s_y, int s_w, int s_h) 
+void QuadNode::SetRect(int& s_x, int& s_y, int& s_w, int& s_h)
 {
 	x = s_x;
 	y = s_y;
@@ -35,62 +35,65 @@ void QuadNode::SetRect(int s_x, int s_y, int s_w, int s_h)
 	h = s_h;
 }
 
-void QuadNode::SubDivide(QuadNode* node, int divisionsLeft) 
+void QuadNode::SubDivide(QuadNode& node, int divisionsLeft) 
 {
-	if (node->root->lowest_height > node->h)
-		node->root->lowest_height = node->h;
+	if (node.root->lowest_height > node.h)
+		node.root->lowest_height = node.h;
 
 	if (divisionsLeft > 0) 
 	{
-		if (!node->isDivided)
+		if (!node.isDivided)
 		{
-			switch (node->root->type)
+			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-			case NORMAL:
-				node->childs[0] = new QuadNode(node->root, node, node->x, node->y, node->w / 2, node->h / 2);
-				node->childs[1] = new QuadNode(node->root, node, node->x + (node->w / 2), node->y, node->w / 2, node->h / 2);
-
-				node->childs[2] = new QuadNode(node->root, node, node->x, node->y + (node->h / 2), node->w / 2, node->h / 2);
-				node->childs[3] = new QuadNode(node->root, node, node->x + (node->w / 2), node->y + (node->h / 2), node->w / 2, node->h / 2);
-				break;
-
-			case ISOMETRIC:
-				node->childs[0] = new QuadNode(node->root, node, node->x, node->y, node->w / 2, node->h / 2);
-				node->childs[1] = new QuadNode(node->root, node, node->x + (node->w / 4), node->y + (node->h / 4), node->w / 2, node->h / 2);
-
-				node->childs[2] = new QuadNode(node->root, node, node->x - (node->w / 4), node->y + (node->h / 4), node->w / 2, node->h / 2);
-				node->childs[3] = new QuadNode(node->root, node, node->x, node->y + (node->h / 2), node->w / 2, node->h / 2);
+				node.childs.push_back(QuadNode());
+			}
+			switch (node.root->type)
+			{
+			case ORTHOGRAPHIC:
+				node.childs[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
+				node.childs[1].Init(node.root, &node, node.x + (node.w / 2), node.y, node.w / 2, node.h / 2);
+								
+				node.childs[2].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
+				node.childs[3].Init(node.root, &node, node.x + (node.w / 2), node.y + (node.h / 2), node.w / 2, node.h / 2);
+				break;			
+								 
+			case ISOMETRIC:		 
+				node.childs[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
+				node.childs[1].Init(node.root, &node, node.x + (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
+									 
+				node.childs[2].Init(node.root, &node, node.x - (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
+				node.childs[3].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
 				break;
 			}
 
-			node->isDivided = true;
+			node.isDivided = true;
 
 
 
 			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-				SubDivide(node->childs[i], divisionsLeft - 1);
+				SubDivide(node.childs[i], divisionsLeft - 1);
 			}
 		}
 	}
 
 }
 
-Rect QuadNode::GetRect() {
-	return {x, y, w, h};
-}
-
 //////////////// QUAD TREE ////////////////
-QuadTree::QuadTree(TreeType s_type, int s_x, int s_y, int s_w, int s_h) 
+QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0)
+{
+}
+void QuadTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h) 
 {
 	type = s_type;
-	baseNode = new QuadNode(this, nullptr, s_x, s_y, s_w, s_h);
+	baseNode.Init(this, nullptr, s_x, s_y, s_w, s_h);
 	lowest_height = s_w;
 }
 QuadTree::~QuadTree() 
 {
 	//Deletes first node and calls ~QuadNode
-	delete baseNode;
+
 }
 
 void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point l2, Point r2)
@@ -103,11 +106,12 @@ void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, P
 	if (this->type == TreeType::ISOMETRIC)
 		r.w += node->root->lowest_height;
 
+	//OPT: Dumb cunt don't check all the nodes lmao
 	if (node->isDivided) 
 	{
 		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 		{
-			FindLoadNodesToList(list, node->childs[i], l2, r2);
+			FindLoadNodesToList(list, &node->childs[i], l2, r2);
 		}
 	}
 	else

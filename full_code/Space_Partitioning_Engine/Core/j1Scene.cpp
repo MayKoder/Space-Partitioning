@@ -57,8 +57,8 @@ bool j1Scene::Start()
 	iPoint size;
 	position = App->map->WorldToMap(0, 0);
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
-	quadTree = new QuadTree(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-	//quadTree->baseNode->SubDivide(quadTree->baseNode, 5);
+	quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
+	//quadTree.baseNode.SubDivide(quadTree.baseNode, 2);
 
 	return true;
 }
@@ -74,67 +74,28 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	// -------
-	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-	//	App->LoadGame("save_game.xml");
-
-	//if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	//	App->SaveGame("save_game.xml");
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		exitGame = true;
 
-
-	SDL_Rect correctedCamera = App->render->camera;
-	correctedCamera.x = -correctedCamera.x;
-	correctedCamera.y = -correctedCamera.y;
-
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
-		if (correctedCamera.y - floor(1000.0f * dt) >= mapLimitsRect.y)
-		{
-			App->render->camera.y += floor(1000.0f * dt);
-		}
-		else
-		{
-			App->render->camera.y = 0;
-		}
+		App->render->camera.y += floor(1000.0f * dt);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (correctedCamera.y + App->render->camera.h + floor(1000.0f * dt) <= mapLimitsRect.h)
-		{
-			App->render->camera.y -= floor(1000.0f * dt);
-		}
-		else
-		{
-			App->render->camera.y = -mapLimitsRect.h + App->render->camera.h;
-		}
+		App->render->camera.y -= floor(1000.0f * dt);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		if (correctedCamera.x - floor(1000.0f * dt) >= mapLimitsRect.x)
-		{
-			App->render->camera.x += floor(1000.0f * dt);
-		}
-		else
-		{
-			App->render->camera.x = -mapLimitsRect.x;
-		}
+		App->render->camera.x += floor(1000.0f * dt);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		if (correctedCamera.x + App->render->camera.w + floor(1000.0f * dt) <= mapLimitsRect.x + mapLimitsRect.w)
-		{
-			App->render->camera.x -= floor(1000.0f * dt);
-		}
-		else
-		{
-			App->render->camera.x = -(mapLimitsRect.x + mapLimitsRect.w) + App->render->camera.w;
-		}
+		App->render->camera.x -= floor(1000.0f * dt);
 	}
 
 
@@ -142,7 +103,7 @@ bool j1Scene::Update(float dt)
 
 
 	//Quad draw
-	App->render->DrawQuadTree(quadTree->type, quadTree->baseNode);
+	App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
 
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
@@ -151,20 +112,6 @@ bool j1Scene::Update(float dt)
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
 
-	//App->render->DrawQuad(mapLimitsRect, 255, 255, 255, 40);
-
-	/*CheckSpatial Audio
-	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(2, 270, 200);
-		App->audio->PlayFx(2, WinGreek_sound, 1);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
-		Mix_HaltChannel(-1);
-		Mix_SetPosition(3, 90, 1);
-		App->audio->PlayFx(3, WinGreek_sound, 1);
-	}*/
-
 	return true;
 }
 
@@ -172,6 +119,11 @@ bool j1Scene::Update(float dt)
 bool j1Scene::PostUpdate()
 {
 	bool ret = true;
+
+	//std::string	lmao = std::to_string((App->GetDT() * 10));
+
+	//fpsText = App->font->Print(lmao.c_str(), { 255, 255, 255, 255 });
+	//App->render->Blit(fpsText, 0, 0, NULL, 0.f);
 
 	return ret;
 }
@@ -184,6 +136,7 @@ bool j1Scene::CleanUp()
 
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
+	SDL_DestroyTexture(fpsText);
 
 	//quadTree->Clear();
 

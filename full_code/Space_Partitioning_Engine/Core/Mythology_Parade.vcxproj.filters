@@ -46,9 +46,6 @@
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Core\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="EntityManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
@@ -114,9 +111,6 @@
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Core\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="EntityManager.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
@@ -128,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="Building.h">
       <Filter>Core\Entities\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBTree.h">
+      <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
