@@ -33,3 +33,11 @@ bool IsPointInsideOffAxisRectangle(Point B, Point A, Point C, Point D, Point m)
 	return 0 > D1 && 0 > D4 && 0 < D2 && 0 > D3;
 
 }
+
+bool IsPointInsideAxisAlignedRectangle(Rect r, Point p)
+{
+
+	if ((p.x >= r.x && p.x <= r.x + r.w) && (p.y >= r.y && p.y <= r.y + r.h))
+		return true;
+	return false;
+}

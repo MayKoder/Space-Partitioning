@@ -159,7 +159,7 @@ bool j1Scene::CleanUp()
 
 	App->tex->UnLoad(debugBlue_tex);
 	App->tex->UnLoad(debugRed_tex);
-	SDL_DestroyTexture(fpsText);
+	//SDL_DestroyTexture(fpsText);
 
 	//quadTree->Clear();
 

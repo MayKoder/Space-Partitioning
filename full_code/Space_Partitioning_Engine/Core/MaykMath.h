@@ -20,29 +20,6 @@ struct Point
 
 };
 
-struct pPoint 
-{
-	float* x = nullptr;
-	float* y = nullptr;
-
-	operator bool() const
-	{
-		if (x != nullptr && x != nullptr) 
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	Point GetValues() 
-	{
-		return { (int)*x, (int)*y};
-	}
-};
-
 struct Rect
 {
 	int x, y, w, h;
@@ -52,7 +29,7 @@ Point vect2d(Point p1, Point p2);
 
 float GetTriangleArea(Point, Point, Point);
 bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
-
+bool IsPointInsideAxisAlignedRectangle(Rect, Point);
 
 
 

@@ -14,6 +14,7 @@
 #include"Entity.h"
 
 #define AABBNODE_CHILD_NUMBER 2
+#define MAX_ITEMS_IN_AABBNODE 5
 #define IN_RANGE_AABBTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 class AABBTree;
@@ -26,8 +27,8 @@ struct AABBNode
 	void Init(AABBTree*, AABBNode*, float*, float*, float*, float*);
 
 	//Positions
-	pPoint minPos;
-	pPoint maxPos;
+	Point minPos;
+	Point maxPos;
 
 	bool isDivided;
 
@@ -43,14 +44,7 @@ struct AABBNode
 
 	Rect GetRect() 
 	{ 
-		if (minPos && maxPos) 
-		{
-			return {(int)*minPos.x, (int)*minPos.y, (int)*maxPos.x - (int)*minPos.x, (int)*maxPos.y - (int)*minPos.y};
-		}
-		else
-		{
-			return {0, 0, 0, 0};
-		}
+			return {minPos.x, minPos.y, maxPos.x - minPos.x, maxPos.y - minPos.y};
 	}
 	void UpdateNodePoints();
 	//std::list<iPoint>* GetContent() { return &data; }
@@ -69,6 +63,8 @@ public:
 
 	AABBNode baseNode;
 	TreeType type;
+
+	AABBNode* lowestNode;
 
 	//Delete and free all the tree memory
 	void AddUnitToTree(Entity&);

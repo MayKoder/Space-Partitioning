@@ -70,7 +70,6 @@ public:
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
 
 	Entity* selectedUnit;
-	SDL_Texture* debugTex;
 	SDL_Texture* buildingTex;
 	SDL_Texture* entTex;
 };

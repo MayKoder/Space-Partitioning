@@ -14,7 +14,7 @@
 #include"Entity.h"
 
 #define QUADNODE_CHILD_NUMBER 4
-#define MAX_ITEMS_IN_NODE 5
+#define MAX_ITEMS_IN_QUADDNODE 5
 #define IN_RANGE_QUADTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 class QuadTree;

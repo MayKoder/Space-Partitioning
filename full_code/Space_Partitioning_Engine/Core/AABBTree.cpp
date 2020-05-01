@@ -6,6 +6,8 @@
 AABBNode::AABBNode() : isDivided(false), root(nullptr), parent(nullptr)
 {
 	//Positions
+	minPos = { 0, 0 };
+	maxPos = { 0, 0 };
 }
 void AABBNode::Init(AABBTree* s_root, AABBNode* s_parent, float* A_x, float* A_y, float* B_x, float* B_y)
 {
@@ -29,38 +31,41 @@ AABBNode::~AABBNode()
 void AABBNode::SetRect(float* A_x, float* A_y, float* B_x, float* B_y)
 {
 
-	minPos.x = A_x;
-	minPos.y = A_y;
+	minPos.x = *A_x;
+	minPos.y = *A_y;
 
-	maxPos.x = B_x;
-	maxPos.y = B_y;
+	maxPos.x = *B_x;
+	maxPos.y = *B_y;
 }
 
 void AABBNode::UpdateNodePoints()
 {
-	Entity* A = *data.begin();
-	Entity* B = *data.begin();
-
 	Entity* temp = nullptr;
+
+	minPos = {(int)(*data.begin())->position.x, (int)(*data.begin())->position.y - (int)(*data.begin())->blitRect.y };
+	maxPos = {(int)(*data.begin())->position.x + (*data.begin())->blitRect.x, (int)(*data.begin())->position.y};
+
 	for (std::list<Entity*>::iterator it = data.begin(); it != data.end(); it++)
 	{
 		temp = (*it);
-		if (temp->position.y < A->position.y) 
+		if (temp->position.y - temp->blitRect.y < minPos.y) 
 		{
-			A = temp;
+			minPos.y = temp->position.y - temp->blitRect.y;
+		}
+		if (temp->position.x < minPos.x)
+		{
+			minPos.x = temp->position.x;
 		}
 
-		if (temp->position.y > A->position.y)
+		if (temp->position.y > maxPos.y)
 		{
-			B = temp;
+			maxPos.y = temp->position.y;
+		}
+		if (temp->position.x + temp->blitRect.x > maxPos.x)
+		{
+			maxPos.x = temp->position.x + temp->blitRect.x;
 		}
 	}
-
-	minPos.x = &A->position.x;
-	minPos.y = &A->position.y;
-
-	maxPos.x = &B->position.x;
-	maxPos.y = &B->position.y;
 }
 
 //void AABBNode::SubDivide(AABBNode& node, int divisionsLeft)
@@ -91,7 +96,7 @@ void AABBNode::UpdateNodePoints()
 //}
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC)
+AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC), lowestNode(nullptr)
 {
 }
 void AABBTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h)
@@ -225,7 +230,11 @@ AABBTree::~AABBTree()
 void AABBTree::AddUnitToTree(Entity& ent)
 {
 	baseNode.data.push_back(&ent);
-	baseNode.UpdateNodePoints();
+
+	if (baseNode.data.size() >= MAX_ITEMS_IN_AABBNODE) 
+	{
+		//Subdivide
+	}
 
 
 }

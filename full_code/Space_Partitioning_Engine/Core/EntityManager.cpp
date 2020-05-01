@@ -4,7 +4,7 @@
 #include "Unit.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager() : selectedUnit(nullptr), debugTex(nullptr), buildingTex(nullptr), entTex(nullptr)
+EntityManager::EntityManager() : selectedUnit(nullptr), buildingTex(nullptr), entTex(nullptr)
 {
 	name.append("entity_manager");
 }
@@ -65,19 +65,19 @@ bool EntityManager::Update(float dt)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			selectedUnit->position.y -= 50.f * dt;
+			selectedUnit->position.y -= 100.f * dt;
 		}
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		{
-			selectedUnit->position.y += 50.f * dt;
+			selectedUnit->position.y += 100.f * dt;
 		}
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
-			selectedUnit->position.x += 50.f * dt;
+			selectedUnit->position.x += 100.f * dt;
 		}
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
-			selectedUnit->position.x -= 50.f * dt;
+			selectedUnit->position.x -= 100.f * dt;
 		}
 		App->scene->aabbTree.baseNode.UpdateNodePoints();
 	}
@@ -107,9 +107,8 @@ bool EntityManager::CleanUp()
 	}
 	entities.clear();
 
-	App->tex->UnLoad(debugTex);
 	App->tex->UnLoad(buildingTex);
-	App->tex->UnLoad(entTex);
+	//App->tex->UnLoad(entTex);
 
 	return true;
 }

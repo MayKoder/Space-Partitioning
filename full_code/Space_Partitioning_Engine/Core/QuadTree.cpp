@@ -175,7 +175,7 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 		}
 
 		lowestNode->data.push_back(&ent);
-		if (lowestNode->data.size() >= MAX_ITEMS_IN_NODE)
+		if (lowestNode->data.size() >= MAX_ITEMS_IN_QUADDNODE)
 		{
 			lowestNode->SubDivide(*lowestNode, 1);
 
