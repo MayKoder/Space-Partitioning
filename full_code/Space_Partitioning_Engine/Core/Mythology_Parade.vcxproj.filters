@@ -55,6 +55,9 @@
     <ClCompile Include="Building.cpp">
       <Filter>Core\Entities\Building</Filter>
     </ClCompile>
+    <ClCompile Include="MaykMath.cpp">
+      <Filter>Core\Tools\Trees\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="AABBTree.h">
       <Filter>Core\Tools\Trees</Filter>
     </ClInclude>
+    <ClInclude Include="MaykMath.h">
+      <Filter>Core\Tools\Trees\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -157,6 +163,9 @@
     </Filter>
     <Filter Include="Core\Entities\Building">
       <UniqueIdentifier>{5c392556-c622-4762-bfa9-5513b4071e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Tools\Trees\Math">
+      <UniqueIdentifier>{2148e84d-9aa5-4fc3-bc1c-af5b50201d1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

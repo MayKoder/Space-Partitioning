@@ -7,26 +7,24 @@
 
 #include<list>
 #include<vector>
-#include"p2Point.h"
+#include"MaykMath.h"
+
+//DELETE THIS AND MAKE IT A TEMPLATE
+//TODO: You need to delete all use of entity and change it to a template
+#include"Entity.h"
 
 #define QUADNODE_CHILD_NUMBER 4
+#define MAX_ITEMS_IN_NODE 5
 #define IN_RANGE_QUADTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
-enum TreeType
+static enum TreeType
 {
 	ORTHOGRAPHIC,
 	ISOMETRIC
 };
-struct Point
-{
-	int x, y;
-};
-struct Rect
-{
-	int x, y, w, h;
-};
 
 class QuadTree;
+class Entity;
 struct QuadNode
 {
 	QuadNode();
@@ -44,12 +42,12 @@ struct QuadNode
 	std::vector<QuadNode> childs;
 
 	//Data
-	std::list<iPoint> data;
+	std::list<Entity*> data;
 
 	void SetRect(int&, int&, int&, int&);
 
 	Rect GetRect() { return {x, y, w, h}; };
-	std::list<iPoint>* GetContent() { return &data; }
+	const std::list<Entity*>* GetContent() { return &data; }
 
 	static void SubDivide(QuadNode&, int);
 };
@@ -70,12 +68,18 @@ public:
 	int tile_height = 0;
 
 	int lowest_height = 0;
+	QuadNode* lowestNode = nullptr;
 
 	//Delete and free all the tree memory
 	void Clear();
 	void FindLoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
+	
+	void FindLowestNodeInPoint(QuadNode*, const Point&);
+	
 	static bool QuadNodeOverLap(Rect, Rect);
 	static Point CoordsToIsometricInt(Point, Point);
+
+	void AddEntityToNode(Entity&, Point);
 
 };
 

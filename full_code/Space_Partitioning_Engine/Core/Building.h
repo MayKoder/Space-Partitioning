@@ -5,77 +5,32 @@
 #include"EntityManager.h"
 #include "j1Timer.h"
 
-enum BuildingType 
-{
-	FORTRESS,
-	MONASTERY,
-	TEMPLE,
-	ENCAMPMENT
-};
-enum BuildingStatus
-{
-	CONSTRUCTING,
-	FINISHED,
-	DESTROYED
-};
-enum BuildingAction
-{
-	RESEARCHING,
-	PRODUCING,
-	NOTHING
-};
 struct BuildingInfo;
 
 class Building: public Entity
 {
 public:
-	Building(BuildingType, iPoint, BuildingInfo);
+	Building();
 	~Building();
 	
 	const char* GetDescription();
 	BuildingType GetBuildingType() { return buildingType; }
-	int GetInfluence() { return influence; }
-	int GetDamage() { return damage; }
-	int GetMaxCap() { return maxCap; }
+	void Init(iPoint pos);
+
+	bool Draw(float dt) override;
 
 private:
 
 	bool Awake(pugi::xml_node&);
 	bool Update(float dt) override;
-	bool Draw(float dt);
 
-	//Stats
-	int defenses;
-	int influence;
-	int damage;
-	int maxCap;
-	int time_construction;
-
-	int time_research;
-	int time_producing;
-	bool researched;
-
-	int nearbyMonks;
 	std::string description;
-
-	//Used when constructing/producing
-	float percentage_constructing;
-	j1Timer timer_construction;
-	bool first_time_constructing;
-	std::string element_producing;
 	
 
 	//Settigns
 	BuildingType buildingType;
 	int tileLenght;
 	SDL_Rect original_spriteRect;
-
-public:
-	BuildingStatus buildingStatus;
-	BuildingAction buildingAction;
-
-
-
 };
 
 #endif // !__BUILDING_H__

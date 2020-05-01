@@ -7,7 +7,8 @@
 #include"QuadTree.h"
 
 #include<list>
-
+enum TreeType;
+struct QuadNode;
 class j1Render : public j1Module
 {
 public:

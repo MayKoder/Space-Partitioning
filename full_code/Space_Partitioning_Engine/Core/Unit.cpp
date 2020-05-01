@@ -3,25 +3,26 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 
-Unit::Unit(UnitType type, iPoint pos): unitType(type), _isSelected(false), moveSpeed(60)
+Unit::Unit(): _isSelected(false), moveSpeed(60)
 {
 	
 	collisionRect = { 0, 0, 30, -55 };
-	unitType = type;
-	position = {(float)pos.x, (float)pos.y};
+	position = {(float)0, (float)0};
 	directionToTarget = {0, 0};
 	normalizedDirection = { 0, 0 };
 
 	timeToDespawn = 1.f;
 
-	//Init Units
-	switch (type)
-	{
-	case UnitType::MONK:
-		Init(1);
-		break;
-	}
+}
 
+void Unit::Init(iPoint pos) 
+{
+	collisionRect = { 0, 0, 30, -55 };
+	position = { (float)pos.x, (float)pos.y };
+	directionToTarget = { 0, 0 };
+	normalizedDirection = { 0, 0 };
+
+	timeToDespawn = 1.f;
 }
 
 Unit::~Unit()
@@ -98,13 +99,6 @@ void Unit::MoveToTarget()
 		targetPosition.ResetAsPosition();
 	}
 	
-}
-
-void Unit::Init(int maxHealth)
-{
-
-
-	targetPosition.ResetAsPosition();
 }
 
 

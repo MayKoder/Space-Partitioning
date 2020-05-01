@@ -1,5 +1,7 @@
 #include"QuadTree.h"
 
+#include"p2Log.h"
+
 //Code by https://github.com/MayKoder
 
 
@@ -35,7 +37,7 @@ void QuadNode::SetRect(int& s_x, int& s_y, int& s_w, int& s_h)
 	h = s_h;
 }
 
-void QuadNode::SubDivide(QuadNode& node, int divisionsLeft) 
+void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 {
 	if (node.root->lowest_height > node.h)
 		node.root->lowest_height = node.h;
@@ -157,6 +159,62 @@ Point QuadTree::CoordsToIsometricInt(Point input, Point tileSize)
 	ret.y = int((input.y / half_height - (input.x / half_width)) / 2);
 
 	return ret;
+}
+
+void QuadTree::AddEntityToNode(Entity& ent, Point p)
+{
+
+	//Figure lowest node out
+	FindLowestNodeInPoint(&baseNode, p);
+	if (lowestNode != nullptr) 
+	{
+		lowestNode->data.push_back(&ent);
+		if (lowestNode->data.size() >= MAX_ITEMS_IN_NODE)
+		{
+			lowestNode->SubDivide(*lowestNode, 1);
+
+			Rect rect;
+			//For every data element set it to the new subdivision
+			for (std::list<Entity*>::iterator it = lowestNode->data.begin(); it != lowestNode->data.end(); it++)
+			{
+				for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+				{
+					rect = lowestNode->childs[i].GetRect();
+					if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {(int)(*it)->position.x, (int)(*it)->position.y }))
+					{
+						lowestNode->childs[i].data.push_back(*it);
+						break;
+					}
+				}
+			}
+
+
+		}
+		LOG("%i", lowestNode->data.size());
+		lowestNode = nullptr;
+	}
+}
+
+//This MUST return the lowest node, and you MUST remove the lowestNode variable
+void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
+{
+	Rect rect = node->GetRect();
+	QuadNode* res = nullptr;
+	if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, p)) 
+	{
+
+		if (node->childs.size() != 0) 
+		{
+			for (unsigned int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+			{
+				FindLowestNodeInPoint(&node->childs[i], p);
+			}
+		}
+		else
+		{
+			lowestNode = node;
+		}
+	}
 }
 
 void QuadTree::Clear() 

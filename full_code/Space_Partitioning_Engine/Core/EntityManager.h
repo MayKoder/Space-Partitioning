@@ -20,12 +20,6 @@
 
 enum class UnitType;
 enum BuildingType;
-enum CivilizationType {
-	VIKING,
-	GREEK,
-	NONE
-};
-
 struct CreationPreview
 {
 	bool active = false;
@@ -93,28 +87,15 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	////Called when loading the game
-	//bool Load(pugi::xml_node&);
-
-	////Called when saving the game
-	//bool Save(pugi::xml_node&) const;
-
 	bool DeleteEntity(Entity*);
 
-	Entity* CreatePlayerEntity();
 	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
-	Entity* CreateBuildingEntity(iPoint, BuildingType, BuildingInfo, CivilizationType);
-	void UpdateBuildPreview(int);
+	Entity* CreateBuildingEntity(iPoint);
 	void SetBuildIndex(int);
 
 	//Load data packets
-	void LoadBuildingsData(pugi::xml_node&);
 	iPoint CalculateBuildingSize(int, int, int);
 	void DrawEverything();
-
-	void LoadBuildingsBlitRect();
-
-	Player* getPlayer() const;
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
 
@@ -124,11 +105,6 @@ public:
 	CreationPreview crPreview;
 	SDL_Texture* debugTex;
 
-	//The way to store the spritesheets
-	std::unordered_map<SpriteSheetType, SDL_Texture*> entitySpriteSheets;
-	std::vector<BuildingInfo> buildingsData;
-	void FxUnits(int channel, int fx, int posx, int posy);
-	int volume;
 
 private:
 	int buildingTestIndex = 0;

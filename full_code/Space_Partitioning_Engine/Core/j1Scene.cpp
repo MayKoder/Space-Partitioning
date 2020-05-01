@@ -12,6 +12,7 @@
 #include "j1Scene.h"
 
 #include"QuadTree.h"
+#include"MaykMath.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -42,7 +43,6 @@ bool j1Scene::Start()
 		App->map->CreateWalkabilityMap(w, h, &data);
 
 		mapLimitsRect = App->map->GetMapRect();
-		App->entityManager->LoadBuildingsBlitRect();
 
 		RELEASE_ARRAY(data);
 	}
@@ -111,6 +111,28 @@ bool j1Scene::Update(float dt)
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
+
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN) 
+	{
+		iPoint mouse = App->map->GetMousePositionOnMap();
+		mouse = App->map->MapToWorld(mouse.x, mouse.y);
+		mouse.y += App->map->data.tile_height / 2;
+
+		App->entityManager->CreateBuildingEntity(mouse);
+	}
+
+
+
+
+	//Rect rect = quadTree.baseNode.GetRect();
+
+	//iPoint por;
+	//App->input->GetMousePosition(por.x, por.y);
+	//por = App->render->ScreenToWorld(por.x, por.y);
+
+
+	//bool a = IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {por.x, por.y});
+	//LOG("%i %i // %i", por.x, por.y, a);
 
 	return true;
 }

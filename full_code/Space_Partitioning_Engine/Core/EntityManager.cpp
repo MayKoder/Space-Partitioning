@@ -7,7 +7,6 @@
 EntityManager::EntityManager()
 {
 	name.append("entity_manager");
-	buildingsData.reserve(MAX_BUILDING_TYPES);
 	buildingTestIndex = 0;
 }
 
@@ -22,17 +21,7 @@ bool EntityManager::Awake(pugi::xml_node& a)
 	//Load buildings info
 	pugi::xml_document buildings;
 	buildings.load_file(a.child("buildings").attribute("file").as_string());
-	LoadBuildingsData(buildings.child("map").child("objectgroup"));
 
-	//INFO: This is a good way to itinerate all the map, to itinerate only items in one key, use only the second for loop
-	for (unsigned i = 0; i < entities.size(); i++)
-	{
-		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
-		{
-			Entity* ent = it._Ptr->_Myval;
-			ent->Awake(a.child(ent->name.c_str()));
-		}
-	}
 	active = false;
 
 	return true;
@@ -42,8 +31,6 @@ bool EntityManager::Awake(pugi::xml_node& a)
 bool EntityManager::Start()
 {
 	//TODO: NO HARDCODE BOY
-	entitySpriteSheets[SpriteSheetType::BUILDINGS] = App->tex->Load("assets/buildings/Buildings.png");
-
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -53,16 +40,6 @@ bool EntityManager::Start()
 	}
 
 	return true;
-}
-
-void EntityManager::LoadBuildingsBlitRect()
-{
-	for (unsigned int i = 0; i < buildingsData.size(); i++)
-	{
-		BuildingInfo* info = &buildingsData[i];
-		int blitWidth = info->tileLenght * App->map->data.tile_width;
-		info->blitSize = CalculateBuildingSize(blitWidth, info->spriteRect.w, info->spriteRect.h);
-	}
 }
 
 // Called each loop iteration
@@ -93,19 +70,6 @@ bool EntityManager::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		EnterBuildMode();
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		if (buildingTestIndex < MAX_BUILDING_TYPES - 1)
-		{
-			buildingTestIndex++;
-		}
-		else
-		{
-			buildingTestIndex = 0;
-		}
-		UpdateBuildPreview(buildingTestIndex);
 	}
 
 	if (crPreview.active)
@@ -148,32 +112,6 @@ bool EntityManager::Update(float dt)
 		iPoint mouse = App->map->GetMousePositionOnMap();
 		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
 		spawnPos.y += App->map->data.tile_height / 2;
-		bool viking = false;
-		switch (buildingTestIndex)
-		{
-		case 0:
-			viking = true;
-		case 4:
-			CreateBuildingEntity(spawnPos, BuildingType::FORTRESS, buildingsData[buildingTestIndex],CivilizationType::VIKING);
-			break;
-		case 1:
-			viking = true;
-		case 5:
-			CreateBuildingEntity(spawnPos, BuildingType::MONASTERY , buildingsData[buildingTestIndex],CivilizationType::VIKING);
-			faithToDescrease = 200;
-			break;
-		case 2:
-			viking = true;
-		case 6:
-			CreateBuildingEntity(spawnPos, BuildingType::TEMPLE, buildingsData[buildingTestIndex], CivilizationType::VIKING);
-			break;
-		case 3:
-			viking = true;
-		case 7:
-			CreateBuildingEntity(spawnPos, BuildingType::ENCAMPMENT, buildingsData[buildingTestIndex], CivilizationType::VIKING);
-			faithToDescrease = 200;
-			break;
-		}
 
 		//Onces you build disable building mode
 
@@ -203,11 +141,6 @@ bool EntityManager::CleanUp()
 		}
 		entities[(EntityType)i].clear();
 	}
-	for (unsigned int i = 0; i < entitySpriteSheets.size(); i++)
-	{
-		if(entitySpriteSheets[(SpriteSheetType)i])
-			App->tex->UnLoad(entitySpriteSheets[(SpriteSheetType)i]);
-	}
 	entities.clear();
 
 	return true;
@@ -215,58 +148,35 @@ bool EntityManager::CleanUp()
 
 Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
 {
-	Entity* ret = nullptr;
+	//Unit ret;
+	//ret.Init(pos);
 
-	switch (type)
-	{
-	case UnitType::MONK:
-		ret = new Unit(UnitType::MONK, pos);
-		break;
-	}
-	ret->type = EntityType::UNIT;
+	//entities[EntityType::UNIT].push_back(ret);
 
-	entities[EntityType::UNIT].push_back(ret);
+	////DELETE: THIS
+	//entities[EntityType::UNIT].sort(entity_Sort());
 
-	//DELETE: THIS
-	entities[EntityType::UNIT].sort(entity_Sort());
-
-	return ret;
+	//return &ret;
+	return nullptr;
 }
 
 void EntityManager::DrawEverything()
 {
 	float dt = App->GetDT();
-	Entity* ent = nullptr;
 
-	for (unsigned i = 1; i < entities.size(); i++)
+	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
-			ent = it._Ptr->_Myval;
-			ent->Draw(dt);
+			it._Ptr->_Myval->Draw(dt);
 		}
 	}
 }
 
-Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, BuildingInfo info, CivilizationType civilization)
+Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 {
-	Entity* ret = nullptr;
-	switch (type)
-	{
-	case FORTRESS:
-		ret = new Building(BuildingType::FORTRESS, pos, info);
-		break;
-	case MONASTERY:
-		ret = new Building(BuildingType::MONASTERY, pos, info);
-		break;
-	case TEMPLE:
-		ret = new Building(BuildingType::TEMPLE, pos, info);
-		break;
-	case ENCAMPMENT:
-		ret = new Building(BuildingType::ENCAMPMENT, pos, info);
-		break;
-	}
-
+	Building* ret = new Building();
+	ret->Init(pos);
 
 	iPoint iso = pos;
 	iso += App->map->GetTilesHalfSize();
@@ -276,9 +186,10 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 
 	//TODO load spritesheet when needed only? first call of constructor of entity?
 	entities[EntityType::BUILDING].push_back(ret);
-	//TODO: sort elements only inside the screen (QuadTree)
+
+	App->scene->quadTree.AddEntityToNode(*ret, {pos.x, pos.y});
+
 	entities[EntityType::BUILDING].sort(entity_Sort());
-	//std::sort(entities[EntityType::BUILDING].begin(), entities[EntityType::BUILDING].end(), entity_Sort());
 
 	return ret;
 }
@@ -286,15 +197,13 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos, BuildingType type, Build
 void EntityManager::EnterBuildMode()
 {
 	crPreview.active = !crPreview.active;
-	UpdateBuildPreview(buildingTestIndex);
 }
 void EntityManager::SetBuildIndex(int index)
 {
-	if (index < MAX_BUILDING_TYPES - 1) {
+	if (index < MAX_BUILDING_TYPES - 1) 
+	{
 		buildingTestIndex = index;
 	}
-
-	UpdateBuildPreview(buildingTestIndex);
 }
 
 //Called when deleting a new Entity
@@ -307,69 +216,6 @@ bool EntityManager::DeleteEntity(Entity* e)
 		return true;
 	}
 	return false;
-}
-
-void EntityManager::UpdateBuildPreview(int index)
-{
-	BuildingInfo data = buildingsData[index];
-	crPreview.height = data.tileLenght;
-	crPreview.width = data.tileLenght;
-}
-
-void EntityManager::LoadBuildingsData(pugi::xml_node& node)
-{
-	if (node != NULL)
-	{
-		pugi::xml_node obj;
-
-		for (obj = node.child("object"); obj; obj = obj.next_sibling("object"))
-		{
-
-			BuildingInfo info;
-			bool push = true;
-			info.spriteRect = { obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() };
-
-			pugi::xml_node data = obj.child("properties");
-			if (data != NULL)
-			{
-				pugi::xml_node prop;
-				for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
-				{
-					//OPT: Not the best way but meh
-
-					std::string name = prop.attribute("name").as_string();
-					if (name == "civilization")
-					{
-						CivilizationType type = (CivilizationType)prop.attribute("value").as_int();
-						info.civilization = type;
-						if (IN_RANGE(type, VIKING, GREEK) == 0)
-						{
-							push = false;
-						}
-					}
-					else if (push == false && name == "consType")
-					{
-						break;
-					}
-					else if (name == "tileSquareLenght")
-					{
-						info.tileLenght = prop.attribute("value").as_int();
-					}
-					else if (name == "type")
-					{
-						info.buildingType = (BuildingType)prop.attribute("value").as_int();
-					}
-				}
-			}
-			//TODO: Find a wat to mesure this with the tileLenght
-			info.blitSize = { info.spriteRect.w, info.spriteRect.h };
-
-			if (push)
-				buildingsData.push_back(info);
-		}
-	}
-
-
 }
 
 iPoint EntityManager::CalculateBuildingSize(int bw, int w, int h)

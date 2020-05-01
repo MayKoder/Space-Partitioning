@@ -12,7 +12,7 @@ enum class EntityType
 	BUILDING
 };
 
-class Entity :public j1Module
+class Entity
 {
 public:
 	Entity(/*EntityTypes type*/) 
@@ -26,10 +26,9 @@ public:
 		CleanUp();
 	}
 
-	// Called before render is available
-	virtual bool Awake(pugi::xml_node&)
+	virtual void Init(iPoint pos)
 	{
-		return true;
+
 	}
 
 	// Called before the first frame
@@ -60,6 +59,9 @@ public:
 	{
 		return true;
 	}
+
+	bool operator == (const Entity& s) const { return this == &s; }
+	bool operator != (const Entity& s) const { return !operator==(s); }
 
 public:
 

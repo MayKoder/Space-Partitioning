@@ -5,25 +5,6 @@
 #include "SDL/include/SDL_rect.h"
 #include"EntityManager.h"
 
-enum class ReligiousType
-{
-	MONK,
-	CLERIC,
-	MISSIONARY
-};
-
-enum class UnitType 
-{
-	PIKEMAN,
-	ASSASSIN,
-	EXPLORER,
-	PRIEST,
-	FOOTMAN,
-	MONK,
-	CLERIC,
-	MISSIONARY
-};
-
 class Unit : public Entity
 {
 private:
@@ -37,15 +18,11 @@ private:
 	//Description / Effect
 	std::string description;
 
-public: 
-	//Unit Type
-	UnitType unitType;
-
 public:
-	Unit(UnitType, iPoint);
+	Unit();
 	virtual ~Unit();
 
-	void Init(int maxHealth);
+	void Init(iPoint);
 
 	bool Start() override;
 	bool Update(float dt);
