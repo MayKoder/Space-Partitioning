@@ -108,31 +108,18 @@ bool j1Scene::Update(float dt)
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
+		if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+		{
+			iPoint mouse = App->map->GetMousePositionOnMap();
+			mouse = App->map->MapToWorld(mouse.x, mouse.y);
+			mouse.y += App->map->data.tile_height / 2;
+
+			App->entityManager->CreateBuildingEntity(mouse);
+		}
+
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
-
-	if (App->input->GetMouseButtonDown(1) == KEY_DOWN) 
-	{
-		iPoint mouse = App->map->GetMousePositionOnMap();
-		mouse = App->map->MapToWorld(mouse.x, mouse.y);
-		mouse.y += App->map->data.tile_height / 2;
-
-		App->entityManager->CreateBuildingEntity(mouse);
-	}
-
-
-
-
-	//Rect rect = quadTree.baseNode.GetRect();
-
-	//iPoint por;
-	//App->input->GetMousePosition(por.x, por.y);
-	//por = App->render->ScreenToWorld(por.x, por.y);
-
-
-	//bool a = IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {por.x, por.y});
-	//LOG("%i %i // %i", por.x, por.y, a);
 
 	return true;
 }

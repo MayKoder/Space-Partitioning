@@ -5,6 +5,8 @@
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
 #include"p2Point.h"
+#include"AABBTree.h"
+#include"QuadTree.h"
 
 struct SDL_Rect;
 
@@ -19,7 +21,6 @@ enum class CloseSceneMenus {
 };
 
 struct SDL_Texture;
-class QuadTree;
 class Entity;
 class Building;
 enum class UnitType;
@@ -59,24 +60,7 @@ public:
 	// Called when restarting the game
 	void RestartGame();
 
-	// Called to get the rect of the sprite of the portrait
-	SDL_Rect GetSpritePortrait(int type_of_portrait, UnitType unit_type);
-
 	void OnClick(UI* element, float argument = 0);
-
-private:
-	enum class Type_Selected {
-		None,
-		Assassin,
-		Pikeman,
-		Monk,
-		Priest,
-		Fortress,
-		Temple,
-		Encampment,
-		Monastery,
-		Unknown
-	};
 
 	SDL_Rect mapLimitsRect;
 
@@ -89,6 +73,7 @@ public:
 	bool godMode;
 
 	QuadTree quadTree;
+	AABBTree aabbTree;
 };
 
 #endif // __j1SCENE_H__

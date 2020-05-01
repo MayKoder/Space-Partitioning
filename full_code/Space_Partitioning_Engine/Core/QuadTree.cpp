@@ -1,7 +1,5 @@
 #include"QuadTree.h"
 
-#include"p2Log.h"
-
 //Code by https://github.com/MayKoder
 
 
@@ -190,7 +188,6 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 
 
 		}
-		LOG("%i", lowestNode->data.size());
 		lowestNode = nullptr;
 	}
 }

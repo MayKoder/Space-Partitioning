@@ -58,6 +58,9 @@
     <ClCompile Include="MaykMath.cpp">
       <Filter>Core\Tools\Trees\Math</Filter>
     </ClCompile>
+    <ClCompile Include="AABBTree.cpp">
+      <Filter>Core\Tools\Trees</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
