@@ -11,6 +11,7 @@
 #include<list>
 enum TreeType;
 struct QuadNode;
+struct AABBNode;
 class j1Render : public j1Module
 {
 public:

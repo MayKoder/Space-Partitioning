@@ -58,7 +58,9 @@ bool j1Scene::Start()
 	position = App->map->WorldToMap(0, 0);
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-	//quadTree.baseNode.SubDivide(quadTree.baseNode, 2);
+
+
+
 
 	return true;
 }
@@ -101,12 +103,14 @@ bool j1Scene::Update(float dt)
 
 	App->map->Draw();
 
-
+	App->entityManager->DrawEverything();
 	//Quad draw
 	App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
+	App->render->DrawAABBTree(aabbTree.type, aabbTree.baseNode);
+
 
 	iPoint p = App->map->GetMousePositionOnMap();
-	if (!App->entityManager->crPreview.active && IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
+	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
 		if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 		{
@@ -116,6 +120,16 @@ bool j1Scene::Update(float dt)
 
 			App->entityManager->CreateBuildingEntity(mouse);
 		}
+
+		if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
+		{
+			iPoint mouse = App->map->GetMousePositionOnMap();
+			mouse = App->map->MapToWorld(mouse.x, mouse.y);
+			mouse.y += App->map->data.tile_height / 2;
+
+			App->entityManager->CreateUnitEntity(mouse);
+		}
+
 
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
@@ -150,24 +164,6 @@ bool j1Scene::CleanUp()
 	//quadTree->Clear();
 
 	return true;
-}
-
-// Called when returning to main menu (either winning/losing or by menu options like exit)
-void j1Scene::BackToTitleMenu() {
-	destroy = true;
-	App->map->destroy = true;
-	App->entityManager->destroy = true;
-	//App->fade_to_black->FadeToBlack(which_fade::scene_to_title, 2);
-
-	//App->change_scene = true;
-}
-
-// Called when restarting the game
-void j1Scene::RestartGame() {
-	App->restart_scene = true;
-	destroy = true;
-	App->map->destroy = true;
-	App->entityManager->destroy = true;
 }
 
 void j1Scene::OnClick(UI* element, float argument)

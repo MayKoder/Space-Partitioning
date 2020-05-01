@@ -166,6 +166,14 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 	FindLowestNodeInPoint(&baseNode, p);
 	if (lowestNode != nullptr) 
 	{
+
+		QuadNode* back = lowestNode->parent;
+		while (back != nullptr)
+		{
+			back->data.push_back(&ent);
+			back = back->parent;
+		}
+
 		lowestNode->data.push_back(&ent);
 		if (lowestNode->data.size() >= MAX_ITEMS_IN_NODE)
 		{
@@ -193,6 +201,7 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 }
 
 //This MUST return the lowest node, and you MUST remove the lowestNode variable
+//TODO: Adding an element also means adding it to parents
 void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
 {
 	Rect rect = node->GetRect();

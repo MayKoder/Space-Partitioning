@@ -17,12 +17,6 @@
 #define MAX_ITEMS_IN_NODE 5
 #define IN_RANGE_QUADTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
-enum TreeType
-{
-	ORTHOGRAPHIC,
-	ISOMETRIC
-};
-
 class QuadTree;
 class Entity;
 struct QuadNode

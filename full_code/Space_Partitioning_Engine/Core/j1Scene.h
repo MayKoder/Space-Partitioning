@@ -9,23 +9,10 @@
 #include"QuadTree.h"
 
 struct SDL_Rect;
-
-enum class CloseSceneMenus {
-	None,
-	Pause,
-	Options,
-	Confirmation,
-	Confirmation_and_Pause,
-	Research,
-	Unknown
-};
-
 struct SDL_Texture;
 class Entity;
 class Building;
 enum class UnitType;
-enum BuildingType;
-enum CivilizationType;
 
 class j1Scene : public j1Module
 {
@@ -53,12 +40,6 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
-
-	// Called when returning to main menu (either winning/losing or by menu options like exit)
-	void BackToTitleMenu();
-
-	// Called when restarting the game
-	void RestartGame();
 
 	void OnClick(UI* element, float argument = 0);
 

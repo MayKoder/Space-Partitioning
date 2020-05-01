@@ -14,8 +14,7 @@ public:
 	~Building();
 	
 	const char* GetDescription();
-	BuildingType GetBuildingType() { return buildingType; }
-	void Init(iPoint pos);
+	void Init(iPoint pos, SDL_Texture* s_tex);
 
 	bool Draw(float dt) override;
 
@@ -28,7 +27,7 @@ private:
 	
 
 	//Settigns
-	BuildingType buildingType;
+	SDL_Texture* tex;
 	int tileLenght;
 	SDL_Rect original_spriteRect;
 };

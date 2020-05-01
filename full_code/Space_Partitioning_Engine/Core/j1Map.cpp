@@ -39,9 +39,6 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-	iPoint A = WorldToMap(-App->render->camera.x, -App->render->camera.y);
-	iPoint B = WorldToMap(-App->render->camera.x + App->render->camera.w, -App->render->camera.y + App->render->camera.h);
-
 	//int blits = 0;
 	for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
 	{
@@ -51,37 +48,27 @@ void j1Map::Draw()
 			continue;
 
 		//Approach 2.0
-		for (int a = A.x+A.y - 2; a <= B.x + B.y + 2/* or 2*/; a++) 
+		for (int y = 0; y < data.height; y++) 
 		{
-			for (int b = A.x - A.y - 2; b <= B.x - B.y +2; b++) 
+			for (int x = 0; x < data.height; x++)
 			{
-				if ((b & 1) != (a & 1)) 
-					continue;
 
-				int x = (a + b) / 2;
-				int y = (a - b) / 2;
-
-				if (x >= 0 && y >= 0 && x < data.width && y < data.height) 
+				int tile_id = layer->Get(x, y);
+				if (tile_id > 0)
 				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
-						//blits++;
-					}
+					//blits++;
 				}
 
 			}
 		}
 	}
-
-	App->entityManager->DrawEverything();
 }
 
 int Properties::Get(const char* value, int default_value)

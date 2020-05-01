@@ -325,30 +325,33 @@ bool j1Render::DrawAABBTree(TreeType type, AABBNode& node)
 	Rect r = node.GetRect();
 	SDL_Rect quad = {r.x , r.y , r.w,  r.h};
 
-	switch (type)
+	if (quad.w != 0 && quad.h != 0) 
 	{
-	case ORTHOGRAPHIC:
-		DrawQuad(quad, 0, 255, 0);
-		break;
-
-
-	case ISOMETRIC:
-
-		App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
-		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
-
-		App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-		App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-		break;
-
-	}
-
-	if (node.isDivided)
-	{
-		for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+		switch (type)
 		{
-			DrawAABBTree(type, node.childs[i]);
+		case ORTHOGRAPHIC:
+			DrawQuad(quad, 0, 255, 0, 255, false);
+			break;
+
+
+		case ISOMETRIC:
+
+			App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+			App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+
+			App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+			App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+			break;
+
 		}
+
+		//if (node.isDivided)
+		//{
+		//	for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+		//	{
+		//		DrawAABBTree(type, node.childs[i]);
+		//	}
+		//}
 	}
 	return true;
 }

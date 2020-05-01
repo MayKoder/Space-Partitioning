@@ -11,12 +11,9 @@ private:
 
 	//Move Speed
 	int moveSpeed;
-
 	//Conditions
 	bool _isSelected;
-
-	//Description / Effect
-	std::string description;
+	bool isDead;
 
 public:
 	Unit();
@@ -34,18 +31,6 @@ public:
 	virtual bool Draw(float dt);
 
 	void MoveToTarget();
-
-	void SetPath(const std::vector<iPoint>);
-
-protected:
-
-	iPoint targetPosition;
-	iPoint directionToTarget;
-	fPoint normalizedDirection;
-
-	std::vector<iPoint> entPath;
-
-	float timeToDespawn;
 	
 };
 

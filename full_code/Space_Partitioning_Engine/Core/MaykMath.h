@@ -3,9 +3,15 @@
 
 #define ABS(N) ((N<0)?(-N):(N))
 
+enum TreeType
+{
+	ORTHOGRAPHIC,
+	ISOMETRIC
+};
+
 struct Point
 {
-	int x, y;
+	int x = 0, y = 0;
 
 	float operator*(Point const &b) 
 	{
@@ -13,6 +19,30 @@ struct Point
 	}
 
 };
+
+struct pPoint 
+{
+	float* x = nullptr;
+	float* y = nullptr;
+
+	operator bool() const
+	{
+		if (x != nullptr && x != nullptr) 
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	Point GetValues() 
+	{
+		return { (int)*x, (int)*y};
+	}
+};
+
 struct Rect
 {
 	int x, y, w, h;

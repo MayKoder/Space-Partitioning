@@ -4,10 +4,9 @@
 #include "Unit.h"
 
 #include "p2Log.h"
-EntityManager::EntityManager()
+EntityManager::EntityManager() : selectedUnit(nullptr), debugTex(nullptr), buildingTex(nullptr), entTex(nullptr)
 {
 	name.append("entity_manager");
-	buildingTestIndex = 0;
 }
 
 //Destructor
@@ -17,12 +16,7 @@ EntityManager::~EntityManager()
 //Called before render is available
 bool EntityManager::Awake(pugi::xml_node& a)
 {
-
-	//Load buildings info
-	pugi::xml_document buildings;
-	buildings.load_file(a.child("buildings").attribute("file").as_string());
-
-	active = false;
+	active = true;
 
 	return true;
 }
@@ -30,7 +24,9 @@ bool EntityManager::Awake(pugi::xml_node& a)
 // Called before the first frame
 bool EntityManager::Start()
 {
-	//TODO: NO HARDCODE BOY
+
+	buildingTex = App->tex->Load("assets/buildings/GENHouse.png");
+
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -38,7 +34,6 @@ bool EntityManager::Start()
 			it._Ptr->_Myval->Start();
 		}
 	}
-
 	return true;
 }
 
@@ -66,56 +61,25 @@ bool EntityManager::Update(float dt)
 		}
 	}
 
-	//TODO: Move this logic to the player
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if (selectedUnit) 
 	{
-		EnterBuildMode();
-	}
-
-	if (crPreview.active)
-	{
-		iPoint mouse = App->map->GetMousePositionOnMap();
-
-		crPreview.canBuild = true;
-		debugTex = App->scene->debugBlue_tex;
-
-		for (int i = 0; i <= 1; i++)
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-			for (int y = mouse.y; y > mouse.y - crPreview.height; y--)
-			{
-				for (int x = mouse.x; x < mouse.x + crPreview.width; x++)
-				{
-					if (i == 0)
-					{
-						if (crPreview.canBuild)
-						{
-							debugTex = App->scene->debugRed_tex;
-							crPreview.canBuild = false;
-						}
-					}
-					else
-					{
-						if (IN_RANGE(x, 0, App->map->data.width - 1) == 1 && IN_RANGE(y, 0, App->map->data.height - 1) == 1)
-						{
-							iPoint p = App->map->MapToWorld(x, y);
-							App->render->Blit(debugTex, p.x, p.y);
-						}
-					}
-				}
-			}
+			selectedUnit->position.y -= 50.f * dt;
 		}
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && crPreview.active && crPreview.canBuild)
-	{
-		int faithToDescrease = 0;
-		iPoint mouse = App->map->GetMousePositionOnMap();
-		iPoint spawnPos = App->map->MapToWorld(mouse.x, mouse.y);
-		spawnPos.y += App->map->data.tile_height / 2;
-
-		//Onces you build disable building mode
-
-		crPreview.active = false;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		{
+			selectedUnit->position.y += 50.f * dt;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			selectedUnit->position.x += 50.f * dt;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			selectedUnit->position.x -= 50.f * dt;
+		}
+		App->scene->aabbTree.baseNode.UpdateNodePoints();
 	}
 
 	return true;
@@ -143,21 +107,11 @@ bool EntityManager::CleanUp()
 	}
 	entities.clear();
 
+	App->tex->UnLoad(debugTex);
+	App->tex->UnLoad(buildingTex);
+	App->tex->UnLoad(entTex);
+
 	return true;
-}
-
-Entity* EntityManager::CreateUnitEntity(UnitType type, iPoint pos, CivilizationType civilization)
-{
-	//Unit ret;
-	//ret.Init(pos);
-
-	//entities[EntityType::UNIT].push_back(ret);
-
-	////DELETE: THIS
-	//entities[EntityType::UNIT].sort(entity_Sort());
-
-	//return &ret;
-	return nullptr;
 }
 
 void EntityManager::DrawEverything()
@@ -169,14 +123,44 @@ void EntityManager::DrawEverything()
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
 			it._Ptr->_Myval->Draw(dt);
+			//App->render->DrawQuad({(int)(*it)->position.x + App->map->data.tile_width / 2,(int)(*it)->position.y, 3, 3}, 255, 0, 0);
 		}
 	}
 }
 
+Entity* EntityManager::CreateUnitEntity(iPoint pos)
+{
+	Unit* ret = new Unit();
+	ret->Init(pos);
+
+	entities[EntityType::UNIT].push_back(ret);
+
+	//DELETE: THIS
+	entities[EntityType::UNIT].sort(entity_Sort());
+
+	App->scene->aabbTree.AddUnitToTree(*ret);
+	selectedUnit = ret;
+
+	return ret;
+}
 Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 {
+
+	//TODO 1: Check if the new building is inside an existing one
+	bool exit = false;
+	for (std::list<Entity*>::iterator it = entities[EntityType::BUILDING].begin(); it != entities[EntityType::BUILDING].end(); it++)
+	{
+		if (App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) == App->map->WorldToMap((*it)->position.x + App->map->data.tile_width / 2, (*it)->position.y))
+		{
+			exit = true;
+			break;
+		}
+	}
+	if (exit)
+		return nullptr;
+
 	Building* ret = new Building();
-	ret->Init(pos);
+	ret->Init(pos, buildingTex);
 
 	iPoint iso = pos;
 	iso += App->map->GetTilesHalfSize();
@@ -187,24 +171,13 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 	//TODO load spritesheet when needed only? first call of constructor of entity?
 	entities[EntityType::BUILDING].push_back(ret);
 
-	App->scene->quadTree.AddEntityToNode(*ret, {pos.x, pos.y});
+	App->scene->quadTree.AddEntityToNode(*ret, {pos.x + App->map->data.tile_width / 2, pos.y});
 
 	entities[EntityType::BUILDING].sort(entity_Sort());
 
 	return ret;
 }
 
-void EntityManager::EnterBuildMode()
-{
-	crPreview.active = !crPreview.active;
-}
-void EntityManager::SetBuildIndex(int index)
-{
-	if (index < MAX_BUILDING_TYPES - 1) 
-	{
-		buildingTestIndex = index;
-	}
-}
 
 //Called when deleting a new Entity
 bool EntityManager::DeleteEntity(Entity* e)

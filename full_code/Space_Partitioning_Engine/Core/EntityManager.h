@@ -16,37 +16,6 @@
 #include "j1Scene.h"
 #include"j1Textures.h"
 
-
-
-enum class UnitType;
-enum BuildingType;
-struct CreationPreview
-{
-	bool active = false;
-	int width;
-	int height;
-	bool canBuild = false;
-
-};
-
-struct BuildingInfo
-{
-	CivilizationType civilization;
-	SDL_Rect spriteRect;
-	iPoint blitSize;
-
-	BuildingType buildingType;
-	int tileLenght;
-};
-
-enum class SpriteSheetType
-{
-	BUILDINGS,
-	ASSASSIN,
-	PRIEST,
-	SPEAR_SOLDIER
-};
-
 class Entity;
 class Player;
 
@@ -80,8 +49,6 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
-	void EnterBuildMode();
-
 	bool PostUpdate();
 
 	// Called before quitting
@@ -89,9 +56,8 @@ public:
 
 	bool DeleteEntity(Entity*);
 
-	Entity* CreateUnitEntity(UnitType, iPoint, CivilizationType);
+	Entity* CreateUnitEntity(iPoint);
 	Entity* CreateBuildingEntity(iPoint);
-	void SetBuildIndex(int);
 
 	//Load data packets
 	iPoint CalculateBuildingSize(int, int, int);
@@ -102,13 +68,10 @@ public:
 public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
-	CreationPreview crPreview;
+
+	Entity* selectedUnit;
 	SDL_Texture* debugTex;
-
-
-private:
-	int buildingTestIndex = 0;
-
-
+	SDL_Texture* buildingTex;
+	SDL_Texture* entTex;
 };
 #endif // !_ENTITYMANAGER_H
