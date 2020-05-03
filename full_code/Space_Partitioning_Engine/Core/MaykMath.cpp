@@ -41,3 +41,17 @@ bool IsPointInsideAxisAlignedRectangle(Rect r, Point p)
 		return true;
 	return false;
 }
+
+bool CheckRectCollision(const Rect& rect, const Rect& r)
+{
+	bool detectedX = true;
+	bool detectedY = true;
+
+	if ((rect.x + rect.w) < r.x || (r.x + r.w) < rect.x)
+		detectedX = false;
+
+	if ((rect.y + rect.h) < r.y || (r.y + r.h) < rect.y)
+		detectedY = false;
+
+	return detectedX && detectedY;
+}

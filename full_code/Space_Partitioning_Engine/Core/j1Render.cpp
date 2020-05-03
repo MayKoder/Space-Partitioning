@@ -330,7 +330,7 @@ bool j1Render::DrawAABBTree(TreeType type, AABBNode& node)
 		switch (type)
 		{
 		case ORTHOGRAPHIC:
-			DrawQuad(quad, 0, 255, 0, 255, false);
+			DrawQuad(quad, node.color.w, node.color.x, node.color.y, node.color.z, false);
 			break;
 
 
@@ -342,16 +342,15 @@ bool j1Render::DrawAABBTree(TreeType type, AABBNode& node)
 			App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
 			App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
 			break;
-
 		}
 
-		//if (node.isDivided)
-		//{
-		//	for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
-		//	{
-		//		DrawAABBTree(type, node.childs[i]);
-		//	}
-		//}
+		if (node.isDivided)
+		{
+			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+			{
+				DrawAABBTree(type, node.childs[i]);
+			}
+		}
 	}
 	return true;
 }

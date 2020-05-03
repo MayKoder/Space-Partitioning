@@ -81,6 +81,10 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 }
 
 //////////////// QUAD TREE ////////////////
+
+//TODO IMPORTANT: When checking close entities, check all childs, not only the data inside one child but the data inside all 4 childs
+//to avoid an entity being close to the edge of a node and not detecting another entity in the next child node
+//Check if the point you are looking for is inside the current node, if not, get the new node
 QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0)
 {
 }
@@ -161,9 +165,6 @@ Point QuadTree::CoordsToIsometricInt(Point input, Point tileSize)
 
 void QuadTree::AddEntityToNode(Entity& ent, Point p)
 {
-
-	//Figure lowest node out
-	FindLowestNodeInPoint(&baseNode, p);
 	if (lowestNode != nullptr) 
 	{
 

@@ -13,9 +13,9 @@ Unit::Unit(): _isSelected(false), moveSpeed(60), isDead(false)
 
 void Unit::Init(iPoint pos) 
 {
-	collisionRect = { 0, 0, 30, -55 };
 	position = { (float)pos.x + 20, (float)pos.y };
 	blitRect = { 16, 30 };
+	collisionRect = { (int)position.x, (int)position.y, blitRect.x, -blitRect.y};
 }
 
 Unit::~Unit()
@@ -42,6 +42,8 @@ bool Unit::Update(float dt)
 {
 	bool ret = true;
 
+	collisionRect.x = (int)position.x;
+	collisionRect.y = (int)position.y;
 	//Allawys blit the sprite at the end
 	//ret = Draw(dt);
 
@@ -64,5 +66,6 @@ bool Unit::isSelected()
 bool Unit::Draw(float dt)
 {
 	App->render->DrawQuad({(int)position.x, (int)position.y, blitRect.x, -blitRect.y}, 255, 255, 255);
+	App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
 	return true;
 }

@@ -15,6 +15,7 @@
 //Can delete
 #include "j1Scene.h"
 #include"j1Textures.h"
+#include"MaykMath.h"
 
 class Entity;
 class Player;

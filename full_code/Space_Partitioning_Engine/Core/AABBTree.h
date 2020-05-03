@@ -14,7 +14,7 @@
 #include"Entity.h"
 
 #define AABBNODE_CHILD_NUMBER 2
-#define MAX_ITEMS_IN_AABBNODE 5
+#define MAX_ITEMS_IN_AABBNODE 6
 #define IN_RANGE_AABBTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 class AABBTree;
@@ -24,7 +24,7 @@ struct AABBNode
 	AABBNode();
 	~AABBNode();
 
-	void Init(AABBTree*, AABBNode*, float*, float*, float*, float*);
+	void Init(AABBTree*, AABBNode*, int, int, int, int);
 
 	//Positions
 	Point minPos;
@@ -39,8 +39,9 @@ struct AABBNode
 
 	//Data
 	std::list<Entity*> data;
+	Vector4 color;
 
-	void SetRect(float*, float*, float*, float*);
+	void SetRect(int, int, int, int);
 
 	Rect GetRect() 
 	{ 
@@ -49,7 +50,7 @@ struct AABBNode
 	void UpdateNodePoints();
 	//std::list<iPoint>* GetContent() { return &data; }
 
-	//static void SubDivide(AABBNode&, int);
+	static void SubDivide(AABBNode&);
 };
 
 class AABBTree
@@ -68,6 +69,10 @@ public:
 
 	//Delete and free all the tree memory
 	void AddUnitToTree(Entity&);
+
+	void UpdateAllNodes(AABBNode& node);
+	AABBNode* FindLowestNode(AABBNode*, const Point);
+
 	void Clear();
 	//void FindLoadNodesToList(std::list<AABBNode*>*, AABBNode*, Point, Point);
 	//static bool QuadNodeOverLap(Rect, Rect);

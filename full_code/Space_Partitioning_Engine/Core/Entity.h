@@ -5,6 +5,7 @@
 #include "SDL/include/SDL_rect.h"
 #include "j1App.h"
 #include "j1Render.h"
+#include"MaykMath.h"
 
 enum class EntityType
 {
@@ -78,6 +79,13 @@ public:
 	{
 		return collisionRect;
 	}
+
+	Rect getCollisionMathRect()
+	{
+		return {collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h};
+	}
+
+
 
 protected:
 	SDL_Rect collisionRect;

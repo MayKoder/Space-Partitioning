@@ -8,8 +8,9 @@ AABBNode::AABBNode() : isDivided(false), root(nullptr), parent(nullptr)
 	//Positions
 	minPos = { 0, 0 };
 	maxPos = { 0, 0 };
+	color = {0, 255, 0, 255};
 }
-void AABBNode::Init(AABBTree* s_root, AABBNode* s_parent, float* A_x, float* A_y, float* B_x, float* B_y)
+void AABBNode::Init(AABBTree* s_root, AABBNode* s_parent, int A_x, int A_y, int B_x, int B_y)
 {
 	root = s_root;
 	parent = s_parent;
@@ -28,14 +29,14 @@ AABBNode::~AABBNode()
 	childs.clear();
 }
 
-void AABBNode::SetRect(float* A_x, float* A_y, float* B_x, float* B_y)
+void AABBNode::SetRect(int A_x, int A_y, int B_x, int B_y)
 {
 
-	minPos.x = *A_x;
-	minPos.y = *A_y;
+	minPos.x = A_x;
+	minPos.y = A_y;
 
-	maxPos.x = *B_x;
-	maxPos.y = *B_y;
+	maxPos.x = B_x;
+	maxPos.y = B_y;
 }
 
 void AABBNode::UpdateNodePoints()
@@ -68,32 +69,37 @@ void AABBNode::UpdateNodePoints()
 	}
 }
 
-//void AABBNode::SubDivide(AABBNode& node, int divisionsLeft)
-//{
-//	if (divisionsLeft > 0)
-//	{
-//		if (!node.isDivided)
-//		{
-//			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
-//			{
-//				node.childs.push_back(AABBNode());
-//			}
-//
-//			node.childs[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
-//			node.childs[1].Init(node.root, &node, node.x + (node.w / 2), node.y, node.w / 2, node.h / 2);
-//
-//			node.isDivided = true;
-//
-//
-//
-//			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
-//			{
-//				SubDivide(node.childs[i], divisionsLeft - 1);
-//			}
-//		}
-//	}
-//
-//}
+void AABBNode::SubDivide(AABBNode& node)
+{
+	if (!node.isDivided)
+	{
+		for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+		{
+			node.childs.push_back(AABBNode());
+		}
+
+		node.childs[0].Init(node.root, &node, node.minPos.x, node.minPos.y, 0, 0);
+		node.childs[1].Init(node.root, &node, node.maxPos.x, node.maxPos.y, 0, 0);
+
+		for (std::list<Entity*>::iterator it = node.data.begin(); it != node.data.end(); it++)
+		{
+			float dMin = node.minPos.DistanceManhattan((Point)(*it)->position);
+			float dMax = node.maxPos.DistanceManhattan((Point)(*it)->position);
+
+			if (dMin < dMax || dMin == dMax)
+			{
+				node.childs[0].data.push_back((*it));
+			}
+			else if (dMin > dMax) 
+			{
+				node.childs[1].data.push_back((*it));
+			}
+
+		}
+
+		node.isDivided = true;
+	}
+}
 
 //////////////// QUAD TREE ////////////////
 AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC), lowestNode(nullptr)
@@ -229,14 +235,72 @@ AABBTree::~AABBTree()
 
 void AABBTree::AddUnitToTree(Entity& ent)
 {
-	baseNode.data.push_back(&ent);
 
-	if (baseNode.data.size() >= MAX_ITEMS_IN_AABBNODE) 
+	AABBNode* lowestNode = nullptr;
+	//Fins lowest node in point
+	lowestNode = FindLowestNode(&baseNode, (Point)ent.position);
+
+	//Is point inside node?
+	//is node divided? if not, this is the lowest node, 
+
+	if (lowestNode != nullptr) 
 	{
-		//Subdivide
+
+		AABBNode* back = lowestNode->parent;
+		while (back != nullptr)
+		{
+			back->data.push_back(&ent);
+			back = back->parent;
+		}
+
+		lowestNode->data.push_back(&ent);
+		if (lowestNode->data.size() >= MAX_ITEMS_IN_AABBNODE)
+		{
+			//Subdivide
+			lowestNode->SubDivide(*lowestNode);
+		}
+
 	}
+}
 
+void AABBTree::UpdateAllNodes(AABBNode& node)
+{
 
+	if (node.data.size() > 0) 
+	{
+		node.UpdateNodePoints();
+
+		if (node.isDivided)
+		{
+			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+			{
+				UpdateAllNodes(node.childs[i]);
+			}
+		}
+	}
+}
+
+AABBNode* AABBTree::FindLowestNode(AABBNode* node, const Point p)
+{
+	if (node->isDivided)
+	{
+		//is it closer to A or B?
+		float dMin = node->minPos.DistanceManhattan(p);
+		float dMax = node->maxPos.DistanceManhattan(p);
+
+		if (dMin < dMax || dMin == dMax)
+		{
+			return FindLowestNode(&node->childs[0], p);
+		}
+		else if (dMin > dMax)
+		{
+			return FindLowestNode(&node->childs[1], p);
+		}
+	}
+	else
+	{
+		return node;
+	}
 }
 
 void AABBTree::Clear()

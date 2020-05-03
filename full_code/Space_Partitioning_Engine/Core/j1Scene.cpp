@@ -112,25 +112,6 @@ bool j1Scene::Update(float dt)
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)
 	{
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
-		{
-			iPoint mouse = App->map->GetMousePositionOnMap();
-			mouse = App->map->MapToWorld(mouse.x, mouse.y);
-			mouse.y += App->map->data.tile_height / 2;
-
-			App->entityManager->CreateBuildingEntity(mouse);
-		}
-
-		if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
-		{
-			iPoint mouse = App->map->GetMousePositionOnMap();
-			mouse = App->map->MapToWorld(mouse.x, mouse.y);
-			mouse.y += App->map->data.tile_height / 2;
-
-			App->entityManager->CreateUnitEntity(mouse);
-		}
-
-
 		p = App->map->MapToWorld(p.x, p.y);
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
