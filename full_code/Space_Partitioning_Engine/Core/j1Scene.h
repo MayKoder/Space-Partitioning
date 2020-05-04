@@ -1,6 +1,8 @@
 #ifndef __j1SCENE_H__
 #define __j1SCENE_H__
 
+#include<time.h>
+
 #include "j1Module.h"
 #include "j1Timer.h"
 #include "SDL/include/SDL.h"
@@ -41,7 +43,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void OnClick(UI* element, float argument = 0);
+	int GetRandomIntInRange(int, int);
 
 	SDL_Rect mapLimitsRect;
 

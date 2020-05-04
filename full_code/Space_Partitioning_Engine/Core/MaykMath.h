@@ -68,4 +68,5 @@ bool IsPointInsideAxisAlignedRectangle(Rect, Point);
 
 bool CheckRectCollision(const Rect&, const Rect&);
 
+
 #endif

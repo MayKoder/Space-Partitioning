@@ -95,11 +95,23 @@ bool EntityManager::Update(float dt)
 		//Create unit
 		if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
 		{
-			iPoint mouse = App->map->GetMousePositionOnMap();
-			mouse = App->map->MapToWorld(mouse.x, mouse.y);
-			mouse.y += App->map->data.tile_height / 2;
+			//iPoint mouse = App->map->GetMousePositionOnMap();
+			//mouse = App->map->MapToWorld(mouse.x, mouse.y);
+			//mouse.y += App->map->data.tile_height / 2;
 
-			App->entityManager->CreateUnitEntity(mouse);
+			//App->entityManager->CreateUnitEntity(mouse);
+
+			for (int i = 0; i < 10; i++)
+			{
+				int x = App->scene->GetRandomIntInRange(0, App->map->data.width);
+				int y = App->scene->GetRandomIntInRange(0, App->map->data.height);
+
+				iPoint pos = App->map->MapToWorld(x, y);
+				pos.x += 32;
+
+				CreateUnitEntity(pos);
+				App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
+			}
 		}
 	}
 	if (selectedUnit) 

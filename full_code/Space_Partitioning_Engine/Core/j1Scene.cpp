@@ -14,9 +14,11 @@
 #include"QuadTree.h"
 #include"MaykMath.h"
 
-j1Scene::j1Scene() : j1Module()
+j1Scene::j1Scene() : j1Module(), debugBlue_tex(nullptr), debugRed_tex(nullptr), fpsText(nullptr), godMode(false), paused_game(false)
 {
 	name.append("scene");
+	mapLimitsRect = { 0, 0, 0, 0 };
+	std::srand(time(NULL));
 }
 
 // Destructor
@@ -58,9 +60,6 @@ bool j1Scene::Start()
 	position = App->map->WorldToMap(0, 0);
 	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
 	quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-
-
-
 
 	return true;
 }
@@ -147,10 +146,7 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-void j1Scene::OnClick(UI* element, float argument)
+int j1Scene::GetRandomIntInRange(int minValue, int maxValue)
 {
-
-	switch (element->type)
-	{
-	}
+	return (rand() % (maxValue - minValue + 1)) + minValue;
 }
