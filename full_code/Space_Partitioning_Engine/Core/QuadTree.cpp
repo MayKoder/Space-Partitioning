@@ -85,7 +85,7 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 //TODO IMPORTANT: When checking close entities, check all childs, not only the data inside one child but the data inside all 4 childs
 //to avoid an entity being close to the edge of a node and not detecting another entity in the next child node
 //Check if the point you are looking for is inside the current node, if not, get the new node
-QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0)
+QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(false)
 {
 }
 void QuadTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h) 

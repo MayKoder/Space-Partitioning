@@ -47,6 +47,14 @@ struct AABBNode
 	{ 
 			return {minPos.x, minPos.y, maxPos.x - minPos.x, maxPos.y - minPos.y};
 	}
+	std::list<Entity*>* GetData() 
+	{
+		return &data;
+	}
+	std::list<Entity*> GetDataValue() 
+	{
+		return data;
+	}
 	void UpdateNodePoints();
 	//std::list<iPoint>* GetContent() { return &data; }
 
@@ -64,6 +72,7 @@ public:
 
 	AABBNode baseNode;
 	TreeType type;
+	bool displayTree;
 
 	AABBNode* lowestNode;
 
@@ -72,9 +81,9 @@ public:
 
 	void UpdateAllNodes(AABBNode& node);
 	AABBNode* FindLowestNode(AABBNode*, const Point);
+	void LoadInterNodesToList(AABBNode*, std::list<AABBNode*>&);
 
 	void Clear();
-	//void FindLoadNodesToList(std::list<AABBNode*>*, AABBNode*, Point, Point);
 	//static bool QuadNodeOverLap(Rect, Rect);
 	//static Point CoordsToIsometricInt(Point, Point);
 

@@ -70,6 +70,8 @@ public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
 
+	std::list<AABBNode*> nodesToCheck;
+
 	Entity* selectedUnit;
 	SDL_Texture* buildingTex;
 	SDL_Texture* entTex;

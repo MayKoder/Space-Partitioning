@@ -102,7 +102,7 @@ void AABBNode::SubDivide(AABBNode& node)
 }
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC), lowestNode(nullptr)
+AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC), lowestNode(nullptr), displayTree(false)
 {
 }
 void AABBTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h)
@@ -116,34 +116,6 @@ AABBTree::~AABBTree()
 
 }
 
-//void AABBTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point l2, Point r2)
-//{
-//
-//	Rect rect = { node->x, node->y, node->w, node->h };
-//
-//	//TODO: 160 WHAT
-//	Rect r = { l2.x, l2.y, r2.x, r2.y };
-//	if (this->type == TreeType::ISOMETRIC)
-//		r.w += node->root->lowest_height;
-//
-//	//OPT: Dumb cunt don't check all the nodes lmao
-//	if (node->isDivided)
-//	{
-//		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-//		{
-//			FindLoadNodesToList(list, &node->childs[i], l2, r2);
-//		}
-//	}
-//	else
-//	{
-//		if (QuadNodeOverLap(rect, r) || QuadNodeOverLap(r, rect))
-//		{
-//			list->push_back(node);
-//		}
-//	}
-//
-//}
-//
 //bool AABBTree::QuadNodeOverLap(Rect rect, Rect r)
 //{
 //	//OPT: Needs a big update, detection can't be hardcoded with a +350...
@@ -179,59 +151,6 @@ AABBTree::~AABBTree()
 //	return ret;
 //}
 //
-//void AABBTree::AddEntityToNode(Entity& ent, Point p)
-//{
-//
-//	//Figure lowest node out
-//	FindLowestNodeInPoint(&baseNode, p);
-//	if (lowestNode != nullptr)
-//	{
-//		lowestNode->data.push_back(&ent);
-//		if (lowestNode->data.size() >= MAX_ITEMS_IN_NODE)
-//		{
-//			lowestNode->SubDivide(*lowestNode, 1);
-//
-//			Rect rect;
-//			//For every data element set it to the new subdivision
-//			for (std::list<Entity*>::iterator it = lowestNode->data.begin(); it != lowestNode->data.end(); it++)
-//			{
-//				for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-//				{
-//					rect = lowestNode->childs[i].GetRect();
-//					if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, { (int)(*it)->position.x, (int)(*it)->position.y }))
-//					{
-//						lowestNode->childs[i].data.push_back(*it);
-//						break;
-//					}
-//				}
-//			}
-//
-//
-//		}
-//	}
-//}
-//
-////This MUST return the lowest node, and you MUST remove the lowestNode variable
-//void AABBTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
-//{
-//	Rect rect = node->GetRect();
-//	QuadNode* res = nullptr;
-//	if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, p))
-//	{
-//
-//		if (node->childs.size() != 0)
-//		{
-//			for (unsigned int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-//			{
-//				FindLowestNodeInPoint(&node->childs[i], p);
-//			}
-//		}
-//		else
-//		{
-//			lowestNode = node;
-//		}
-//	}
-//}
 
 void AABBTree::AddUnitToTree(Entity& ent)
 {
@@ -300,6 +219,20 @@ AABBNode* AABBTree::FindLowestNode(AABBNode* node, const Point p)
 	else
 	{
 		return node;
+	}
+}
+
+void AABBTree::LoadInterNodesToList(AABBNode* node, std::list<AABBNode*>& list)
+{
+
+	if (node->isDivided) 
+	{
+		LoadInterNodesToList(&node->childs[0], list);
+		LoadInterNodesToList(&node->childs[1], list);
+	}
+	else
+	{
+		list.push_back(node);
 	}
 }
 

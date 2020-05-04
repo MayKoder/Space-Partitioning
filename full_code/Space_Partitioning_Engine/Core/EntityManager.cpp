@@ -81,9 +81,9 @@ bool EntityManager::Update(float dt)
 			App->input->GetMousePosition(p.x, p.y);
 			p = App->render->ScreenToWorld(p.x, p.y);
 
-			std::list<Entity*>* listData = &App->scene->aabbTree.FindLowestNode(&App->scene->aabbTree.baseNode, p)->data;
+			//std::list<Entity*>* listData = &App->scene->aabbTree.FindLowestNode(&App->scene->aabbTree.baseNode, p)->data;
 
-			for (std::list<Entity*>::iterator it = listData->begin(); it != listData->end(); it++)
+			for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 			{
 				if (IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p)) 
 				{
@@ -101,7 +101,7 @@ bool EntityManager::Update(float dt)
 
 			//App->entityManager->CreateUnitEntity(mouse);
 
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 50; i++)
 			{
 				int x = App->scene->GetRandomIntInRange(0, App->map->data.width);
 				int y = App->scene->GetRandomIntInRange(0, App->map->data.height);
@@ -145,24 +145,73 @@ bool EntityManager::PostUpdate()
 
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
+	App->scene->aabbTree.LoadInterNodesToList(&App->scene->aabbTree.baseNode, nodesToCheck);
 
-	//Update all collisions
-	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+	std::list<std::list<Entity*>> groups;
+	for (std::list<AABBNode*>::iterator data1 = nodesToCheck.begin(); data1 != nodesToCheck.end(); data1++)
 	{
-		for (std::list<Entity*>::iterator it2 = entities[EntityType::UNIT].begin(); it2 != entities[EntityType::UNIT].end(); it2++)
+		for (std::list<AABBNode*>::iterator data2 = nodesToCheck.begin(); data2 != nodesToCheck.end(); data2++)
 		{
-			//Calculte collisions
-			if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+			if (data1 != data2) 
 			{
-				LOG("Collision");
-				//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
-				//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
-
+				std::list<Entity*> lst = (*data1)->GetDataValue();
+				if (CheckRectCollision((*data1)->GetRect(), (*data2)->GetRect()))
+				{
+					lst.merge((*data2)->GetDataValue());
+					(*data1)->color = { 255, 0, 0, 255 };
+					(*data2)->color = { 255, 0, 0, 255 };
+				}
+				else
+				{
+					(*data1)->color = { 0, 255, 0, 255 };
+					(*data2)->color = { 0, 255, 0, 255 };
+				}
+				groups.push_back(lst);
 			}
 		}
 	}
 
-	//LOG("Time to check collisions between %i units took: %f", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
+	LOG("List merge took: %f ms", timer.ReadMs() - startTimer);
+
+	for (std::list<std::list<Entity*>>::iterator datas = groups.begin(); datas != groups.end(); datas++)
+	{
+		//Update all collisions
+		for (std::list<Entity*>::iterator it = (*datas).begin(); it != (*datas).end(); it++)
+		{
+			for (std::list<Entity*>::iterator it2 = (*datas).begin(); it2 != (*datas).end(); it2++)
+			{
+				//Calculte collisions
+				if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+				{
+					LOG("Collision");
+					//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
+					//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
+
+				}
+			}
+		}
+	}
+
+	groups.clear();
+	nodesToCheck.clear();
+
+	////Update all collisions
+	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+	//{
+	//	for (std::list<Entity*>::iterator it2 = entities[EntityType::UNIT].begin(); it2 != entities[EntityType::UNIT].end(); it2++)
+	//	{
+	//		//Calculte collisions
+	//		if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+	//		{
+	//			LOG("Collision");
+	//			//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
+	//			//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
+
+	//		}
+	//	}
+	//}
+
+	LOG("Time to check collisions between %i units took: %f", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
 
 	return true;
 }
@@ -182,6 +231,7 @@ bool EntityManager::CleanUp()
 	}
 	entities.clear();
 
+	nodesToCheck.clear();
 	App->tex->UnLoad(buildingTex);
 	//App->tex->UnLoad(entTex);
 
@@ -206,6 +256,22 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 {
 
 	//TODO 1.1: Check if the new entity is inside an existing one
+	bool exit = false;
+
+	//Figure lowest node out
+	//App->scene->quadTree.FindLowestNodeInPoint(&App->scene->quadTree.baseNode, { pos.x, pos.y });
+	//QuadNode* node = App->scene->quadTree.lowestNode;
+
+	for (std::list<Entity*>::iterator it = App->scene->aabbTree.baseNode.data.begin(); it != App->scene->aabbTree.baseNode.data.end(); it++)
+	{
+		if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))
+		{
+			exit = true;
+			break;
+		}
+	}
+	if (exit)
+		return nullptr;
 
 	Unit* ret = new Unit();
 	ret->Init(pos);

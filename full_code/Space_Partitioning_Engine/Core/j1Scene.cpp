@@ -99,13 +99,22 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(1000.0f * dt);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
+	{
+		quadTree.displayTree = !quadTree.displayTree;
+		aabbTree.displayTree = !aabbTree.displayTree;
+	}
+
 
 	App->map->Draw();
 
 	App->entityManager->DrawEverything();
 	//Quad draw
-	App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
-	App->render->DrawAABBTree(aabbTree.type, aabbTree.baseNode);
+	if(quadTree.displayTree)
+		App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
+
+	if(aabbTree.displayTree)
+		App->render->DrawAABBTree(aabbTree.type, aabbTree.baseNode);
 
 
 	iPoint p = App->map->GetMousePositionOnMap();

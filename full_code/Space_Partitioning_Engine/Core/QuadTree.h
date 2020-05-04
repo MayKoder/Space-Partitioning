@@ -60,6 +60,7 @@ public:
 
 	int tile_width = 0;
 	int tile_height = 0;
+	bool displayTree;
 
 	int lowest_height = 0;
 	QuadNode* lowestNode = nullptr;
