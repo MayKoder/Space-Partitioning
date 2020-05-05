@@ -187,7 +187,7 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 				for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 				{
 					rect = lowestNode->childs[i].GetRect();
-					if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {(int)(*it)->position.x, (int)(*it)->position.y }))
+					if (MaykMath::IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {(int)(*it)->position.x, (int)(*it)->position.y }))
 					{
 						lowestNode->childs[i].data.push_back(*it);
 						break;
@@ -207,7 +207,7 @@ void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
 {
 	Rect rect = node->GetRect();
 	QuadNode* res = nullptr;
-	if (IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, p)) 
+	if (MaykMath::IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, p))
 	{
 
 		if (node->childs.size() != 0) 

@@ -236,6 +236,22 @@ void AABBTree::LoadInterNodesToList(AABBNode* node, std::list<AABBNode*>& list)
 	}
 }
 
+void AABBTree::LoadLeafNodesInsideRect(AABBNode* node, std::vector<AABBNode*>& vec, Rect& collider)
+{
+	if (MaykMath::CheckRectCollision(node->GetRect(), collider))
+	{
+		if (node->isDivided) 
+		{
+			LoadLeafNodesInsideRect(&node->childs[0], vec, collider);
+			LoadLeafNodesInsideRect(&node->childs[1], vec, collider);
+		}
+		else
+		{
+			vec.push_back(node);
+		}
+	}
+}
+
 void AABBTree::Clear()
 {
 	//Deletes and calls ~j1QuadTree

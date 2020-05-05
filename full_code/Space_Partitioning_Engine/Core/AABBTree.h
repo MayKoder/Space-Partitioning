@@ -82,6 +82,7 @@ public:
 	void UpdateAllNodes(AABBNode& node);
 	AABBNode* FindLowestNode(AABBNode*, const Point);
 	void LoadInterNodesToList(AABBNode*, std::list<AABBNode*>&);
+	void LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect& collider);
 
 	void Clear();
 	//static bool QuadNodeOverLap(Rect, Rect);

@@ -85,7 +85,7 @@ bool EntityManager::Update(float dt)
 
 			for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 			{
-				if (IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p)) 
+				if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
 				{
 					selectedUnit = (*it);
 					break;
@@ -101,10 +101,10 @@ bool EntityManager::Update(float dt)
 
 			//App->entityManager->CreateUnitEntity(mouse);
 
-			for (int i = 0; i < 50; i++)
+			for (int i = 0; i < 100; i++)
 			{
-				int x = App->scene->GetRandomIntInRange(0, App->map->data.width);
-				int y = App->scene->GetRandomIntInRange(0, App->map->data.height);
+				int x = App->scene->GetRandomIntInRange(1, App->map->data.width);
+				int y = App->scene->GetRandomIntInRange(1, App->map->data.height);
 
 				iPoint pos = App->map->MapToWorld(x, y);
 				pos.x += 32;
@@ -145,43 +145,33 @@ bool EntityManager::PostUpdate()
 
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
-	App->scene->aabbTree.LoadInterNodesToList(&App->scene->aabbTree.baseNode, nodesToCheck);
+	int checks = 0;
 
-	std::list<std::list<Entity*>> groups;
-	for (std::list<AABBNode*>::iterator data1 = nodesToCheck.begin(); data1 != nodesToCheck.end(); data1++)
+
+	float itinerAllEntityList = 0;
+	float itinerateNodes = 0;
+	float checkCollisions = 0;
+	//Per cada entitat
+	//Mirar nodes amb colisio
+	//comprova colisio amb data de cada node
+	startTimer = timer.ReadMs();
+	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
-		for (std::list<AABBNode*>::iterator data2 = nodesToCheck.begin(); data2 != nodesToCheck.end(); data2++)
-		{
-			if (data1 != data2) 
-			{
-				std::list<Entity*> lst = (*data1)->GetDataValue();
-				if (CheckRectCollision((*data1)->GetRect(), (*data2)->GetRect()))
-				{
-					lst.merge((*data2)->GetDataValue());
-					(*data1)->color = { 255, 0, 0, 255 };
-					(*data2)->color = { 255, 0, 0, 255 };
-				}
-				else
-				{
-					(*data1)->color = { 0, 255, 0, 255 };
-					(*data2)->color = { 0, 255, 0, 255 };
-				}
-				groups.push_back(lst);
-			}
-		}
-	}
+		float tempIter = timer.ReadMs();
+		std::vector<AABBNode*> nodesToCheck;
+		App->scene->aabbTree.LoadLeafNodesInsideRect(&App->scene->aabbTree.baseNode, nodesToCheck, (*it)->getCollisionMathRect());
+		itinerAllEntityList += (timer.ReadMs() - tempIter);
 
-	LOG("List merge took: %f ms", timer.ReadMs() - startTimer);
-
-	for (std::list<std::list<Entity*>>::iterator datas = groups.begin(); datas != groups.end(); datas++)
-	{
-		//Update all collisions
-		for (std::list<Entity*>::iterator it = (*datas).begin(); it != (*datas).end(); it++)
+		//TIME: This takes almost no time
+		float tempItNodes = timer.ReadMs();
+		for (int i = 0; i < nodesToCheck.size(); i++)
 		{
-			for (std::list<Entity*>::iterator it2 = (*datas).begin(); it2 != (*datas).end(); it2++)
+			float tempCheck = timer.ReadMs();
+			for (std::list<Entity*>::iterator it2 = nodesToCheck[i]->data.begin(); it2 != nodesToCheck[i]->data.end(); it2++)
 			{
 				//Calculte collisions
-				if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+				checks++;
+				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
 				{
 					LOG("Collision");
 					//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
@@ -189,11 +179,66 @@ bool EntityManager::PostUpdate()
 
 				}
 			}
+			checkCollisions += (timer.ReadMs() - tempCheck);
 		}
+		itinerateNodes += (timer.ReadMs() - tempItNodes);
+		nodesToCheck.clear();
 	}
+	LOG("Time to find nodes %f, time to check Vector %f, time to check collisions %f, total time %f, entities %i", itinerAllEntityList, itinerateNodes, checkCollisions, timer.ReadMs() - startTimer, entities[EntityType::UNIT].size());
 
-	groups.clear();
-	nodesToCheck.clear();
+	//LOG("Time to check all nodes: %fms", timer.ReadMs() - startTimer);
+
+	//LOG("%i units collision %i checks took: %f ms", entities[EntityType::UNIT].size(), checks, timer.ReadMs() - startTimer);
+	//App->scene->aabbTree.LoadInterNodesToList(&App->scene->aabbTree.baseNode, nodesToCheck);
+
+	////Too slow
+	//std::list<std::list<Entity*>> groups;
+	//for (std::list<AABBNode*>::iterator data1 = nodesToCheck.begin(); data1 != nodesToCheck.end(); data1++)
+	//{
+	//	for (std::list<AABBNode*>::iterator data2 = nodesToCheck.begin(); data2 != nodesToCheck.end(); data2++)
+	//	{
+	//		if (data1 != data2) 
+	//		{
+	//			std::list<Entity*> lst = (*data1)->GetDataValue();
+	//			if (CheckRectCollision((*data1)->GetRect(), (*data2)->GetRect()))
+	//			{
+	//				lst.merge((*data2)->GetDataValue());
+	//				(*data1)->color = { 255, 0, 0, 255 };
+	//				(*data2)->color = { 255, 0, 0, 255 };
+	//			}
+	//			else
+	//			{
+	//				(*data1)->color = { 0, 255, 0, 255 };
+	//				(*data2)->color = { 0, 255, 0, 255 };
+	//			}
+	//			groups.push_back(lst);
+	//		}
+	//	}
+	//}
+
+	//LOG("List merge took: %f ms", timer.ReadMs() - startTimer);
+
+	//for (std::list<std::list<Entity*>>::iterator datas = groups.begin(); datas != groups.end(); datas++)
+	//{
+	//	//Update all collisions
+	//	for (std::list<Entity*>::iterator it = (*datas).begin(); it != (*datas).end(); it++)
+	//	{
+	//		for (std::list<Entity*>::iterator it2 = (*datas).begin(); it2 != (*datas).end(); it2++)
+	//		{
+	//			//Calculte collisions
+	//			if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
+	//			{
+	//				LOG("Collision");
+	//				//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
+	//				//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
+
+	//			}
+	//		}
+	//	}
+	//}
+
+	//groups.clear();
+	//nodesToCheck.clear();
 
 	////Update all collisions
 	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
@@ -211,7 +256,7 @@ bool EntityManager::PostUpdate()
 	//	}
 	//}
 
-	LOG("Time to check collisions between %i units took: %f", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
+	//LOG("Time to check collisions between %i units took: %f", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
 
 	return true;
 }

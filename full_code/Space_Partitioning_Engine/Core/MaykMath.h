@@ -56,17 +56,17 @@ struct Vector4
 		this->y = y;
 		this->z = z;
 	}
-
-
 };
 
-Point vect2d(Point p1, Point p2);
 
-float GetTriangleArea(Point, Point, Point);
-bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
-bool IsPointInsideAxisAlignedRectangle(Rect, Point);
-
-bool CheckRectCollision(const Rect&, const Rect&);
+namespace MaykMath
+{
+	Point PointsToVector(Point p1, Point p2);
+	float GetTriangleArea(Point, Point, Point);
+	bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
+	bool IsPointInsideAxisAlignedRectangle(Rect, Point);
+	bool CheckRectCollision(const Rect&, const Rect&);
+}
 
 
 #endif
