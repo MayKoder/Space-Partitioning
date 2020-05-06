@@ -114,7 +114,7 @@ bool j1Scene::Update(float dt)
 		App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
 
 	if(aabbTree.displayTree)
-		App->render->DrawAABBTree(aabbTree.type, aabbTree.baseNode);
+		App->render->DrawAABBTree(aabbTree.baseNode);
 
 
 	iPoint p = App->map->GetMousePositionOnMap();

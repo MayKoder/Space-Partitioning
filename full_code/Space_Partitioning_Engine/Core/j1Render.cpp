@@ -318,7 +318,7 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 	return true;
 }
 
-bool j1Render::DrawAABBTree(TreeType type, AABBNode& node)
+bool j1Render::DrawAABBTree(AABBNode& node)
 {
 
 	//This method needs to be upgraded to a generic display type
@@ -327,28 +327,14 @@ bool j1Render::DrawAABBTree(TreeType type, AABBNode& node)
 
 	if (quad.w != 0 && quad.h != 0) 
 	{
-		switch (type)
-		{
-		case ORTHOGRAPHIC:
-			DrawQuad(quad, node.color.w, node.color.x, node.color.y, node.color.z, false);
-			break;
 
-
-		case ISOMETRIC:
-
-			App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
-			App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
-
-			App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-			App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-			break;
-		}
+		DrawQuad(quad, node.color.w, node.color.x, node.color.y, node.color.z, false);
 
 		if (node.isDivided)
 		{
 			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
 			{
-				DrawAABBTree(type, node.childs[i]);
+				DrawAABBTree(node.childs[i]);
 			}
 		}
 	}

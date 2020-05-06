@@ -63,6 +63,25 @@ bool EntityManager::Update(float dt)
 
 
 	iPoint p = App->map->GetMousePositionOnMap();
+
+	//Select unit
+	if (App->input->GetMouseButtonDown(2) == KEY_DOWN)
+	{
+		iPoint p;
+		App->input->GetMousePosition(p.x, p.y);
+		p = App->render->ScreenToWorld(p.x, p.y);
+
+		//std::list<Entity*>* listData = &App->scene->aabbTree.FindLowestNode(&App->scene->aabbTree.baseNode, p)->data;
+
+		for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+		{
+			if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
+			{
+				selectedUnit = (*it);
+				break;
+			}
+		}
+	}
 	if (IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
 	{
 		//Create building
@@ -74,30 +93,12 @@ bool EntityManager::Update(float dt)
 
 			App->entityManager->CreateBuildingEntity(mouse);
 		}
-		//Select unit
-		if (App->input->GetMouseButtonDown(2) == KEY_DOWN)
-		{
-			iPoint p;
-			App->input->GetMousePosition(p.x, p.y);
-			p = App->render->ScreenToWorld(p.x, p.y);
-
-			//std::list<Entity*>* listData = &App->scene->aabbTree.FindLowestNode(&App->scene->aabbTree.baseNode, p)->data;
-
-			for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
-			{
-				if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
-				{
-					selectedUnit = (*it);
-					break;
-				}
-			}
-		}
 		//Create unit
 		if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
 		{
-			//iPoint mouse = App->map->GetMousePositionOnMap();
-			//mouse = App->map->MapToWorld(mouse.x, mouse.y);
-			//mouse.y += App->map->data.tile_height / 2;
+			iPoint mouse = App->map->GetMousePositionOnMap();
+			mouse = App->map->MapToWorld(mouse.x, mouse.y);
+			mouse.y += App->map->data.tile_height / 2;
 
 			//App->entityManager->CreateUnitEntity(mouse);
 

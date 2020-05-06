@@ -105,7 +105,6 @@ void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, P
 
 	Rect rect = {node->x, node->y, node->w, node->h};
 
-	//TODO: 160 WHAT
 	Rect r = {l2.x, l2.y, r2.x, r2.y};
 	if (this->type == TreeType::ISOMETRIC)
 		r.w += node->root->lowest_height;

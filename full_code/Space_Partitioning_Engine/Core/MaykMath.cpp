@@ -10,6 +10,7 @@ Point MaykMath::PointsToVector(Point p1, Point p2)
 	return {(p2.x - p1.x), (-1 * (p2.y - p1.y))};
 }
 
+//https://stackoverflow.com/questions/2752725/finding-whether-a-point-lies-inside-a-rectangle-or-not
 bool MaykMath::IsPointInsideOffAxisRectangle(Point B, Point A, Point C, Point D, Point m)
 {
 	Point AB = PointsToVector(A, B);  

@@ -6,7 +6,7 @@
 AABBNode::AABBNode() : isDivided(false), root(nullptr), parent(nullptr)
 {
 	//Positions
-	minPos = { 0, 0 };
+	minPos = { -10, -10};
 	maxPos = { 0, 0 };
 	color = {0, 255, 0, 255};
 }
@@ -78,8 +78,8 @@ void AABBNode::SubDivide(AABBNode& node)
 			node.childs.push_back(AABBNode());
 		}
 
-		node.childs[0].Init(node.root, &node, node.minPos.x, node.minPos.y, 0, 0);
-		node.childs[1].Init(node.root, &node, node.maxPos.x, node.maxPos.y, 0, 0);
+		node.childs[0].Init(node.root, &node, node.minPos.x, node.minPos.y, node.minPos.x, node.minPos.y);
+		node.childs[1].Init(node.root, &node, node.maxPos.x, node.maxPos.y, node.maxPos.x, node.maxPos.y);
 
 		for (std::list<Entity*>::iterator it = node.data.begin(); it != node.data.end(); it++)
 		{
@@ -96,18 +96,16 @@ void AABBNode::SubDivide(AABBNode& node)
 			}
 
 		}
-
 		node.isDivided = true;
 	}
 }
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : type(TreeType::ORTHOGRAPHIC), lowestNode(nullptr), displayTree(false)
+AABBTree::AABBTree() : lowestNode(nullptr), displayTree(false)
 {
 }
-void AABBTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h)
+void AABBTree::Init(int s_x, int s_y, int s_w, int s_h)
 {
-	type = s_type;
 	//baseNode.Init(this, nullptr, s_x, s_y, s_w, s_h);
 }
 AABBTree::~AABBTree()
@@ -115,42 +113,6 @@ AABBTree::~AABBTree()
 	//Deletes first node and calls ~QuadNode
 
 }
-
-//bool AABBTree::QuadNodeOverLap(Rect rect, Rect r)
-//{
-//	//OPT: Needs a big update, detection can't be hardcoded with a +350...
-//	//Use off axis collision detection
-//	//TODO: Use scale to avoid culling bugs when zooming in or out
-//
-//	if (r.x > rect.x&& r.x < rect.x + rect.w && r.y > rect.y&& r.y < rect.y + rect.h)
-//		return true;
-//
-//	if (r.x + r.w > rect.x&& r.x + r.w < rect.x + rect.w && r.y + r.h > rect.y && r.y + r.h < rect.y + rect.h)
-//		return true;
-//
-//	if (r.x > rect.x&& r.x  < rect.x + rect.w && r.y + r.h > rect.y&& r.y + r.h < rect.y + rect.h)
-//		return true;
-//
-//	if (r.x + r.w > rect.x&& r.x + r.w < rect.x + rect.w && r.y > rect.y && r.y < rect.y + rect.h)
-//		return true;
-//
-//	return false;
-//
-//}
-//
-//Point AABBTree::CoordsToIsometricInt(Point input, Point tileSize)
-//{
-//	Point ret;
-//
-//	float half_width = tileSize.x * 0.5f;
-//	float half_height = tileSize.y * 0.5f;
-//
-//	ret.x = int((input.x / half_width + input.y / half_height) / 2) - 1;
-//	ret.y = int((input.y / half_height - (input.x / half_width)) / 2);
-//
-//	return ret;
-//}
-//
 
 void AABBTree::AddUnitToTree(Entity& ent)
 {

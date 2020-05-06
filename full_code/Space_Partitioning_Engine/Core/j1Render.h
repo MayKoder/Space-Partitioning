@@ -53,7 +53,7 @@ public:
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 
 	bool DrawQuadTree(TreeType, QuadNode&);
-	bool DrawAABBTree(TreeType, AABBNode&);
+	bool DrawAABBTree(AABBNode&);
 
 	void BlitInsideQuad(SDL_Texture* texture, SDL_Rect sprite, SDL_Rect quad);
 
