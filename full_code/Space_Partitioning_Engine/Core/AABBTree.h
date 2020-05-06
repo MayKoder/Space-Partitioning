@@ -14,7 +14,7 @@
 #include"Entity.h"
 
 #define AABBNODE_CHILD_NUMBER 2
-#define MAX_ITEMS_IN_AABBNODE 6
+#define MAX_ITEMS_IN_AABBNODE 4
 #define IN_RANGE_AABBTREE( value, min, max ) ( ((value) >= (min) && (value) <= (max)) ? 1 : 0 )
 
 class AABBTree;

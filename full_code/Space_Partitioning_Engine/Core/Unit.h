@@ -3,7 +3,6 @@
 
 #include "Entity.h"
 #include "SDL/include/SDL_rect.h"
-#include"EntityManager.h"
 #include"MaykMath.h"
 
 class Unit : public Entity

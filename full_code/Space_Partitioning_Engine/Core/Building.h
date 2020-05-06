@@ -2,8 +2,8 @@
 #define __BUILDING_H__
 
 #include "Entity.h"
-#include"EntityManager.h"
 #include "j1Timer.h"
+#include"j1Map.h"
 
 struct BuildingInfo;
 
