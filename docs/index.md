@@ -117,26 +117,54 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 **_TODO 0: Project Setup:_**
 
-_WARNING:_ Keep in minf that debug mode can kill performance in visual studio. Don't trust me? Then let me show you some numbers:
+_WARNING:_ Keep in mind that debug mode can kill performance in visual studio. Don't trust me? Then let me show you some numbers:
 
 | Check Method      | Units    | Debug Mode     | Release Mode |
 | ----------------- |:--------:| --------------:| ------------:|
 | Brute Force       | 1560     | ≃ 9.254,18 ms  | ≃ 52,41 ms  | 
 | AABB Tree         | 1560     | ≃ 243,79 ms    | ≃ 6,04 ms   | 
 
-You can download the VS project with all the needed files and the steps to complete the trees yourself [here](). The completed and working VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository you can also go [here]().
+You can download the VS project with all the necessary files and the steps to complete the trees yourself [here](). The complete VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository, you can go [here]().
 
 ##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
+
+Now, try to spawn some units, by default the project will use BRUTE FORCE collision detection. Can you feel the FPS dying? Cool, let's fix that.
 
 **_TODO 1.1: Create tree variables:_**
 
 **_TODO 1.2: Initialize quadTree:_**
+
+**_TODO 2: Create a way to draw the trees for debugging:_**
+
+**_TODO 3: Make sure to update all the AABBTree nodes:_**
+
+**_TODO 4: Fill the code for CreateBuilding() method:_**
+Make sure that two buildings can't spawn in the same tile
+
+**_TODO 5: Fill the code for CreateUnit() method:_**
+Make sure that two units can't spawn in the same position
+
+**_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
+
+**_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
+
+**_TODO 7: Test collision detection in Debug and Release mode:_**
+There will be a big difference in time between debug and release mode, keep that in mind.
+
+**_TODO 8: Test (el que sigui que fagi el quadtree amb les unitats):_**
+
+
+**_TODO 9: Take some time to understand the code:_**
+
+You will modify the code will you? Then take some time to understand all the code. I tried to comment everything.
 
 
 ---
 ## Homework
 
 If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. If you can get it running in a more efficient way (which I'm sure can be done, like really sure), please contact me so I can update the code and credit you properly, let's work together to make this code as fast as possible.
+
+This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the number of collision checks)...
 
 ##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
 
