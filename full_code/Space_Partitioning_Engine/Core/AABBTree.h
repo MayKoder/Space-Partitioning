@@ -68,10 +68,9 @@ public:
 	AABBTree();
 	~AABBTree();
 
-	void Init(TreeType, int, int, int, int);
+	void Init(int, int, int, int);
 
 	AABBNode baseNode;
-	TreeType type;
 	bool displayTree;
 
 	AABBNode* lowestNode;
@@ -85,8 +84,6 @@ public:
 	void LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect& collider);
 
 	void Clear();
-	//static bool QuadNodeOverLap(Rect, Rect);
-	//static Point CoordsToIsometricInt(Point, Point);
 
 };
 

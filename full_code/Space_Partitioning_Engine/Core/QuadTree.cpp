@@ -105,7 +105,6 @@ void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, P
 
 	Rect rect = {node->x, node->y, node->w, node->h};
 
-	//TODO: 160 WHAT
 	Rect r = {l2.x, l2.y, r2.x, r2.y};
 	if (this->type == TreeType::ISOMETRIC)
 		r.w += node->root->lowest_height;
@@ -168,12 +167,12 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 	if (lowestNode != nullptr) 
 	{
 
-		QuadNode* back = lowestNode->parent;
-		while (back != nullptr)
-		{
-			back->data.push_back(&ent);
-			back = back->parent;
-		}
+		//QuadNode* back = lowestNode->parent;
+		//while (back != nullptr)
+		//{
+		//	back->data.push_back(&ent);
+		//	back = back->parent;
+		//}
 
 		lowestNode->data.push_back(&ent);
 		if (lowestNode->data.size() >= MAX_ITEMS_IN_QUADDNODE)
@@ -194,7 +193,7 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 					}
 				}
 			}
-
+			lowestNode->data.clear();
 
 		}
 		lowestNode = nullptr;
@@ -210,7 +209,7 @@ void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
 	if (MaykMath::IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, p))
 	{
 
-		if (node->childs.size() != 0) 
+		if (node->isDivided) 
 		{
 			for (unsigned int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
