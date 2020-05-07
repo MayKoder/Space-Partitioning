@@ -11,9 +11,18 @@ Also note that we can't just ask the computer to get the distance of every objec
 
 So, we don't want to work with O(n²) because if we start adding objects, checks can grow fast and create problems. We need to work with something like O(n log n), which is the operating time of a Quadtrees and AABB Trees. This means that in the same 100 unit's context, we just need to compute O(100 * log(100)) = 200, big improvement from 10.000 to 200 isn't it? (Keep in mind that usually Quad trees operate in O(log n), but we are checking every element of the leaf with every other element so we need to multiply that O(log n) with every element in the leaf).
 
+<br>
+<p align="center">
+This is a gif with a theroical tree construction:
+	<br>
+ <img src="assets/TreeGif.gif">
+</p>
+<br>
+
 Keep in mind that if we are working with a limited number of objects and this number is relatively small, we could just brute force the checks. Trees are useful when we work with a dynamic unlimited number of objects. Also, a bad implemented tree can be slower than some brute force checks, so I recommend to read this page until the end.
 
 Here is a small table to represent the big improvement:
+
 
 | Units         | O(n²)              |  O(n log n)  |
 | ------------- |:------------------:| ------------ |
@@ -58,33 +67,14 @@ In our case, we want the user to be able to deal with large ammounts of entities
 
 We will create a QuadTree to manage static entities, and a AABBTree to manage everything related to dynamic entities (collision, culling, logic... ).
 
-**Add all the structure code here**
-#### Rect
-```cpp
-struct Rect
-{
-	int x, y, w, h;
-
-	Point GetCentralPoint() 
-	{
-		return {x + w / 2, y + h / 2};
-	}
-};
-```
+To start with this, we will work with some custom structs, like Point and Rect, some math functions and the .h and .cpp files provided [HERE](#lets-code-c-implementation);
 
 We will create a working QuadTree and AABBTree and some functions to use them, recursivity will be a recursive topic here (pun intended).
 
-
-
----
-## Links to more documentation
-
-![](assets/TreeGif.gif)
-
-[Introductory Guide to AABB Tree Collision Detection](https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/)
-
 ---
 ## Custom trees documentation
+
+Here you can find information for all the custom functions in the AABBTree and QuadTree classes, Point and Rect structs and MaykMath namespace:
 
 #### AABB Tree data documentation
 
@@ -93,8 +83,12 @@ We will create a working QuadTree and AABBTree and some functions to use them, r
 | int          | GetData()               | Returns something     |
 
 ---
-## LET'S CODE: C++ Implementation
+## Links to more documentation
 
+[Introductory Guide to AABB Tree Collision Detection](https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/)
+
+---
+## LET'S CODE: C++ Implementation
 
 
 
