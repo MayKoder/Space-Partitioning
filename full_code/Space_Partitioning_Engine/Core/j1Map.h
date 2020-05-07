@@ -133,8 +133,6 @@ public:
 
 	SDL_Rect GetMapRect();
 
-	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer);
-
 	TileSet* GetTilesetFromTileId(int id);
 
 private:

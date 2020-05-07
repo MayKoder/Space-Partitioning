@@ -40,13 +40,7 @@ bool j1Scene::Start()
 
 	if (App->map->Load("MainMap.tmx") == true)
 	{
-		int w, h;
-		uchar* data = NULL;
-		App->map->CreateWalkabilityMap(w, h, &data);
-
 		mapLimitsRect = App->map->GetMapRect();
-
-		RELEASE_ARRAY(data);
 	}
 
   //Load building debug textures
@@ -105,17 +99,16 @@ bool j1Scene::Update(float dt)
 		aabbTree.displayTree = !aabbTree.displayTree;
 	}
 
-
 	App->map->Draw();
 
 	App->entityManager->DrawEverything();
+
 	//Quad draw
 	if(quadTree.displayTree)
 		App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
 
 	if(aabbTree.displayTree)
 		App->render->DrawAABBTree(aabbTree.baseNode);
-
 
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)

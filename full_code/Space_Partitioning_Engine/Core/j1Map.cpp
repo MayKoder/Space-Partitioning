@@ -47,7 +47,6 @@ void j1Map::Draw()
 		if (layer->properties.Get("Nodraw") != 0)
 			continue;
 
-		//Approach 2.0
 		for (int y = 0; y < data.height; y++) 
 		{
 			for (int x = 0; x < data.height; x++)
@@ -62,8 +61,6 @@ void j1Map::Draw()
 					iPoint pos = MapToWorld(x, y);
 
 					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
-					//blits++;
 				}
 
 			}
@@ -515,52 +512,6 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
 			properties.list.push_back(p);
 		}
-	}
-
-	return ret;
-}
-
-bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer)
-{
-	bool ret = false;
-
-	for (std::list<MapLayer*>::iterator it = data.downLayers.begin(); it != data.downLayers.end(); it++)
-	{
-		MapLayer* layer = it._Ptr->_Myval;
-
-		if (layer->properties.Get("Navigation", 0) == 0)
-			continue;
-
-		uchar* map = new uchar[layer->width*layer->height];
-		memset(map, 1, layer->width*layer->height);
-
-		for (int y = 0; y < data.height; ++y)
-		{
-			for (int x = 0; x < data.width; ++x)
-			{
-				int i = (y*layer->width) + x;
-
-				int tile_id = layer->Get(x, y);
-				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
-
-				if (tileset != NULL)
-				{
-					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
-					/*TileType* ts = tileset->GetTileType(tile_id);
-					if(ts != NULL)
-					{
-						map[i] = ts->properties.Get("walkable", 1);
-					}*/
-				}
-			}
-		}
-
-		*buffer = map;
-		width = data.width;
-		height = data.height;
-		ret = true;
-
-		break;
 	}
 
 	return ret;

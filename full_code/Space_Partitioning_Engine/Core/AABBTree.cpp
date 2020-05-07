@@ -41,30 +41,34 @@ void AABBNode::SetRect(int A_x, int A_y, int B_x, int B_y)
 
 void AABBNode::UpdateNodePoints()
 {
-	Entity* temp = nullptr;
 
-	minPos = {(int)(*data.begin())->position.x, (int)(*data.begin())->position.y - (int)(*data.begin())->blitRect.y };
-	maxPos = {(int)(*data.begin())->position.x + (*data.begin())->blitRect.x, (int)(*data.begin())->position.y};
-
-	for (std::list<Entity*>::iterator it = data.begin(); it != data.end(); it++)
+	if (data.size() != 0) 
 	{
-		temp = (*it);
-		if (temp->position.y - temp->blitRect.y < minPos.y) 
-		{
-			minPos.y = temp->position.y - temp->blitRect.y;
-		}
-		if (temp->position.x < minPos.x)
-		{
-			minPos.x = temp->position.x;
-		}
+		Entity* temp = nullptr;
 
-		if (temp->position.y > maxPos.y)
+		minPos = { (int)(*data.begin())->position.x, (int)(*data.begin())->position.y - (int)(*data.begin())->blitRect.y };
+		maxPos = { (int)(*data.begin())->position.x + (*data.begin())->blitRect.x, (int)(*data.begin())->position.y };
+
+		for (std::list<Entity*>::iterator it = data.begin(); it != data.end(); it++)
 		{
-			maxPos.y = temp->position.y;
-		}
-		if (temp->position.x + temp->blitRect.x > maxPos.x)
-		{
-			maxPos.x = temp->position.x + temp->blitRect.x;
+			temp = (*it);
+			if (temp->position.y - temp->blitRect.y < minPos.y)
+			{
+				minPos.y = temp->position.y - temp->blitRect.y;
+			}
+			if (temp->position.x < minPos.x)
+			{
+				minPos.x = temp->position.x;
+			}
+
+			if (temp->position.y > maxPos.y)
+			{
+				maxPos.y = temp->position.y;
+			}
+			if (temp->position.x + temp->blitRect.x > maxPos.x)
+			{
+				maxPos.x = temp->position.x + temp->blitRect.x;
+			}
 		}
 	}
 }
@@ -97,11 +101,12 @@ void AABBNode::SubDivide(AABBNode& node)
 
 		}
 		node.isDivided = true;
+		node.data.clear();
 	}
 }
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : lowestNode(nullptr), displayTree(false)
+AABBTree::AABBTree() : displayTree(false)
 {
 }
 void AABBTree::Init(int s_x, int s_y, int s_w, int s_h)
@@ -111,7 +116,6 @@ void AABBTree::Init(int s_x, int s_y, int s_w, int s_h)
 AABBTree::~AABBTree()
 {
 	//Deletes first node and calls ~QuadNode
-
 }
 
 void AABBTree::AddUnitToTree(Entity& ent)
@@ -123,16 +127,8 @@ void AABBTree::AddUnitToTree(Entity& ent)
 
 	//Is point inside node?
 	//is node divided? if not, this is the lowest node, 
-
 	if (lowestNode != nullptr) 
 	{
-
-		AABBNode* back = lowestNode->parent;
-		while (back != nullptr)
-		{
-			back->data.push_back(&ent);
-			back = back->parent;
-		}
 
 		lowestNode->data.push_back(&ent);
 		if (lowestNode->data.size() >= MAX_ITEMS_IN_AABBNODE)
@@ -140,24 +136,25 @@ void AABBTree::AddUnitToTree(Entity& ent)
 			//Subdivide
 			lowestNode->SubDivide(*lowestNode);
 		}
-
 	}
 }
 
 void AABBTree::UpdateAllNodes(AABBNode& node)
 {
+	
+	if (node.isDivided) 
+	{
+		for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+		{
+			UpdateAllNodes(node.childs[i]);
+		}
 
-	if (node.data.size() > 0) 
+		node.minPos = MaykMath::GetMinPoint(node.childs[0].minPos, node.childs[1].minPos);
+		node.maxPos = MaykMath::GetMaxPoint(node.childs[0].maxPos, node.childs[1].maxPos);
+	}
+	else
 	{
 		node.UpdateNodePoints();
-
-		if (node.isDivided)
-		{
-			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
-			{
-				UpdateAllNodes(node.childs[i]);
-			}
-		}
 	}
 }
 
@@ -213,6 +210,52 @@ void AABBTree::LoadLeafNodesInsideRect(AABBNode* node, std::vector<AABBNode*>& v
 		}
 	}
 }
+
+//void AABBTree::DeleteDataElement(AABBNode& node, Entity* ent)
+//{
+//
+//	if (MaykMath::IsPointInsideAxisAlignedRectangle(node.GetRect(), (Point)ent->position)) 
+//	{
+//		if (node.isDivided)
+//		{
+//			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
+//			{
+//				DeleteDataElement(node, ent);
+//			}
+//		}
+//		else
+//		{
+//			for (std::list<Entity*>::iterator it = node.data.begin(); it != node.data.end(); it++)
+//			{
+//				if ((*it) == ent) 
+//				{
+//					//Delete entity i guess
+//					node.data.remove(ent);
+//					//If the data is now 0, remove the division
+//					if (node.data.size() == 0) 
+//					{
+//						//Move the other child data to the parent, delete the two childs and set parent as not divided
+//						AABBNode* par = node.parent;
+//						if (par) 
+//						{
+//							AABBNode* childWithData = (&par->childs[0] == &node) ? &par->childs[0]: &par->childs[1];
+//
+//							par->data = childWithData->data;
+//							childWithData->data.clear();
+//
+//							par->childs.clear();
+//							par->isDivided = false;
+//						}
+//						else
+//						{
+//							//no parent? then its the root node? what do we do?
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
 
 void AABBTree::Clear()
 {

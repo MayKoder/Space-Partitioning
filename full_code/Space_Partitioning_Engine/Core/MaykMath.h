@@ -1,3 +1,5 @@
+//Code by https://github.com/MayKoder
+
 #ifndef _MAYKMATH_H_
 #define _MAYKMATH_H_
 
@@ -61,11 +63,14 @@ struct Vector4
 
 namespace MaykMath
 {
-	Point NegatedYVector(Point p1, Point p2);
+	Point NegatedYVectorFromPoints(Point, Point);
 	float GetTriangleArea(Point, Point, Point);
 	bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
 	bool IsPointInsideAxisAlignedRectangle(Rect, Point);
 	bool CheckRectCollision(const Rect&, const Rect&);
+
+	Point GetMinPoint(Point, Point);
+	Point GetMaxPoint(Point, Point);
 }
 
 

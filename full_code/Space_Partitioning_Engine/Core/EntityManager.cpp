@@ -80,6 +80,7 @@ bool EntityManager::Update(float dt)
 			}
 		}
 	}
+
 	if (IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
 	{
 		//Create building
@@ -98,19 +99,31 @@ bool EntityManager::Update(float dt)
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
 			mouse.y += App->map->data.tile_height / 2;
 
-			//App->entityManager->CreateUnitEntity(mouse);
+			App->entityManager->CreateUnitEntity(mouse);
 
-			for (int i = 0; i < 1000; i++)
-			{
-				int x = App->scene->GetRandomIntInRange(1, App->map->data.width * 3);
-				int y = App->scene->GetRandomIntInRange(1, App->map->data.height * 3);
+			//for (int y = 0; y < App->map->data.height; y++)
+			//{
+			//	for (int x = 0; x < App->map->data.height; x++)
+			//	{
+			//		iPoint pos = App->map->MapToWorld(x, y);
+			//		pos.x += 32;
 
-				iPoint pos = App->map->MapToWorld(x, y);
-				pos.x += 32;
+			//		CreateUnitEntity(pos);
+			//		App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
+			//	}
+			//}
 
-				CreateUnitEntity(pos);
-				App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
-			}
+			//for (int i = 0; i < 1000; i++)
+			//{
+			//	int x = App->scene->GetRandomIntInRange(1, App->map->data.width * 3);
+			//	int y = App->scene->GetRandomIntInRange(1, App->map->data.height * 3);
+
+			//	iPoint pos = App->map->MapToWorld(x, y);
+			//	pos.x += 32;
+
+			//	CreateUnitEntity(pos);
+			//	App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
+			//}
 		}
 	}
 	if (selectedUnit) 
@@ -131,6 +144,12 @@ bool EntityManager::Update(float dt)
 		{
 			selectedUnit->position.x -= 100.f * dt;
 		}
+		//if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) 
+		//{
+		//	App->scene->aabbTree.DeleteDataElement(App->scene->aabbTree.baseNode, selectedUnit);
+		//	DeleteEntity(selectedUnit);
+		//	selectedUnit = nullptr;
+		//}
 	}
 	App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
 
@@ -145,6 +164,7 @@ bool EntityManager::PostUpdate()
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
 
+	//Solutin
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
 		std::vector<AABBNode*> nodesToCheck;
@@ -167,7 +187,24 @@ bool EntityManager::PostUpdate()
 		}
 		nodesToCheck.clear();
 	}
-	LOG("Time to check %i entities: %fms", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
+
+	////BruteForce
+	//for (std::list<Entity*>::iterator A = entities[EntityType::UNIT].begin(); A != entities[EntityType::UNIT].end(); A++)
+	//{
+	//	for (std::list<Entity*>::iterator B = entities[EntityType::UNIT].begin(); B != entities[EntityType::UNIT].end(); B++)
+	//	{
+	//		//Calculte collisions
+	//		if (A._Ptr->_Myval != B._Ptr->_Myval && MaykMath::CheckRectCollision((*A)->getCollisionMathRect(), (*B)->getCollisionMathRect()))
+	//		{
+	//			LOG("Collision");
+	//			//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
+	//			//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
+
+	//		}
+	//	}
+	//}
+
+	LOG("Debug Mode || Brute Force || Time to check %i entities: %fms", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
 
 	return true;
 }
@@ -203,7 +240,6 @@ void EntityManager::DrawEverything()
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
 		{
 			it._Ptr->_Myval->Draw(dt);
-			//App->render->DrawQuad({(int)(*it)->position.x + App->map->data.tile_width / 2,(int)(*it)->position.y, 3, 3}, 255, 0, 0);
 		}
 	}
 }
@@ -214,11 +250,7 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 	//TODO 1.1: Check if the new entity is inside an existing one
 	bool exit = false;
 
-	//Figure lowest node out
-	//App->scene->quadTree.FindLowestNodeInPoint(&App->scene->quadTree.baseNode, { pos.x, pos.y });
-	//QuadNode* node = App->scene->quadTree.lowestNode;
-
-	for (std::list<Entity*>::iterator it = App->scene->aabbTree.baseNode.data.begin(); it != App->scene->aabbTree.baseNode.data.end(); it++)
+	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
 		if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))
 		{
@@ -234,7 +266,6 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 
 	entities[EntityType::UNIT].push_back(ret);
 
-	//DELETE: THIS
 	entities[EntityType::UNIT].sort(entity_Sort());
 
 	App->scene->aabbTree.AddUnitToTree(*ret);
@@ -275,7 +306,6 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 
 	ret->type = EntityType::BUILDING;
 
-	//TODO load spritesheet when needed only? first call of constructor of entity?
 	entities[EntityType::BUILDING].push_back(ret);
 
 	App->scene->quadTree.AddEntityToNode(*ret, {pos.x + App->map->data.tile_width / 2, pos.y});

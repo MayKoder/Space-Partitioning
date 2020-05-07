@@ -57,6 +57,8 @@ public:
 
 	QuadTree quadTree;
 	AABBTree aabbTree;
+
+
 };
 
 #endif // __j1SCENE_H__

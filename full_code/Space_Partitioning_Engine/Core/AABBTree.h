@@ -73,8 +73,6 @@ public:
 	AABBNode baseNode;
 	bool displayTree;
 
-	AABBNode* lowestNode;
-
 	//Delete and free all the tree memory
 	void AddUnitToTree(Entity&);
 
@@ -82,6 +80,8 @@ public:
 	AABBNode* FindLowestNode(AABBNode*, const Point);
 	void LoadInterNodesToList(AABBNode*, std::list<AABBNode*>&);
 	void LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect& collider);
+
+	void DeleteDataElement(AABBNode&, Entity*);
 
 	void Clear();
 

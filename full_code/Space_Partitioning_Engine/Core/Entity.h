@@ -85,8 +85,6 @@ public:
 		return {collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h};
 	}
 
-
-
 protected:
 	SDL_Rect collisionRect;
 };
