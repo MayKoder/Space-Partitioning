@@ -27,7 +27,7 @@ There's also lots of data trees structure, like Octree used in 3D space.
 ## Different approaches by different games
 
 There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. This is some of the games that used implementations of space partitioning:
-
+[Here](https://twobithistory.org/2019/11/06/doom-bsp.html)
 - DOOM
 
 It's safe to say that almost any modern game engine uses trees for camera culling, collision detection, raycast rendering...
