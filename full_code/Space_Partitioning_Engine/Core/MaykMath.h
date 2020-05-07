@@ -61,7 +61,7 @@ struct Vector4
 
 namespace MaykMath
 {
-	Point PointsToVector(Point p1, Point p2);
+	Point NegatedYVector(Point p1, Point p2);
 	float GetTriangleArea(Point, Point, Point);
 	bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
 	bool IsPointInsideAxisAlignedRectangle(Rect, Point);

@@ -71,8 +71,6 @@ bool EntityManager::Update(float dt)
 		App->input->GetMousePosition(p.x, p.y);
 		p = App->render->ScreenToWorld(p.x, p.y);
 
-		//std::list<Entity*>* listData = &App->scene->aabbTree.FindLowestNode(&App->scene->aabbTree.baseNode, p)->data;
-
 		for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 		{
 			if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
@@ -146,7 +144,6 @@ bool EntityManager::PostUpdate()
 
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
-	int checks = 0;
 
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
@@ -156,7 +153,6 @@ bool EntityManager::PostUpdate()
 		//TIME: This takes almost no time
 		for (int i = 0; i < nodesToCheck.size(); i++)
 		{
-			checks++;
 			for (std::list<Entity*>::iterator it2 = nodesToCheck[i]->data.begin(); it2 != nodesToCheck[i]->data.end(); it2++)
 			{
 				//Calculte collisions
@@ -171,76 +167,7 @@ bool EntityManager::PostUpdate()
 		}
 		nodesToCheck.clear();
 	}
-	//LOG("Time to find nodes %f, time to check Vector %f, time to check collisions %f, total time %f, entities %i", itinerAllEntityList, itinerateNodes, checkCollisions, timer.ReadMs() - startTimer, entities[EntityType::UNIT].size());
-	//LOG("Checks = %i", checks);
-	LOG("Time to check all nodes: %fms", timer.ReadMs() - startTimer);
-
-	//LOG("%i units collision %i checks took: %f ms", entities[EntityType::UNIT].size(), checks, timer.ReadMs() - startTimer);
-	//App->scene->aabbTree.LoadInterNodesToList(&App->scene->aabbTree.baseNode, nodesToCheck);
-
-	////Too slow
-	//std::list<std::list<Entity*>> groups;
-	//for (std::list<AABBNode*>::iterator data1 = nodesToCheck.begin(); data1 != nodesToCheck.end(); data1++)
-	//{
-	//	for (std::list<AABBNode*>::iterator data2 = nodesToCheck.begin(); data2 != nodesToCheck.end(); data2++)
-	//	{
-	//		if (data1 != data2) 
-	//		{
-	//			std::list<Entity*> lst = (*data1)->GetDataValue();
-	//			if (CheckRectCollision((*data1)->GetRect(), (*data2)->GetRect()))
-	//			{
-	//				lst.merge((*data2)->GetDataValue());
-	//				(*data1)->color = { 255, 0, 0, 255 };
-	//				(*data2)->color = { 255, 0, 0, 255 };
-	//			}
-	//			else
-	//			{
-	//				(*data1)->color = { 0, 255, 0, 255 };
-	//				(*data2)->color = { 0, 255, 0, 255 };
-	//			}
-	//			groups.push_back(lst);
-	//		}
-	//	}
-	//}
-
-	//LOG("List merge took: %f ms", timer.ReadMs() - startTimer);
-
-		//Update all collisions
-	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
-	//{
-	//	for (std::list<Entity*>::iterator it2 = entities[EntityType::UNIT].begin(); it2 != entities[EntityType::UNIT].end(); it2++)
-	//	{
-	//		//Calculte collisions
-	//		checks++;
-	//		if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
-	//		{
-	//			LOG("Collision");
-	//			//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
-	//			//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
-
-	//		}
-	//	}
-	//}
-	//groups.clear();
-	//nodesToCheck.clear();
-
-	////Update all collisions
-	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
-	//{
-	//	for (std::list<Entity*>::iterator it2 = entities[EntityType::UNIT].begin(); it2 != entities[EntityType::UNIT].end(); it2++)
-	//	{
-	//		//Calculte collisions
-	//		if (it._Ptr->_Myval != it2._Ptr->_Myval && CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
-	//		{
-	//			LOG("Collision");
-	//			//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
-	//			//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
-
-	//		}
-	//	}
-	//}
-
-	//LOG("Time to check collisions between %i units took: %f", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
+	LOG("Time to check %i entities: %fms", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
 
 	return true;
 }

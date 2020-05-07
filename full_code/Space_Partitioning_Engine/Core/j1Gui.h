@@ -287,8 +287,6 @@ public:
 
 	void ClearUI();
 
-	void ReturnConsole();
-
 	void WorkWithTextInput(std::string text);
 
 private:
