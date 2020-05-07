@@ -124,9 +124,19 @@ _WARNING:_ Keep in mind that debug mode can kill performance in visual studio. D
 | Brute Force       | 1560     | ≃ 9.254,18 ms  | ≃ 52,41 ms  | 
 | AABB Tree         | 1560     | ≃ 243,79 ms    | ≃ 6,04 ms   | 
 
+<br>
+
+_Brute Force:_
+
+![](assets/Debug_BF.png)![](assets/Release_BF.png)
+
+_AABB Tree::_
+
+![](assets/Debug_AABB.png)![](assets/Release_AABB.png)
+
 You can download the VS project with all the necessary files and the steps to complete the trees yourself [here](). The complete VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository, you can go [here]().
 
-##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
+##### **_NEVER remove the license or the name of the creator from the provided files. It's not your code, don't be "that" guy._**
 
 Now, try to spawn some units, by default the project will use BRUTE FORCE collision detection. Can you feel the FPS dying? Cool, let's fix that.
 
@@ -166,8 +176,6 @@ If you think that this is an interesting subject to work on, I dare you to take 
 
 This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the number of collision checks)...
 
-##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
-
 ---
 ## Explanation of any other improvements on the system
 
@@ -177,5 +185,7 @@ This tree structure can be modified to do anything you need, from 2D camera cull
 [DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
 
 # THINGS TO TALK ABOUT
+
 Release mode goes brbrbr but debug mode goes brbrbn't
+
 Making the list of entities not pointers also goes brbrbr, but if you are using polymorphism you must work with pointers.
