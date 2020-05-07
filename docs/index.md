@@ -26,7 +26,7 @@ There's also lots of data tree structures, like Octree used in 3D space.
 ---
 ## Different approaches by different games
 
-There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D looking graphics.
+There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D graphics.
 
 DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This BSP allowed the DOOM developers to build complex 3D maps that could be rendered at real with slow PC's.
 
@@ -34,15 +34,29 @@ Wolfenstein in the other hand used a marching raycast method and build the maps 
 
 You can read more about VSD and BSP [HERE](https://twobithistory.org/2019/11/06/doom-bsp.html)
 
+Also, any RTS game or any other game that manages large numbers of entities must use space partitioning to manage units, collisions, logic...
+
+There is not a lot of info about it but games like [World War Z](https://www.epicgames.com/store/es-MX/product/world-war-z/home) must use some sort of space partitioning or ECS system to work with large ammounts of entities.
+
+<br>
+<p align="center">
+ <img src="assets/WWZGif.gif">
+</p>
+<br>
+
 It's safe to say that almost any modern game engine uses trees for camera culling, collision detection, raycast rendering...
 For instance, Unreal Engine 3 uses BSP trees.
 
 ---
-## Description in detail for the selected approach
+## How can we solve this problem
 
-First of all, let's set up our context, we are working with C++ and SDL. We'll also work with 100 static and 100 dynamic units.
+So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustrum culling to render a 3D space into a 2D surface.
 
-The data structure of the trees will consist in a Node struct and a Tree class. We'll also create a custom namespace with some basic math functions and some structs like Point, Rect...
+If you are dealing with large ammounts of objects for an RTS game, or any other game, maybe you want to work with AABB trees, Octrees (3D context) or QuadTrees (2D context).
+
+In our case, we want the user to be able to deal with large ammounts of entities, like buildings, units, props...
+
+We will create a QuadTree to manage static entities, and a AABBTree to manage everything related to dynamic entities (collision, culling, logic... ).
 
 **Add all the structure code here**
 #### Rect
