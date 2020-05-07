@@ -117,10 +117,16 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 **_TODO 0: Project Setup:_**
 
+_WARNING:_ Keep in minf that debug mode can kill performance in visual studio. Don't trust me? Then let me show you some numbers:
+
+| Check Method      | Units    | Debug Mode     | Release Mode |
+| ----------------- |:--------:| --------------:| ------------:|
+| Brute Force       | 1560     | ≃ 9.254,18 ms  | ≃ 52,41 ms  | 
+| AABB Tree         | 1560     | ≃ 243,79 ms    | ≃ 6,04 ms   | 
+
 You can download the VS project with all the needed files and the steps to complete the trees yourself [here](). The completed and working VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository you can also go [here]().
 
 ##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
-
 
 **_TODO 1.1: Create tree variables:_**
 
