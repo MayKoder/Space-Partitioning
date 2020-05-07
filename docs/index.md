@@ -122,6 +122,11 @@ You can download the VS project with all the needed files and the steps to compl
 ##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
 
 
+**_TODO 1.1: Create tree variables:_**
+
+**_TODO 1.2: Initialize quadTree:_**
+
+
 ---
 ## Homework
 
