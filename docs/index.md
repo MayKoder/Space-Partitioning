@@ -21,16 +21,21 @@ Here is a small table to represent the big improvement:
 | 1.000         | 1.000.000   checks | 3.000 checks |
 | 10.000        | 100,000,000‬ checks | 40.000 checks|
 
-There's also lots of data trees structure, like Octree used in 3D space.
+There's also lots of data tree structures, like Octree used in 3D space.
 
 ---
 ## Different approaches by different games
 
-There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. This is some of the games that used implementations of space partitioning:
-[Here](https://twobithistory.org/2019/11/06/doom-bsp.html)
-- DOOM
+There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D looking graphics.
+
+DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This BSP allowed the DOOM developers to build complex 3D maps that could be rendered at real with slow PC's.
+
+Wolfenstein in the other hand used a marching raycast method and build the maps in a grid, making the rendering process fast enought for slow computers, but this also created a limiting factor on the level design aspect in the game.
+
+You can read more about VSD and BSP [HERE](https://twobithistory.org/2019/11/06/doom-bsp.html)
 
 It's safe to say that almost any modern game engine uses trees for camera culling, collision detection, raycast rendering...
+For instance, Unreal Engine 3 uses BSP trees.
 
 ---
 ## Description in detail for the selected approach
@@ -74,14 +79,17 @@ We will create a working QuadTree and AABBTree and some functions to use them, r
 | int          | GetData()               | Returns something     |
 
 ---
-## TODOs and Solution inside the repository as VS projects
+## LET'S CODE: C++ Implementation
+
+
+
 
 ---
 ## Homework
 
 If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. If you can get it running in a more efficient way (which I'm sure can be done, like really sure), please contact me so I can update the code and credit you properly, let's work together to make this code as fast as possible.
 
-##### **REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code, proper credit MUST be added when using this code.**
+##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
 
 ---
 ## Explanation of any other improvements on the system
