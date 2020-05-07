@@ -41,7 +41,7 @@ DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This 
 
 Wolfenstein in the other hand used a marching raycast method and build the maps in a grid, making the rendering process fast enought for slow computers, but this also created a limiting factor on the level design aspect in the game.
 
-You can read more about VSD and BSP [HERE](https://twobithistory.org/2019/11/06/doom-bsp.html)
+You can read more about VSD and BSP [here](https://twobithistory.org/2019/11/06/doom-bsp.html).
 
 Also, any RTS game or any other game that manages large numbers of entities must use space partitioning to manage units, collisions, logic...
 
@@ -67,7 +67,7 @@ In our case, we want the user to be able to deal with large ammounts of entities
 
 We will create a QuadTree to manage static entities, and a AABBTree to manage everything related to dynamic entities (collision, culling, logic... ).
 
-To start with this, we will work with some custom structs, like Point and Rect, some math functions and the .h and .cpp files provided [HERE](#lets-code-c-implementation);
+To start with this, we will work with some custom structs, like Point and Rect, some math functions and the .h and .cpp files provided [here](#lets-code-c-implementation).
 
 We will create a working QuadTree and AABBTree and some functions to use them, recursivity will be a recursive topic here (pun intended).
 
@@ -77,6 +77,31 @@ We will create a working QuadTree and AABBTree and some functions to use them, r
 Here you can find information for all the custom functions in the AABBTree and QuadTree classes, Point and Rect structs and MaykMath namespace:
 
 #### AABB Tree data documentation
+
+(Add node info under this table with a different table)
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+#### Quad Tree data documentation
+(Add node info under this table with a different table)
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+#### Point struct documentation
+
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+#### Rect struct documentation
+
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+#### MaykMath namespace documentation
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
@@ -90,6 +115,11 @@ Here you can find information for all the custom functions in the AABBTree and Q
 ---
 ## LET'S CODE: C++ Implementation
 
+**_TODO 0: Project Setup:_**
+
+You can download the VS project with all the needed files and the steps to complete the trees yourself [here](). The completed and working VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository you can also go [here]().
+
+##### **_REMEMBER that removing a license or the name of the creator from the code is A CRIME, so don't try to steal the code. Proper credit MUST be provided when using this code._**
 
 
 ---
