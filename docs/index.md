@@ -78,24 +78,24 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 #### AABB Tree data documentation
 
-**_AABBNode_**
+_AABBNode_
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
-**_AABBTree_**
+_AABBTree_
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
 #### Quad Tree data documentation
 
-**_QuadNode_**
+_QuadNode_
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
-**_QuadTree_**
+_QuadTree_
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
@@ -178,14 +178,25 @@ Make sure that two units can't spawn in the same position
 
 **_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
 
-![](assets/AABBExp.png)
+<p align="center">
+  <img width="638" height="360" src="assets/AABBExp.png">
+</p>
+
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
+
+<p align="center">
+  <img width="638" height="496" src="assets/QUADExp.png">
+</p>
+
 
 **_TODO 7: Test collision detection in Debug and Release mode:_**
 
 There will be a big difference in time between debug and release mode, keep that in mind.
-![](assets/goCrazy.png)
+
+<p align="center">
+  <img width="638" height="360" src="assets/goCrazy.png">
+</p>
 
 **_TODO 8: Test (el que sigui que fagi el quadtree amb les unitats):_**
 
