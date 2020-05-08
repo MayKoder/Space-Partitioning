@@ -79,11 +79,15 @@ Here you can find information for all the custom functions in the AABBTree and Q
 #### AABB Tree data documentation
 
 _AABBNode_
+<br>
+
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
 _AABBTree_
+<br>
+
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
@@ -91,11 +95,15 @@ _AABBTree_
 #### Quad Tree data documentation
 
 _QuadNode_
+<br>
+
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
 _QuadTree_
+<br>
+
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
