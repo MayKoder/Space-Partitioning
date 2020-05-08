@@ -78,13 +78,24 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 #### AABB Tree data documentation
 
-(Add node info under this table with a different table)
+**_AABBNode_**
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+**_AABBTree_**
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
 
 #### Quad Tree data documentation
-(Add node info under this table with a different table)
+
+**_QuadNode_**
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| int          | GetData()               | Returns something     |
+
+**_QuadTree_**
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
 | int          | GetData()               | Returns something     |
@@ -93,19 +104,28 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| float        |  DistanceManhattan(const Point& v) const  | Returns the Manhattan distance between two points |
+| bool        |  IsZero()  | Returns true if X and Y are equal to 0 |
+| float        |  operator*(Point const &b)   | Overrides the operator* to allow dot product between Points|
 
 #### Rect struct documentation
 
-| Type         | Function Declaration    | Function description  |
-| ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| Type         | Function Declaration    | Function description  	      |
+| ------------ |:-----------------------:|:----------------------------------:|
+| Point        |  GetCentralPoint()      | Returns the rect's central point   |
 
 #### MaykMath namespace documentation
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| Point| NegatedYVectorFromPoints(Point, Point)  | Calculate a vector from two points and invert the Y (we need this for OA detection)|
+| float        | GetTriangleArea(Point, Point, Point)   | Calculate and return the area of any triangle  |
+| bool  | IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point)| Returns true if the Point is inside an off axis rectangle |
+| bool        | IsPointInsideAxisAlignedRectangle(Rect, Point)   | Returns true is the point is inside the AA rectangle |
+| bool        | CheckRectCollision(const Rect&, const Rect&)   | Returns true if the input rects are overlaping  |
+| Point        |  GetMinPoint(Point, Point)   | Returns a Point with the minimum values of the two input Points  |
+| Point        |  GetMaxPoint(Point, Point)   | Returns a Point with the maximum values of the two input Points  |
+
 
 ---
 ## Links to more documentation
@@ -155,6 +175,8 @@ Make sure that two buildings can't spawn in the same tile
 Make sure that two units can't spawn in the same position
 
 **_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
+
+![](assets/AABBExp.png)
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
 
