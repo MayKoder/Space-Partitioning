@@ -2,6 +2,7 @@
 #include "Building.h"
 #include "j1Gui.h"
 #include "Unit.h"
+#include"j1Window.h"
 
 #include "p2Log.h"
 EntityManager::EntityManager() : selectedUnit(nullptr), buildingTex(nullptr), entTex(nullptr)
@@ -26,6 +27,7 @@ bool EntityManager::Start()
 {
 
 	buildingTex = App->tex->Load("assets/buildings/GENHouse.png");
+	entTex = App->tex->Load("assets/units/Slime.png");
 
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
@@ -97,16 +99,19 @@ bool EntityManager::Update(float dt)
 		{
 			iPoint mouse = App->map->GetMousePositionOnMap();
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
-			mouse.y += App->map->data.tile_height / 2;
+
+			mouse.x -= 3;
+			mouse.y += App->map->data.tile_height / 2 + 10;
 
 			App->entityManager->CreateUnitEntity(mouse);
 
-			//for (int y = 0; y < App->map->data.height; y++)
+			//for (int y = 1; y < App->map->data.height + 1; y++)
 			//{
 			//	for (int x = 0; x < App->map->data.height; x++)
 			//	{
 			//		iPoint pos = App->map->MapToWorld(x, y);
-			//		pos.x += 32;
+			//		pos.x += 30;
+			//		pos.y += 5;
 
 			//		CreateUnitEntity(pos);
 			//		App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
@@ -178,7 +183,7 @@ bool EntityManager::PostUpdate()
 				//Calculte collisions
 				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
 				{
-					LOG("Collision");
+					//LOG("Collision");
 					//Point Ac = (*it)->getCollisionMathRect().GetCentralPoint();
 					//Point Bc = (*it2)->getCollisionMathRect().GetCentralPoint();
 
@@ -226,7 +231,7 @@ bool EntityManager::CleanUp()
 
 	nodesToCheck.clear();
 	App->tex->UnLoad(buildingTex);
-	//App->tex->UnLoad(entTex);
+	App->tex->UnLoad(entTex);
 
 	return true;
 }
@@ -263,6 +268,7 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 
 	Unit* ret = new Unit();
 	ret->Init(pos);
+	ret->tex = entTex;
 
 	entities[EntityType::UNIT].push_back(ret);
 

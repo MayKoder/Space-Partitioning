@@ -41,12 +41,12 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+	uint		scale;
 
 private:
 	std::string	title;
 	uint		width;
 	uint		height;
-	uint		scale;
 };
 
 #endif // __j1WINDOW_H__

@@ -33,7 +33,7 @@ struct Point
 
 struct Rect
 {
-	int x, y, w, h;
+	int x = 0, y = 0, w = 0, h = 0;
 
 	Point GetCentralPoint() 
 	{

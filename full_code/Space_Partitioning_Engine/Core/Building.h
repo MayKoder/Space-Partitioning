@@ -21,7 +21,6 @@ private:
 	bool Awake(pugi::xml_node&);
 
 	//Settigns
-	SDL_Texture* tex;
 	int tileLenght;
 };
 

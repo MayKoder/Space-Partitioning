@@ -12,7 +12,7 @@ Unit::Unit()
 void Unit::Init(iPoint pos) 
 {
 	position = { (float)pos.x + 20, (float)pos.y };
-	blitRect = { 16, 30 };
+	blitRect = { 32, 24 };
 	collisionRect = { (int)position.x, (int)position.y, blitRect.x, -blitRect.y};
 }
 
@@ -33,7 +33,8 @@ bool Unit::Update(float dt)
 
 bool Unit::Draw(float dt)
 {
-	App->render->DrawQuad({(int)position.x, (int)position.y, blitRect.x, -blitRect.y}, 255, 255, 255);
-	App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+	//App->render->DrawQuad({(int)position.x, (int)position.y, blitRect.x, -blitRect.y}, 255, 255, 255);
+	App->render->Blit(tex, (int)position.x, (int)position.y - blitRect.y, blitRect);
+	//App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
 	return true;
 }

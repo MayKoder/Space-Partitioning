@@ -21,23 +21,30 @@ class AABBTree;
 class Entity;
 struct AABBNode
 {
+
+	//Constructor & Destructor
 	AABBNode();
 	~AABBNode();
 
 	void Init(AABBTree*, AABBNode*, int, int, int, int);
 
-	//Positions
+	//Min and Max node positions that construct the rect
 	Point minPos;
 	Point maxPos;
 
+	//Indicates if the node is a leaf or a parent
 	bool isDivided;
 
-	//Pointers
+	//A pointer to the baseNode or root
 	AABBTree* root;
+
+	//A pointer to the parent
 	AABBNode* parent;
+
+	//Vector with the childs info (size == 0 if is not divided)
 	std::vector<AABBNode> childs;
 
-	//Data
+	//Data holded by this node
 	std::list<Entity*> data;
 	Vector4 color;
 
@@ -55,9 +62,9 @@ struct AABBNode
 	{
 		return data;
 	}
-	void UpdateNodePoints();
-	//std::list<iPoint>* GetContent() { return &data; }
 
+	//Updates the node points (min and max) with the data elements
+	void UpdateNodePoints();
 	static void SubDivide(AABBNode&);
 };
 
@@ -65,15 +72,19 @@ class AABBTree
 {
 public:
 
+	//Constructor & Destructor
 	AABBTree();
 	~AABBTree();
 
-	void Init(int, int, int, int);
-
+	//Base node or root of the tree
 	AABBNode baseNode;
+
+	//Display variable, debug info won't be rendered if this is false
 	bool displayTree;
 
-	//Delete and free all the tree memory
+
+	void Init(int, int, int, int);
+	//Adds a unit to the tree and manages subdivisions
 	void AddUnitToTree(Entity&);
 
 	void UpdateAllNodes(AABBNode& node);

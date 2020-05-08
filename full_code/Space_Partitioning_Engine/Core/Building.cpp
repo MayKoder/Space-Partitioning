@@ -1,6 +1,6 @@
 #include "Building.h"
 #include "p2Log.h"
-Building::Building() : tex(nullptr), tileLenght(0)
+Building::Building() : tileLenght(0)
 {
 	position = { (float)0, (float)0};
 

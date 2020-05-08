@@ -16,7 +16,7 @@ enum class EntityType
 class Entity
 {
 public:
-	Entity(/*EntityTypes type*/) 
+	Entity(/*EntityTypes type*/) : tex(nullptr)
 	{
 
 	}
@@ -66,6 +66,7 @@ public:
 
 public:
 
+	SDL_Texture* tex;
 	EntityType type;
 	fPoint position;
 
