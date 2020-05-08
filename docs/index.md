@@ -169,9 +169,11 @@ Now, try to spawn some units, by default the project will use BRUTE FORCE collis
 **_TODO 3: Make sure to update all the AABBTree nodes:_**
 
 **_TODO 4: Fill the code for CreateBuilding() method:_**
+
 Make sure that two buildings can't spawn in the same tile
 
 **_TODO 5: Fill the code for CreateUnit() method:_**
+
 Make sure that two units can't spawn in the same position
 
 **_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
@@ -181,7 +183,9 @@ Make sure that two units can't spawn in the same position
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
 
 **_TODO 7: Test collision detection in Debug and Release mode:_**
+
 There will be a big difference in time between debug and release mode, keep that in mind.
+![](assets/goCrazy.png)
 
 **_TODO 8: Test (el que sigui que fagi el quadtree amb les unitats):_**
 
@@ -205,6 +209,8 @@ This tree structure can be modified to do anything you need, from 2D camera cull
 [Medieval Building 01 - Bleed's Game Art](https://opengameart.org/content/medieval-building-01-bleeds-game-art-0)
 
 [DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
+
+[Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
 
 # THINGS TO TALK ABOUT
 
