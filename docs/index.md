@@ -3,7 +3,7 @@ I am [Miquel Suau](https://www.linkedin.com/in/miquel-suau-gonz%C3%A0lez-346b561
 ---
 ## Why is Space Partitioning necessary
 
-Lets set a context here, lets say you have 100 objects in a scene, and some are really close, some are really far away. We as humans who can see distances, instinctively only look around an object to check if something is colliding with it, right?
+Let's set up a context, let's say you have 100 objects in a scene, and some are really close, some are really far away. We as humans who can see distances, instinctively only look around an object to check if something is colliding with it, right?
 
 Well computers can't do that, when we ask the computer to check collisions, it's pretty common to just make a double FOR loop and check every object with every other object in the scene (brute force). This results in an operating time of O(n²) which means that if we have 100 units, we'll need to compute O(100²) = 10.000 checks. Keep that number in mind.
 
@@ -30,22 +30,22 @@ Here is a small table to represent the big improvement:
 | 1.000         | 1.000.000   checks | 3.000 checks |
 | 10.000        | 100,000,000‬ checks | 40.000 checks|
 
-There's also lots of data tree structures, like Octree used in 3D space.
+There's also lots of data tree structure, like Octree used in 3D space.
 
 ---
 ## Different approaches by different games
 
 There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D graphics.
 
-DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This BSP allowed the DOOM developers to build complex 3D maps that could be rendered at real with slow PC's.
+DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This BSP allowed the DOOM developers to build complex 3D maps that could be rendered in real with slow PC's.
 
-Wolfenstein in the other hand used a marching raycast method and build the maps in a grid, making the rendering process fast enought for slow computers, but this also created a limiting factor on the level design aspect in the game.
+Wolfenstein in the other hand used a marching request method and build the maps in a grid, making the rendering process fast enough for slow computers, but this also created a limiting factor on the level design aspect in the game.
 
 You can read more about VSD and BSP [here](https://twobithistory.org/2019/11/06/doom-bsp.html).
 
 Also, any RTS game or any other game that manages large numbers of entities must use space partitioning to manage units, collisions, logic...
 
-There is not a lot of info about it but games like [World War Z](https://www.epicgames.com/store/es-MX/product/world-war-z/home) must use some sort of space partitioning or ECS system to work with large ammounts of entities.
+There is not a lot of info about it, but games like [World War Z](https://www.epicgames.com/store/es-MX/product/world-war-z/home) must use some sort of space partitioning or ECS system to work with large amounts of entities.
 
 <br>
 <p align="center">
@@ -59,7 +59,7 @@ For instance, Unreal Engine 3 uses BSP trees.
 ---
 ## How can we solve this problem
 
-So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustrum culling to render a 3D space into a 2D surface.
+So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustum culling to render a 3D space into a 2D surface.
 
 <br>
 <p align="center">
@@ -69,11 +69,11 @@ Dungeon generation with BSP Tree:
 </p>
 <br>
 
-If you are dealing with large ammounts of objects for an RTS game, or any other game, maybe you want to work with AABB trees, Octrees (3D context) or QuadTrees (2D context).
+If you are dealing with large amounts of objects for an RTS game, or any other game, maybe you want to work with AABB trees, Octrees (3D context) or QuadTrees (2D context).
 
-In our case, we want the user to be able to deal with large ammounts of entities, like buildings, units, props...
+In our case, we want the user to be able to deal with large amounts of entities, like buildings, units, props...
 
-We will create a QuadTree to manage static entities, and a AABBTree to manage everything related to dynamic entities (collision, culling, logic... ).
+We will create a QuadTree to manage static entities, and a AABBTree to manage everything related to dynamic entities (collision, culling, logic...).
 
 To start with this, we will work with some custom structs, like Point and Rect, some math functions and the .h and .cpp files provided [here](#lets-code-c-implementation).
 
@@ -168,7 +168,7 @@ _QuadTree_
 ---
 ## Links to more documentation
 
-To do this, you will need some knowlage about trees, recursivity and C++, this are some pages i recomend reading before starting with the code.
+To do this, you will need some knowledge about trees, recursivity and C++, these are some pages I recommend reading before starting with the code.
 
 [Introductory Guide to AABB Tree Collision Detection](https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/)
 
@@ -213,7 +213,7 @@ Now, try to spawn some units, by default the project will use BRUTE FORCE collis
 
 **_TODO 1.1: Create tree variables:_**
 
-Not a big deal, you can create them at any module you want but i recomend to doit on the module that manages the entities.
+Not a big deal, you can create them at any module you want, but I recommend to do it on the module that manages the entities.
 
 Variable declaration:
 
@@ -224,9 +224,9 @@ AABBTree aabbTree;
 
 **_TODO 1.2: Initialize quadTree:_**
 
-Now, first off, we need to initialize the QuadTree, AABBTree does NOT need initialization because it's dinamic.
+Now, first off, we need to initialize the QuadTree, AABBTree does NOT need initialization because it's dynamic.
 
-##### **_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric coords._**
+##### **_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._**
 
 ##### **_TIP 2: "App->map->data.width" is the NUMBER of tiles,  "App->map->data.tile_width" is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_**
 
@@ -235,7 +235,7 @@ You can look up to find out how the Init method works, but its really simple, ju
 
 **_TODO 2: Create a way to draw the trees for debugging:_**
 
-Let's start with recursivity then, just uncomment this functions in the j1Render.h  and j1Render.cpp file.
+Let's start with recursivity then, just uncomment this methods in the j1Render.h  and j1Render.cpp file.
 
 ```cpp
 bool DrawQuadTree(TreeType, QuadNode&);
@@ -258,18 +258,18 @@ We have no isometric mode in AABBTree so we can render it as a normal quad. Firs
 
 After this we just render a quad with DrawQuad(quad, 255, 0, 0, 0, false). We use false at the end to render the quad without filling.
 
-Then, and this is the most important part, we create a FOR loop from 0 to AABBNODE_CHILD_NUMBER, and call DrawAABBTree(node.childs[i]). 
+Then, and this is the most important part, we create a FOR loop from 0 to AABBNODE_CHILD_NUMBER, and call DrawAABBTree(node.childNodes[i]). 
 
-Congratz, you created a recursive method.
+Congrats, you created a recursive method.
 
 Now let's do the same with DrawQuadTree(), we have two types of render, OFF AXIS and AXIS ALIGNED (ISOMETRIC or ORTHOGRAPHIC). We can't render off axis quads, so we need to draw the quad line by line. This means that we need to see the quad of the node as some sort of vectors.
 
-I'll let the code commented here, so you just need to look at it, but try to understand what each DrawLine() means, basic vector knowledge should be enought. You also need to add the recursive part of the method, which is the same for loop as the DrawAABBTree() method but with QUADNODE_CHILD_NUMBER.
+I'll let the code commented here, so you just need to look at it, but try to understand what each DrawLine() means, basic vector knowledge should be enough. You also need to add the recursive part of the method, which is the same for loop as the DrawAABBTree() method but with QUADNODE_CHILD_NUMBER.
 
-##### **_TIP: Remember to check if the node.isDivided is true before rendering the childs, if the node is not divided, there is no childs to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
+##### **_TIP: Remember to check if the node.isDivided is true before rendering the  children, if the node is not divided, there is no  child to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
 
 
-You will know if you initialitze the trees corectly if it does look like this, if not, maybe you are using the wrong numbers. 
+You will know if you initialize the trees correctly if it does look like this, if not, maybe you are using the wrong numbers.
 
 <br>
 <p align="center">
@@ -279,9 +279,9 @@ You will know if you initialitze the trees corectly if it does look like this, i
 
 **_TODO 3: Make sure to update all the AABBTree nodes:_**
 
-Let's move to node update now, AABBTree is a dynamic tree, so we need to update it every frame. The diference with some trees is that they need to be destroyed and created again every frame, but we only use 2 points to work with AABBTrees so we just need to update this points as a recursive method with the data from the leaves.
+Let's move to node update now, AABBTree is a dynamic tree, so we need to update it every frame. The difference with some trees is that they need to be destroyed and created again every frame, but we only use 2 points to work with AABBTrees so we just need to update this points as a recursive method with the data from the leaves.
 
-We only have the data at the leaves, so to update the nodes we need to travel to the leaf, update it, and then go back to the parent and update it with the info of it's two childs. We do this until the node we are working on has no parent. If you want to know how this works, look up the code inside the UpdateNode() and UpdateAllNodes() methods.
+We only have the data at the leaves, so to update the nodes we need to travel to the leaf, update it, and then go back to the parent and update it with the info of its two children. We do this until the node we are working on has no parent. If you want to know how this works, look up the code inside the UpdateNode() and UpdateAllNodes() methods.
 
 Just go to your favorite Update() override and call aabbTree.UpdateAllNodes() with aabbTree.baseNode as input, we update the points with recursivity so let the tree handle all the work.
 
@@ -289,13 +289,13 @@ Just go to your favorite Update() override and call aabbTree.UpdateAllNodes() wi
 
 **_TODO 4: Fill the code for CreateBuildingEntity() method:_**
 
-Now let's move to the file that manages entities, we already have a CreateUnitEntity() and CreateBuildingEntity() methods, but they are almost empty. To work with this trees we need to add pointers to the entities to the tree and it's nodes, but don't worry, the trees will handle almost all the work for you.
+Now let's move to the file that manages entities, we already have a CreateUnitEntity() and CreateBuildingEntity() methods, but they are almost empty. To work with these trees we need to add pointers to the entities to the tree and its nodes, but don't worry, the trees will handle almost all the work for you.
 
-_Use quadTree.AddEntityToNode() to add an entity by position._
+_Use quadTree.AddEntityToNode() to add an entity by it's position._
 
-Make sure that two buildings can't spawn in the same tile, just use the "FindLowestNodeInPoint()" method to find the lowest node, and then iterate all the data elements of that node and compare their position with the input of CreateBuildingEntity(). 
+Make sure that two buildings can't spawn in the same tile, just use the "FindLowestNodeInPoint()" method to find the lowest node, and then iterates all the data elements of that node and compare their position with the input of CreateBuildingEntity(). 
 
-If any of those points is the same as yours (it's an isometric context, so you have to convert the check inside the **if** to App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) and the same with the the item you are checking agains (*it).position) then you can just return nullptr out of the function because you are trying to spawn a unit in the same place as an already existing one.
+If any of those points is the same as yours (it's an isometric context, so you have to convert the check inside the **if** to App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) and the same with the the item you are checking against (*it).position) then you can just return nullptr out of the function because you are trying to spawn a unit in the same place as an already existing one.
 
 **_TODO 5: Fill the code for CreateUnitEntity() method:_**
 
@@ -308,12 +308,12 @@ Make sure that two units can't spawn in the same position.
 I'll keep the hardest parts of the code, but try to complete it yourself. This is the logic you need to follow:
 
  - Check if the node is divided.
- - Push AABBNODE_CHILD_NUMBER times an empty AABBNode() to the node.childs list
- - Init the two new childs like (node.root, &node, ....) with child 0, init at node.minPos, with child 1 use node.maxPos.
- - Distribute the data of the node to the new ones. This part is hard so i'll let the code commented inside, but try to understand what i'm doing here. We use the distance of the entity between the min and max node points and sent it to the closest one.
+ - Push AABBNODE_CHILD_NUMBER times an empty AABBNode() to the node.childNodes list
+ - Init the two new children like (node.root, &node, ....) with child 0, init at node.minPos, with child 1 use node.maxPos.
+ - Distribute the data of the node to the new ones. This part is hard so I'll let the code commented in, but try to understand what I'm doing here. We use the distance of the entity between the min and max node points and sent it to the closest one.
  - Set this node isDivided as true and clear this node data list.
  
- _YAY_ now you can add as much units as you want and you should see the AABBTree divinding every AABBNODE_CHILD_NUMBER units added.
+ _COOL_, now you can add as much units as you want and you should see the AABBTree dividing every AABBNODE_CHILD_NUMBER units added.
 
 
 <p align="center">
@@ -323,18 +323,18 @@ I'll keep the hardest parts of the code, but try to complete it yourself. This i
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
 
-QuadTrees are easy to subdivide, the worst part of this is to find a way to check if a point is inside an off axis rectangle, and it took me longer than what i'll ever admit.
+QuadTrees are easy to subdivide, the worst part of this is to find a way to check if a point is inside an off axis rectangle, and it took me longer than what I'll ever admit.
 
 This is the logic you need to follow:
 
  - Check if node.root.lowest_height > node.h, if it is, set node.root->lowest_height = node.h.
- - Check if the divisionsLeft > 0, if it is, keep this steps, else you can return. 
+ - Check if the divisionsLeft > 0, if it is, keep these steps, else you can return. 
  - Check if the node is divided. If it is, return.
- - Cool we can now just push QUADNODE_CHILD_NUMBER times and empty QuadNode() to the node.childs list.
- - Be awere of the code inside the switch, how we use diferent coords if its isometric. (Try to understand why we are using this points).
+ - Cool we can now just push QUADNODE_CHILD_NUMBER times and empty QuadNode() to the node.childNodes list.
+ - Be aware of the code inside the switch, how we use different coords if its isometric. (Try to understand why we are using this points).
  - Set the node.isDivided as true.
 
-Thats all _YAAAY_ now you can divide the QuadTree too.
+That's all _COOL_ now you can divide the QuadTree too.
 
 <p align="center">
   <img width="638" height="496" src="assets/QUADExp.png">
@@ -360,26 +360,28 @@ Now you can throw those units to the buildings with freedom. again, keep in mind
 
 **_TODO 9: Take some time to understand the code:_**
 
-You will modify the code will you? Then take some time to understand all the code, go to the MaykMath file, thats where the fun's at. I tried to comment everything i could.
+You will modify the code will you? Then take some time to understand all the code, go to the MaykMath file, that's where the fun's at. I tried to comment everything I could.
 
-That's it, you should be able to understand everything you've done until now with this TODO's, i hope this code helps you improve your game.
+That's it, you should be able to understand everything you've done until now with this TODO's, I hope this code helps you improve your game.
 
 
 ---
 ## Homework
 
-If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. If you can get it running in a more efficient way (which I'm sure can be done, like really sure), please contact me so I can update the code and credit you properly, let's work together to make this code as fast as possible.
+If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. 
 
-This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the number of collision checks)...
+If you can get it running in a more efficient way (which I'm sure can be done, like really sure), please contact me so I can update the code and credit you properly, let's work together to make this code as fast as possible.
+
+This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the amount of collision checks)...
 
 ---
 ## Explanation of any other improvements on the system
 
-As we all know, this trees aren't perfect, there is a lot of room to work with, but this files povide a way to make anything you want, with just some knowlege about trees. The most important method in both clases is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
+As we all know, this tree isn't perfect, there is a lot of room to work with, but this file provides a way to make anything you want, with just some knowledge about trees. The most important method in both classes is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
 
 Object lists iterate A LOT faster than pointer lists, but we are working with polymorphism, so we CAN'T store them as objects, because lists store only the template object size. Let's say our Entity class size is 2 bites and our Building child is 2 bites.
 
-If we try to store a Building object in a list<Entity>, our object will be 4 bites long (polymorphism object sizes are sizeof(parent) + sizeof(child)), but our list can store only 2 bite objects, so our Building object data will be lost and every time we try to use that object from the list, it won't be a Building, it will be a Entity, so all the Building info won't be there. 
+If we try to store a Building object in a list<Entity>, our object will be 4 bites long (polymorphism object sizes are sizeof(parent) + sizeof(child)), but our list can store only 2 byte objects, so our Building object data will be lost and every time we try to use that object from the list, it won't be a Building, it will be an Entity, so all the Building info won't be there. 
 
 This can be used if we are storing only one type of object in our trees, and will speed up everything a bit.
 
