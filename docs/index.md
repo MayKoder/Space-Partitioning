@@ -136,7 +136,7 @@ _QuadTree_
 | ------------ |:-----------------------:|:---------------------:|
 | Point| NegatedYVectorFromPoints(Point, Point)  | Calculate a vector from two points and invert the Y (we need this for OA detection)|
 | float        | GetTriangleArea(Point, Point, Point)   | Calculate and return the area of any triangle  |
-| bool  | IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point)| Returns true if the Point is inside an off axis rectangle |
+| bool  | IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point)| Returns true if the Point is inside an OA rectangle |
 | bool        | IsPointInsideAxisAlignedRectangle(Rect, Point)   | Returns true is the point is inside the AA rectangle |
 | bool        | CheckRectCollision(const Rect&, const Rect&)   | Returns true if the input rects are overlaping  |
 | Point        |  GetMinPoint(Point, Point)   | Returns a Point with the minimum values of the two input Points  |
