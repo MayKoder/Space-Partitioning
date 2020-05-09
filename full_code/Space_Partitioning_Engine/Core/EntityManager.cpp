@@ -191,6 +191,36 @@ bool EntityManager::PostUpdate()
 			}
 		}
 		nodesToCheck.clear();
+
+		//Check with every building if its close
+		fPoint lmao[4];
+		lmao[0] = (*it)->position;
+		lmao[1] = { (*it)->position.x, (*it)->position.y - (*it)->blitRect.y};
+		lmao[2] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y};
+		lmao[3] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y - (*it)->blitRect.y };
+
+		int a = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			App->scene->quadTree.FindLowestNodeInPoint(&App->scene->quadTree.baseNode, lmao[i]);
+
+			if (App->scene->quadTree.lowestNode)
+			{
+				for (std::list<Entity*>::iterator it2 = App->scene->quadTree.lowestNode->data.begin(); it2 != App->scene->quadTree.lowestNode->data.end(); it2++)
+				{
+					App->render->DrawLine((int)lmao[i].x, (int)lmao[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
+					if ((*it2)->position.DistanceNoSqrt(lmao[i]) <= 20000)
+					{
+
+					}
+					a++;
+				}
+
+				App->scene->quadTree.lowestNode = nullptr;
+			}
+		}
+		//LOG("Building Checks: %i", a);
+
 	}
 
 	////BruteForce
@@ -209,7 +239,7 @@ bool EntityManager::PostUpdate()
 	//	}
 	//}
 
-	LOG("Debug Mode || Brute Force || Time to check %i entities: %fms", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
+	//LOG("Debug Mode || Brute Force || Time to check %i entities: %fms", entities[EntityType::UNIT].size(), timer.ReadMs() - startTimer);
 
 	return true;
 }
