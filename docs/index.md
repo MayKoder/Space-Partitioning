@@ -96,11 +96,11 @@ We will create a working QuadTree and AABBTree and some functions to use them, r
 
 Here you can find information for all the custom functions in the AABBTree and QuadTree classes, Point and Rect structs and MaykMath namespace:
 
-**AABB Tree data documentation**
-
 <br>
 
-_AABBNode_:
+**AABB Tree data documentation**
+
+_AABBNode_ :
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -114,7 +114,7 @@ _AABBNode_:
 
 <br>
 <br>
-_AABBTree_:
+_AABBTree_ :
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -132,9 +132,7 @@ _AABBTree_:
 
 **Quad Tree data documentation**
 
-<br>
-
-_QuadNode_:
+_QuadNode_ :
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -148,7 +146,7 @@ _QuadNode_:
 <br>
 <br>
 
-_QuadTree_:
+_QuadTree_ :
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -166,7 +164,6 @@ _QuadTree_:
 
 **Point struct documentation**
 
-<br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
@@ -179,7 +176,6 @@ _QuadTree_:
 
 **Rect struct documentation**
 
-<br>
 
 | Type         | Function Declaration    | Function description  	      |
 | ------------ |:-----------------------:|:----------------------------------:|
@@ -190,7 +186,6 @@ _QuadTree_:
 
 **MaykMath namespace documentation**
 
-<br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
