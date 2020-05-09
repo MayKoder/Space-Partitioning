@@ -1,7 +1,7 @@
 I am [Miquel Suau](https://www.linkedin.com/in/miquel-suau-gonz%C3%A0lez-346b5617a/), student of the [Bachelor’s Degree in Video Games by UPC at CITM](https://www.citm.upc.edu/ing/estudis/graus-videojocs/). This content is generated for the second year’s subject Project 2, under supervision of lecturer [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/).
 
 ---
-## Why is Space Partitioning necessary
+# Why is Space Partitioning necessary
 
 Let's set up a context, let's say you have 100 objects in a scene, and some are really close, some are really far away. We as humans who can see distances, instinctively only look around an object to check if something is colliding with it, right?
 
@@ -33,7 +33,7 @@ Here is a small table to represent the big improvement:
 There's also lots of data tree structure, like Octree used in 3D space.
 
 ---
-## Different approaches by different games
+# Different approaches by different games
 
 There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D graphics.
 
@@ -57,7 +57,7 @@ It's safe to say that almost any modern game engine uses trees for camera cullin
 For instance, Unreal Engine 3 uses BSP trees.
 
 ---
-## How can we solve this problem
+# How can we solve this problem
 
 So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustum culling to render a 3D space into a 2D surface.
 
@@ -80,7 +80,7 @@ To start with this, we will work with some custom structs, like Point and Rect, 
 We will create a working QuadTree and AABBTree and some functions to use them, recursivity will be a recursive topic here (pun intended).
 
 ---
-## Custom trees documentation
+# Custom trees documentation
 
 Here you can find information for all the custom functions in the AABBTree and QuadTree classes, Point and Rect structs and MaykMath namespace:
 
@@ -166,7 +166,7 @@ _QuadTree_
 
 
 ---
-## Links to more documentation
+# Links to more documentation
 
 To do this, you will need some knowledge about trees, recursivity and C++, these are some pages I recommend reading before starting with the code.
 
@@ -184,7 +184,7 @@ Also read about the ways to find data in trees, for example, when we want to fin
 <br>
 
 ---
-## LET'S CODE: C++ Implementation
+# LET'S CODE: C++ Implementation
 
 **_TODO 0: Project Setup:_**
 
@@ -366,7 +366,7 @@ That's it, you should be able to understand everything you've done until now wit
 
 
 ---
-## Homework
+# Homework
 
 If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. 
 
@@ -375,7 +375,7 @@ If you can get it running in a more efficient way (which I'm sure can be done, l
 This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the amount of collision checks)...
 
 ---
-## Explanation of any other improvements on the system
+# Explanation of any other improvements on the system
 
 As we all know, this tree isn't perfect, there is a lot of room to work with, but this file provides a way to make anything you want, with just some knowledge about trees. The most important method in both classes is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
 
