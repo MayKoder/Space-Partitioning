@@ -61,6 +61,14 @@ For instance, Unreal Engine 3 uses BSP trees.
 
 So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustrum culling to render a 3D space into a 2D surface.
 
+<br>
+<p align="center">
+Dungeon generation with BSP Tree:
+	<br>
+ <img src="assets/roomGeneration.gif">
+</p>
+<br>
+
 If you are dealing with large ammounts of objects for an RTS game, or any other game, maybe you want to work with AABB trees, Octrees (3D context) or QuadTrees (2D context).
 
 In our case, we want the user to be able to deal with large ammounts of entities, like buildings, units, props...
@@ -138,7 +146,20 @@ _QuadTree_
 ---
 ## Links to more documentation
 
+To do this, you will need some knowlage about trees, recursivity and C++, this are some pages i recomend reading before starting with the code.
+
 [Introductory Guide to AABB Tree Collision Detection](https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/)
+
+[Binary Search Trees](https://brilliant.org/wiki/binary-search-trees/)
+
+
+Also read about the ways to find data in trees, for example, when we want to find the lowest nodes or leafs in our tree, we will use a recursive Depth-first search.
+
+<br>
+<p align="center">
+ <img src="assets/treeSearch.gif">
+</p>
+<br>
 
 ---
 ## LET'S CODE: C++ Implementation
@@ -224,6 +245,11 @@ This tree structure can be modified to do anything you need, from 2D camera cull
 ---
 ## Explanation of any other improvements on the system
 
+As we all know, this trees aren't perfect, there is a lot of room to work with, but this files povide a way to make anything you want, with just some knowlege about trees. The most important method in both clases is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
+
+**I dont know any more improvements lmao**
+
+---
 ### Sources
 [Medieval Building 01 - Bleed's Game Art](https://opengameart.org/content/medieval-building-01-bleeds-game-art-0)
 
@@ -232,7 +258,5 @@ This tree structure can be modified to do anything you need, from 2D camera cull
 [Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
 
 # THINGS TO TALK ABOUT
-
-Release mode goes brbrbr but debug mode goes brbrbn't
 
 Making the list of entities not pointers also goes brbrbr, but if you are using polymorphism you must work with pointers.
