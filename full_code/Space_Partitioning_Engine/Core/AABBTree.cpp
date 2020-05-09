@@ -17,7 +17,7 @@ void AABBNode::Init(AABBTree* s_root, AABBNode* s_parent, int A_x, int A_y, int 
 
 	SetRect(A_x, A_y, B_x, B_y);
 
-	childs.reserve(AABBNODE_CHILD_NUMBER);
+	childNodes.reserve(AABBNODE_CHILD_NUMBER);
 
 	isDivided = false;
 
@@ -25,8 +25,8 @@ void AABBNode::Init(AABBTree* s_root, AABBNode* s_parent, int A_x, int A_y, int 
 
 AABBNode::~AABBNode()
 {
-	//It's called by ~j1QuadTree and deletes all the childs of the base, entering in a recursive loop deleting all the childs of the tree
-	childs.clear();
+	//It's called by ~j1QuadTree and deletes all the children of the base, entering in a recursive loop deleting all the children of the tree
+	childNodes.clear();
 }
 
 void AABBNode::SetRect(int A_x, int A_y, int B_x, int B_y)
@@ -39,7 +39,7 @@ void AABBNode::SetRect(int A_x, int A_y, int B_x, int B_y)
 	maxPos.y = B_y;
 }
 
-void AABBNode::UpdateNodePoints()
+void AABBNode::UpdateNode()
 {
 
 	if (data.size() != 0) 
@@ -79,11 +79,11 @@ void AABBNode::SubDivide(AABBNode& node)
 	{
 		for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
 		{
-			node.childs.push_back(AABBNode());
+			node.childNodes.push_back(AABBNode());
 		}
 
-		node.childs[0].Init(node.root, &node, node.minPos.x, node.minPos.y, node.minPos.x, node.minPos.y);
-		node.childs[1].Init(node.root, &node, node.maxPos.x, node.maxPos.y, node.maxPos.x, node.maxPos.y);
+		node.childNodes[0].Init(node.root, &node, node.minPos.x, node.minPos.y, node.minPos.x, node.minPos.y);
+		node.childNodes[1].Init(node.root, &node, node.maxPos.x, node.maxPos.y, node.maxPos.x, node.maxPos.y);
 
 		for (std::list<Entity*>::iterator it = node.data.begin(); it != node.data.end(); it++)
 		{
@@ -92,11 +92,11 @@ void AABBNode::SubDivide(AABBNode& node)
 
 			if (dMin < dMax || dMin == dMax)
 			{
-				node.childs[0].data.push_back((*it));
+				node.childNodes[0].data.push_back((*it));
 			}
 			else if (dMin > dMax) 
 			{
-				node.childs[1].data.push_back((*it));
+				node.childNodes[1].data.push_back((*it));
 			}
 
 		}
@@ -106,7 +106,7 @@ void AABBNode::SubDivide(AABBNode& node)
 }
 
 //////////////// QUAD TREE ////////////////
-AABBTree::AABBTree() : displayTree(false)
+AABBTree::AABBTree() : displayTree(true)
 {
 }
 void AABBTree::Init(int s_x, int s_y, int s_w, int s_h)
@@ -123,7 +123,7 @@ void AABBTree::AddUnitToTree(Entity& ent)
 
 	AABBNode* lowestNode = nullptr;
 	//Fins lowest node in point
-	lowestNode = FindLowestNode(&baseNode, (Point)ent.position);
+	lowestNode = FindLowestNodeInPoint(&baseNode, (Point)ent.position);
 
 	//Is point inside node?
 	//is node divided? if not, this is the lowest node, 
@@ -146,19 +146,19 @@ void AABBTree::UpdateAllNodes(AABBNode& node)
 	{
 		for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
 		{
-			UpdateAllNodes(node.childs[i]);
+			UpdateAllNodes(node.childNodes[i]);
 		}
 
-		node.minPos = MaykMath::GetMinPoint(node.childs[0].minPos, node.childs[1].minPos);
-		node.maxPos = MaykMath::GetMaxPoint(node.childs[0].maxPos, node.childs[1].maxPos);
+		node.minPos = MaykMath::GetMinPoint(node.childNodes[0].minPos, node.childNodes[1].minPos);
+		node.maxPos = MaykMath::GetMaxPoint(node.childNodes[0].maxPos, node.childNodes[1].maxPos);
 	}
 	else
 	{
-		node.UpdateNodePoints();
+		node.UpdateNode();
 	}
 }
 
-AABBNode* AABBTree::FindLowestNode(AABBNode* node, const Point p)
+AABBNode* AABBTree::FindLowestNodeInPoint(AABBNode* node, const Point p)
 {
 	if (node->isDivided)
 	{
@@ -168,11 +168,11 @@ AABBNode* AABBTree::FindLowestNode(AABBNode* node, const Point p)
 
 		if (dMin < dMax || dMin == dMax)
 		{
-			return FindLowestNode(&node->childs[0], p);
+			return FindLowestNodeInPoint(&node->childNodes[0], p);
 		}
 		else if (dMin > dMax)
 		{
-			return FindLowestNode(&node->childs[1], p);
+			return FindLowestNodeInPoint(&node->childNodes[1], p);
 		}
 	}
 	else
@@ -181,13 +181,13 @@ AABBNode* AABBTree::FindLowestNode(AABBNode* node, const Point p)
 	}
 }
 
-void AABBTree::LoadInterNodesToList(AABBNode* node, std::list<AABBNode*>& list)
+void AABBTree::LoadLeavesToList(AABBNode* node, std::list<AABBNode*>& list)
 {
 
 	if (node->isDivided) 
 	{
-		LoadInterNodesToList(&node->childs[0], list);
-		LoadInterNodesToList(&node->childs[1], list);
+		LoadLeavesToList(&node->childNodes[0], list);
+		LoadLeavesToList(&node->childNodes[1], list);
 	}
 	else
 	{
@@ -201,8 +201,8 @@ void AABBTree::LoadLeafNodesInsideRect(AABBNode* node, std::vector<AABBNode*>& v
 	{
 		if (node->isDivided) 
 		{
-			LoadLeafNodesInsideRect(&node->childs[0], vec, collider);
-			LoadLeafNodesInsideRect(&node->childs[1], vec, collider);
+			LoadLeafNodesInsideRect(&node->childNodes[0], vec, collider);
+			LoadLeafNodesInsideRect(&node->childNodes[1], vec, collider);
 		}
 		else
 		{

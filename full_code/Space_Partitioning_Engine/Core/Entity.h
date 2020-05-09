@@ -81,6 +81,11 @@ public:
 		return collisionRect;
 	}
 
+	Rect getCollisionAsrect()
+	{
+		return { collisionRect.x, collisionRect.y + (collisionRect.h *2) + 16, collisionRect.w, -collisionRect.h };
+	}
+
 	Rect getCollisionMathRect()
 	{
 		return {collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h};

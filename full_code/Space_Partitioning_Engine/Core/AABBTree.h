@@ -41,12 +41,12 @@ struct AABBNode
 	//A pointer to the parent
 	AABBNode* parent;
 
-	//Vector with the childs info (size == 0 if is not divided)
-	std::vector<AABBNode> childs;
-
 	//Data holded by this node
 	std::list<Entity*> data;
 	Vector4 color;
+
+	//Vector with the children info (size == 0 if is not divided)
+	std::vector<AABBNode> childNodes;
 
 	void SetRect(int, int, int, int);
 
@@ -64,7 +64,7 @@ struct AABBNode
 	}
 
 	//Updates the node points (min and max) with the data elements
-	void UpdateNodePoints();
+	void UpdateNode();
 	static void SubDivide(AABBNode&);
 };
 
@@ -88,8 +88,9 @@ public:
 	void AddUnitToTree(Entity&);
 
 	void UpdateAllNodes(AABBNode& node);
-	AABBNode* FindLowestNode(AABBNode*, const Point);
-	void LoadInterNodesToList(AABBNode*, std::list<AABBNode*>&);
+	AABBNode* FindLowestNodeInPoint(AABBNode*, const Point);
+
+	void LoadLeavesToList(AABBNode*, std::list<AABBNode*>&);
 	void LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect& collider);
 
 	void DeleteDataElement(AABBNode&, Entity*);

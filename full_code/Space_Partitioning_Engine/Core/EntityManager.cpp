@@ -209,9 +209,14 @@ bool EntityManager::PostUpdate()
 				for (std::list<Entity*>::iterator it2 = App->scene->quadTree.lowestNode->data.begin(); it2 != App->scene->quadTree.lowestNode->data.end(); it2++)
 				{
 					App->render->DrawLine((int)lmao[i].x, (int)lmao[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
-					if ((*it2)->position.DistanceNoSqrt(lmao[i]) <= 20000)
-					{
+					//if ((*it2)->position.DistanceNoSqrt(lmao[i]) <= 20000)
+					//{
 
+					//}
+
+					if (MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionAsrect())) 
+					{
+						//
 					}
 					a++;
 				}
@@ -285,6 +290,8 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 	//TODO 1.1: Check if the new entity is inside an existing one
 	bool exit = false;
 
+
+	//TODO PER EL MAYK: No itineris tots, busca el lowestNode
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
 		if (App->map->WorldToMap(pos.x, pos.y) == App->map->WorldToMap((*it)->position.x, (*it)->position.y))

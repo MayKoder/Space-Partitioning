@@ -28,11 +28,14 @@ struct QuadNode
 
 	//Positions
 	int x, y, w, h;
+
+	//Indicates if it's a leaf
 	bool isDivided;
 
 	//Pointers
 	QuadTree* root;
 	QuadNode* parent;
+
 	std::vector<QuadNode> childs;
 
 	//Data
@@ -65,16 +68,16 @@ public:
 	int lowest_height = 0;
 	QuadNode* lowestNode = nullptr;
 
-	//Delete and free all the tree memory
-	void Clear();
-	void FindLoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
-	
+	void AddEntityToNode(Entity&, Point);
+
+	void LoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
 	void FindLowestNodeInPoint(QuadNode*, const Point&);
 	
-	static bool QuadNodeOverLap(Rect, Rect);
+	static bool CheckNodeOverLap(Rect, Rect);
 	static Point CoordsToIsometricInt(Point, Point);
 
-	void AddEntityToNode(Entity&, Point);
+	//Delete and free all the tree memory
+	void Clear();
 
 };
 

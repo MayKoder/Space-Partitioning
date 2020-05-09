@@ -35,6 +35,7 @@ void QuadNode::SetRect(int& s_x, int& s_y, int& s_w, int& s_h)
 	h = s_h;
 }
 
+//TODO MAYK: Maybe remove the divisionsLeft?
 void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 {
 	if (node.root->lowest_height > node.h)
@@ -69,8 +70,6 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 
 			node.isDivided = true;
 
-
-
 			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
 				SubDivide(node.childs[i], divisionsLeft - 1);
@@ -85,7 +84,7 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 //TODO IMPORTANT: When checking close entities, check all childs, not only the data inside one child but the data inside all 4 childs
 //to avoid an entity being close to the edge of a node and not detecting another entity in the next child node
 //Check if the point you are looking for is inside the current node, if not, get the new node
-QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(false)
+QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(true)
 {
 }
 void QuadTree::Init(TreeType s_type, int s_x, int s_y, int s_w, int s_h) 
@@ -100,7 +99,7 @@ QuadTree::~QuadTree()
 
 }
 
-void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point l2, Point r2)
+void QuadTree::LoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point l2, Point r2)
 {
 
 	Rect rect = {node->x, node->y, node->w, node->h};
@@ -109,25 +108,23 @@ void QuadTree::FindLoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, P
 	if (this->type == TreeType::ISOMETRIC)
 		r.w += node->root->lowest_height;
 
-	//OPT: Dumb cunt don't check all the nodes lmao
-	if (node->isDivided) 
+	if (CheckNodeOverLap(rect, r) || CheckNodeOverLap(r, rect)) 
 	{
-		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+		if (node->isDivided)
 		{
-			FindLoadNodesToList(list, &node->childs[i], l2, r2);
+			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+			{
+				LoadNodesToList(list, &node->childs[i], l2, r2);
+			}
 		}
-	}
-	else
-	{
-		if (QuadNodeOverLap(rect, r) || QuadNodeOverLap(r, rect))
+		else
 		{
 			list->push_back(node);
 		}
 	}
-
 }
 
-bool QuadTree::QuadNodeOverLap(Rect rect, Rect r)
+bool QuadTree::CheckNodeOverLap(Rect rect, Rect r)
 {
 	//OPT: Needs a big update, detection can't be hardcoded with a +350...
 	//Use off axis collision detection
