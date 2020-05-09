@@ -202,9 +202,6 @@ _QuadTree_ :
 | static Point   | CoordsToIsometricInt(Point, Point)| Transforms input to isometric space  |
 | void   | Clear()| Deletes the tree if it's a pointer  |
 
-<br>
-<br>
-
 ---
 <br>
 
