@@ -323,7 +323,18 @@ I'll keep the hardest parts of the code, but try to complete it yourself. This i
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
 
+QuadTrees are easy to subdivide, the worst part of this is to find a way to check if a point is inside an off axis rectangle, and it took me longer than what i'll ever admit.
 
+This is the logic you need to follow:
+
+ - Check if node.root.lowest_height > node.h, if it is, set node.root->lowest_height = node.h.
+ - Check if the divisionsLeft > 0, if it is, keep this steps, else you can return. 
+ - Check if the node is divided. If it is, return.
+ - Cool we can now just push QUADNODE_CHILD_NUMBER times and empty QuadNode() to the node.childs list.
+ - Be awere of the code inside the switch, how we use diferent coords if its isometric. (Try to understand why we are using this points).
+ - Set the node.isDivided as true.
+
+Thats all _YAAAY_ now you can divide the QuadTree too.
 
 <p align="center">
   <img width="638" height="496" src="assets/QUADExp.png">
