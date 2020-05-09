@@ -345,16 +345,22 @@ Thats all _YAAAY_ now you can divide the QuadTree too.
 
 There will be a big difference in time between debug and release mode, keep that in mind.
 
+Go to EntityManager PostUpdate() method, we've been using brute force checks unitl now, you can slap a big comment in that code and uncomment the Tree collision code. Now compile in debug and release and check the times with the dynamic AABBTree. If you go to the Update() method, where you spawn units, you can comment the current code and uncomment the for under it, this will fill the map with units when you click. Enjoy the show.
+
 <p align="center">
   <img width="638" height="360" src="assets/goCrazy.png">
 </p>
 
 **_TODO 8: Test unit to building collision:_**
 
+We also want to try Building to Unit collision detection, so uncomment the code inside the current collision detection method called //BuilToUnit.
+
+Now you can throw those units to the buildings with freedom. again, keep in mind that this is WAY faster than brute force.
+
 
 **_TODO 9: Take some time to understand the code:_**
 
-You will modify the code will you? Then take some time to understand all the code. I tried to comment everything i could.
+You will modify the code will you? Then take some time to understand all the code, go to the MaykMath file, thats where the fun's at. I tried to comment everything i could.
 
 That's it, you should be able to understand everything you've done until now with this TODO's, i hope this code helps you improve your game.
 
@@ -376,13 +382,11 @@ Object lists iterate A LOT faster than pointer lists, but we are working with po
 If we try to store a Building object in a list<Entity>, our object will be 4 bites long (polymorphism object sizes are sizeof(parent) + sizeof(child)), but our list can store only 2 bite objects, so our Building object data will be lost and every time we try to use that object from the list, it won't be a Building, it will be a Entity, so all the Building info won't be there. 
 
 This can be used if we are storing only one type of object in our trees, and will speed up everything a bit.
-	
-**I dont know any more improvements lmao**
 
 ---
-### Sources
-[Medieval Building 01 - Bleed's Game Art](https://opengameart.org/content/medieval-building-01-bleeds-game-art-0)
 
-[DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
+# Sources
 
-[Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
+ - [Medieval Building 01 - Bleed's Game Art](https://opengameart.org/content/medieval-building-01-bleeds-game-art-0)
+ - [DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
+ - [Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
