@@ -98,6 +98,44 @@ Here you can find information for all the custom functions in the AABBTree and Q
 
 <br>
 
+**Point struct documentation**
+
+
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| float        |  DistanceManhattan(const Point& v) const  | Returns the Manhattan distance between two points |
+| bool        |  IsZero()  | Returns true if X and Y are equal to 0 |
+| float        |  operator*(Point const &b)   | Overrides the operator* to allow dot product between Points|
+
+<br>
+<br>
+
+**Rect struct documentation**
+
+
+| Type         | Function Declaration    | Function description  	      |
+| ------------ |:-----------------------:|:----------------------------------:|
+| Point        |  GetCentralPoint()      | Returns the rect's central point   |
+
+<br>
+<br>
+
+**MaykMath namespace documentation**
+
+
+| Type         | Function Declaration    | Function description  |
+| ------------ |:-----------------------:|:---------------------:|
+| Point| NegatedYVectorFromPoints(Point, Point)  | Calculate a vector from two points and invert the Y (we need this for OA detection)|
+| float        | GetTriangleArea(Point, Point, Point)   | Calculate and return the area of any triangle  |
+| bool  | IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point)| Returns true if the Point is inside an OA rectangle |
+| bool        | IsPointInsideAxisAlignedRectangle(Rect, Point)   | Returns true is the point is inside the AA rectangle |
+| bool        | CheckRectCollision(const Rect&, const Rect&)   | Returns true if the input rects are overlaping  |
+| Point        |  GetMinPoint(Point, Point)   | Returns a Point with the minimum values of the two input Points  |
+| Point        |  GetMaxPoint(Point, Point)   | Returns a Point with the maximum values of the two input Points  |
+
+<br>
+<br>
+
 **AABB Tree data documentation**
 
 <br>
@@ -166,42 +204,6 @@ _QuadTree_ :
 
 <br>
 <br>
-
-**Point struct documentation**
-
-
-| Type         | Function Declaration    | Function description  |
-| ------------ |:-----------------------:|:---------------------:|
-| float        |  DistanceManhattan(const Point& v) const  | Returns the Manhattan distance between two points |
-| bool        |  IsZero()  | Returns true if X and Y are equal to 0 |
-| float        |  operator*(Point const &b)   | Overrides the operator* to allow dot product between Points|
-
-<br>
-<br>
-
-**Rect struct documentation**
-
-
-| Type         | Function Declaration    | Function description  	      |
-| ------------ |:-----------------------:|:----------------------------------:|
-| Point        |  GetCentralPoint()      | Returns the rect's central point   |
-
-<br>
-<br>
-
-**MaykMath namespace documentation**
-
-
-| Type         | Function Declaration    | Function description  |
-| ------------ |:-----------------------:|:---------------------:|
-| Point| NegatedYVectorFromPoints(Point, Point)  | Calculate a vector from two points and invert the Y (we need this for OA detection)|
-| float        | GetTriangleArea(Point, Point, Point)   | Calculate and return the area of any triangle  |
-| bool  | IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point)| Returns true if the Point is inside an OA rectangle |
-| bool        | IsPointInsideAxisAlignedRectangle(Rect, Point)   | Returns true is the point is inside the AA rectangle |
-| bool        | CheckRectCollision(const Rect&, const Rect&)   | Returns true if the input rects are overlaping  |
-| Point        |  GetMinPoint(Point, Point)   | Returns a Point with the minimum values of the two input Points  |
-| Point        |  GetMaxPoint(Point, Point)   | Returns a Point with the maximum values of the two input Points  |
-
 
 ---
 <br>
