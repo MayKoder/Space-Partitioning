@@ -91,14 +91,26 @@ _AABBNode_
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| void         | Init(AABBTree*, AABBNode*, int, int, int, int)  | Initialize node data     |
+| Rect         | GetRect()   | Returns the node rect     |
+| std::list<Entity*>*         | GetData()   | Returns a pointer to the node data list    |
+| std::list<Entity*>         | GetDataValue()    | Returns a copy of the node data list    |
+| void         | UpdateNode()  | Updates the node min and max positions     |
+| static void         | SubDivide(AABBNode&)  | Creates a node subdivision and distributes the old node data     |
+
 
 _AABBTree_
 <br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| void         | Init(int, int, int, int)  | Initialize tree data     |
+| void         | AddUnitToTree(Entity&)   | Adds a unit to the tree by positions and manages subdivisions     |
+| void         | UpdateAllNodes(AABBNode& node)   | Updates all tree nodes with recursivity    |
+| AABBNode*    | FindLowestNodeInPoint(AABBNode*, const Point)    | Returns a pointer to the lowest node inside a point    |
+| void         | LoadLeavesToList(AABBNode*, std::list<AABBNode*>&)  | Loads all the leaves in a list    |
+| void   | LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect&)| Loads all leaves inside the rect  |
+| void   | Clear()| Deletes the tree if it's a pointer  |
 
 #### Quad Tree data documentation
 
@@ -107,14 +119,24 @@ _QuadNode_
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| void         | Init(QuadTree*, QuadNode*, int, int, int, int)  | Initialize node data     |
+| void         | SetRect(int&, int&, int&, int&)   | Sets the rect info |
+| Rect        | GetRect()    | Returns the node rect    |
+| const std::list<Entity*>*         | GetContent()    | Resturs a pointer to the data list    |
+| static void          | SubDivide(QuadNode&, int)  | Subdivides the tree X number of times     |
 
 _QuadTree_
 <br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
-| int          | GetData()               | Returns something     |
+| void         | Init(TreeType, int, int, int, int)  | Initialize tree data     |
+| void         | AddEntityToNode(Entity&, Point)   | Adds an entity to the tree by positions and manages subdivisions     |
+| void |LoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point) | Loads all nodes overlaping with the point in a list|
+| void    | FindLowestNodeInPoint(QuadNode*, const Point&)    |Finds the leaf inside a point  |
+| static bool         | CheckNodeOverLap(Rect, Rect)  | Checks off axis rect overlap  |
+| static Point   | CoordsToIsometricInt(Point, Point)| Transforms input to isometric space  |
+| void   | Clear()| Deletes the tree if it's a pointer  |
 
 #### Point struct documentation
 
@@ -153,7 +175,7 @@ To do this, you will need some knowlage about trees, recursivity and C++, this a
 [Binary Search Trees](https://brilliant.org/wiki/binary-search-trees/)
 
 
-Also read about the ways to find data in trees, for example, when we want to find the lowest nodes or leafs in our tree, we will use a recursive Depth-first search.
+Also read about the ways to find data in trees, for example, when we want to find the lowest nodes or leaves in our tree, we will use a recursive Depth-first search.
 
 <br>
 <p align="center">
