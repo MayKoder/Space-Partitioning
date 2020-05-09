@@ -1,7 +1,12 @@
 I am [Miquel Suau](https://www.linkedin.com/in/miquel-suau-gonz%C3%A0lez-346b5617a/), student of the [Bachelor’s Degree in Video Games by UPC at CITM](https://www.citm.upc.edu/ing/estudis/graus-videojocs/). This content is generated for the second year’s subject Project 2, under supervision of lecturer [Marc Garrigó](https://www.linkedin.com/in/mgarrigo/).
 
 ---
+
+<br>
+
 # Why is Space Partitioning necessary
+
+<br>
 
 Let's set up a context, let's say you have 100 objects in a scene, and some are really close, some are really far away. We as humans who can see distances, instinctively only look around an object to check if something is colliding with it, right?
 
@@ -33,7 +38,12 @@ Here is a small table to represent the big improvement:
 There's also lots of data tree structure, like Octree used in 3D space.
 
 ---
+
+<br>
+
 # Different approaches by different games
+
+<br>
 
 There are a lot of games using Space Partitioning these days, it's almost a "must", but in the old days of video games, space partitioning wasn't so common. Some games like **DOOM**, **Quake** and **Wolfenstein** used BSP implementations to render 3D graphics.
 
@@ -57,7 +67,12 @@ It's safe to say that almost any modern game engine uses trees for camera cullin
 For instance, Unreal Engine 3 uses BSP trees.
 
 ---
+
+<br>
+
 # How can we solve this problem
+
+<br>
 
 So, space partitioning can lead to a lot of implementations depending on what you want to solve, if you are doing a 3D renderer, you want to solve something like the VSD problem and then you need to create some sort of BSP tree or frustum culling to render a 3D space into a 2D surface.
 
@@ -80,13 +95,21 @@ To start with this, we will work with some custom structs, like Point and Rect, 
 We will create a working QuadTree and AABBTree and some functions to use them, recursivity will be a recursive topic here (pun intended).
 
 ---
+
+<br>
+
 # Custom trees documentation
+
+<br>
 
 Here you can find information for all the custom functions in the AABBTree and QuadTree classes, Point and Rect structs and MaykMath namespace:
 
-#### AABB Tree data documentation
+**AABB Tree data documentation**
 
-_AABBNode_
+<br>
+<br>
+
+_AABBNode_:
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -98,8 +121,9 @@ _AABBNode_
 | void         | UpdateNode()  | Updates the node min and max positions     |
 | static void         | SubDivide(AABBNode&)  | Creates a node subdivision and distributes the old node data     |
 
-
-_AABBTree_
+<br>
+<br>
+_AABBTree_:
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -112,9 +136,15 @@ _AABBTree_
 | void   | LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect&)| Loads all leaves inside the rect  |
 | void   | Clear()| Deletes the tree if it's a pointer  |
 
-#### Quad Tree data documentation
+<br>
+<br>
 
-_QuadNode_
+**Quad Tree data documentation**
+
+<br>
+<br>
+
+_QuadNode_:
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -125,7 +155,10 @@ _QuadNode_
 | const std::list<Entity*>*         | GetContent()    | Resturs a pointer to the data list    |
 | static void          | SubDivide(QuadNode&, int)  | Subdivides the tree X number of times     |
 
-_QuadTree_
+<br>
+<br>
+
+_QuadTree_:
 <br>
 
 | Type         | Function Declaration    | Function description  |
@@ -138,7 +171,13 @@ _QuadTree_
 | static Point   | CoordsToIsometricInt(Point, Point)| Transforms input to isometric space  |
 | void   | Clear()| Deletes the tree if it's a pointer  |
 
-#### Point struct documentation
+<br>
+<br>
+
+**Point struct documentation**
+
+<br>
+<br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
@@ -146,13 +185,25 @@ _QuadTree_
 | bool        |  IsZero()  | Returns true if X and Y are equal to 0 |
 | float        |  operator*(Point const &b)   | Overrides the operator* to allow dot product between Points|
 
-#### Rect struct documentation
+<br>
+<br>
+
+**Rect struct documentation**
+
+<br>
+<br>
 
 | Type         | Function Declaration    | Function description  	      |
 | ------------ |:-----------------------:|:----------------------------------:|
 | Point        |  GetCentralPoint()      | Returns the rect's central point   |
 
-#### MaykMath namespace documentation
+<br>
+<br>
+
+**MaykMath namespace documentation**
+
+<br>
+<br>
 
 | Type         | Function Declaration    | Function description  |
 | ------------ |:-----------------------:|:---------------------:|
@@ -166,7 +217,11 @@ _QuadTree_
 
 
 ---
+<br>
+
 # Links to more documentation
+
+<br>
 
 To do this, you will need some knowledge about trees, recursivity and C++, these are some pages I recommend reading before starting with the code.
 
@@ -184,9 +239,20 @@ Also read about the ways to find data in trees, for example, when we want to fin
 <br>
 
 ---
+
+<br>
+
 # LET'S CODE: C++ Implementation
 
+<br>
+
+---
+
+<br>
+
 **_TODO 0: Project Setup:_**
+
+<br>
 
 _WARNING:_ Keep in mind that debug mode can kill performance in visual studio. Don't trust me? Then let me show you some numbers:
 
@@ -211,7 +277,13 @@ You can download the VS project with all the necessary files and the steps to co
 
 Now, try to spawn some units, by default the project will use BRUTE FORCE collision detection. Can you feel the FPS dying? Cool, let's fix that.
 
+---
+
+<br>
+
 **_TODO 1.1: Create tree variables:_**
+
+<br>
 
 Not a big deal, you can create them at any module you want, but I recommend to do it on the module that manages the entities.
 
@@ -222,18 +294,29 @@ QuadTree quadTree;
 AABBTree aabbTree;
 ```
 
+---
+
+<br>
+
 **_TODO 1.2: Initialize quadTree:_**
+
+<br>
 
 Now, first off, we need to initialize the QuadTree, AABBTree does NOT need initialization because it's dynamic.
 
-##### **_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._**
+**_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._**
 
-##### **_TIP 2: "App->map->data.width" is the NUMBER of tiles,  "App->map->data.tile_width" is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_**
+**_TIP 2: "App->map->data.width" is the NUMBER of tiles,  "App->map->data.tile_width" is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_**
 
 You can look up to find out how the Init method works, but its really simple, just set the map type, the starting X and Y and the width  and height in pixels.
 	
+---
+
+<br>
 
 **_TODO 2: Create a way to draw the trees for debugging:_**
+
+<br>
 
 Let's start with recursivity then, just uncomment this methods in the j1Render.h  and j1Render.cpp file.
 
@@ -266,7 +349,7 @@ Now let's do the same with DrawQuadTree(), we have two types of render, OFF AXIS
 
 I'll let the code commented here, so you just need to look at it, but try to understand what each DrawLine() means, basic vector knowledge should be enough. You also need to add the recursive part of the method, which is the same for loop as the DrawAABBTree() method but with QUADNODE_CHILD_NUMBER.
 
-##### **_TIP: Remember to check if the node.isDivided is true before rendering the  children, if the node is not divided, there is no  child to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
+**_TIP: Remember to check if the node.isDivided is true before rendering the  children, if the node is not divided, there is no  child to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
 
 
 You will know if you initialize the trees correctly if it does look like this, if not, maybe you are using the wrong numbers.
@@ -277,7 +360,13 @@ You will know if you initialize the trees correctly if it does look like this, i
 </p>
 <br>
 
+---
+
+<br>
+
 **_TODO 3: Make sure to update all the AABBTree nodes:_**
+
+<br>
 
 Let's move to node update now, AABBTree is a dynamic tree, so we need to update it every frame. The difference with some trees is that they need to be destroyed and created again every frame, but we only use 2 points to work with AABBTrees so we just need to update this points as a recursive method with the data from the leaves.
 
@@ -285,9 +374,15 @@ We only have the data at the leaves, so to update the nodes we need to travel to
 
 Just go to your favorite Update() override and call aabbTree.UpdateAllNodes() with aabbTree.baseNode as input, we update the points with recursivity so let the tree handle all the work.
 
-##### **_TIP: If you move the units, update the tree AFTER all the units are moved in the frame, this can fix a lot of problems in the future._**
+**_TIP: If you move the units, update the tree AFTER all the units are moved in the frame, this can fix a lot of problems in the future._**
+
+---
+
+<br>
 
 **_TODO 4: Fill the code for CreateBuildingEntity() method:_**
+
+<br>
 
 Now let's move to the file that manages entities, we already have a CreateUnitEntity() and CreateBuildingEntity() methods, but they are almost empty. To work with these trees we need to add pointers to the entities to the tree and its nodes, but don't worry, the trees will handle almost all the work for you.
 
@@ -297,13 +392,25 @@ Make sure that two buildings can't spawn in the same tile, just use the "FindLow
 
 If any of those points is the same as yours (it's an isometric context, so you have to convert the check inside the **if** to App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) and the same with the the item you are checking against (*it).position) then you can just return nullptr out of the function because you are trying to spawn a unit in the same place as an already existing one.
 
+---
+
+<br>
+
 **_TODO 5: Fill the code for CreateUnitEntity() method:_**
+
+<br>
 
 Exactly the same as last TODO, but with units, so we use "App->scene->aabbTree.AddUnitToTree()" this time.
 
 Make sure that two units can't spawn in the same position.
 
+---
+
+<br>
+
 **_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
+
+<br>
 
 I'll keep the hardest parts of the code, but try to complete it yourself. This is the logic you need to follow:
 
@@ -320,8 +427,13 @@ I'll keep the hardest parts of the code, but try to complete it yourself. This i
   <img width="638" height="360" src="assets/AABBExp.png">
 </p>
 
+---
+
+<br>
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
+
+<br>
 
 QuadTrees are easy to subdivide, the worst part of this is to find a way to check if a point is inside an off axis rectangle, and it took me longer than what I'll ever admit.
 
@@ -340,8 +452,13 @@ That's all _COOL_ now you can divide the QuadTree too.
   <img width="638" height="496" src="assets/QUADExp.png">
 </p>
 
+---
+
+<br>
 
 **_TODO 7: Test collision detection in Debug and Release mode:_**
+
+<br>
 
 There will be a big difference in time between debug and release mode, keep that in mind.
 
@@ -351,14 +468,25 @@ Go to EntityManager PostUpdate() method, we've been using brute force checks uni
   <img width="638" height="360" src="assets/goCrazy.png">
 </p>
 
+---
+
+<br>
+
 **_TODO 8: Test unit to building collision:_**
+
+<br>
 
 We also want to try Building to Unit collision detection, so uncomment the code inside the current collision detection method called //BuilToUnit.
 
 Now you can throw those units to the buildings with freedom. again, keep in mind that this is WAY faster than brute force.
 
+---
+
+<br>
 
 **_TODO 9: Take some time to understand the code:_**
+
+<br>
 
 You will modify the code will you? Then take some time to understand all the code, go to the MaykMath file, that's where the fun's at. I tried to comment everything I could.
 
@@ -366,7 +494,12 @@ That's it, you should be able to understand everything you've done until now wit
 
 
 ---
+
+<br>
+
 # Homework
+
+<br>
 
 If you think that this is an interesting subject to work on, I dare you to take my code and optimize it, feel free to play around with it, I tried to make it as c++ independent by avoiding std's so it's easy to move to other languages. 
 
@@ -375,7 +508,12 @@ If you can get it running in a more efficient way (which I'm sure can be done, l
 This tree structure can be modified to do anything you need, from 2D camera culling, to area attacks (to reduce the amount of collision checks)...
 
 ---
+
+<br>
+
 # Explanation of any other improvements on the system
+
+<br>
 
 As we all know, this tree isn't perfect, there is a lot of room to work with, but this file provides a way to make anything you want, with just some knowledge about trees. The most important method in both classes is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
 
@@ -386,6 +524,7 @@ If we try to store a Building object in a list<Entity>, our object will be 4 bit
 This can be used if we are storing only one type of object in our trees, and will speed up everything a bit.
 
 ---
+<br>
 
 # Sources
 
