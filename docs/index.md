@@ -213,21 +213,108 @@ Now, try to spawn some units, by default the project will use BRUTE FORCE collis
 
 **_TODO 1.1: Create tree variables:_**
 
+Not a big deal, you can create them at any module you want but i recomend to doit on the module that manages the entities.
+
+Variable declaration:
+
+```cpp
+QuadTree quadTree;
+AABBTree aabbTree;
+```
+
 **_TODO 1.2: Initialize quadTree:_**
+
+Now, first off, we need to initialize the QuadTree, AABBTree does NOT need initialization because it's dinamic.
+
+##### **_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric coords._**
+
+##### **_TIP 2: "App->map->data.width" is the NUMBER of tiles,  "App->map->data.tile_width" is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_**
+
+You can look up to find out how the Init method works, but its really simple, just set the map type, the starting X and Y and the width  and height in pixels.
+	
 
 **_TODO 2: Create a way to draw the trees for debugging:_**
 
+Let's start with recursivity then, just uncomment this functions in the j1Render.h  and j1Render.cpp file.
+
+```cpp
+bool DrawQuadTree(TreeType, QuadNode&);
+bool DrawAABBTree(AABBNode&);
+```
+
+Start with the DrawAABBTree(AABBNode&), when we call this function we use the baseNode variable of the tree as input, this is a recursive function so we just need to iterate all the nodes of the tree, and draw every Rect.
+
+We COULD create a casting override to convert from Rect to SDL_Rect with (SDL_Rect)node.GetRect() like this:
+```cpp
+operator SDL_Rect() const
+{
+	return {x, y, w, h };
+}
+```
+
+But we are trying to make the code as generic as possible, so we'll do the ugly way.
+
+We have no isometric mode in AABBTree so we can render it as a normal quad. First off, get the node Rect with GetRect() and converted as an SDL_Rect. Then check if the rect W and H are different to 0.
+
+After this we just render a quad with DrawQuad(quad, 255, 0, 0, 0, false). We use false at the end to render the quad without filling.
+
+Then, and this is the most important part, we create a FOR loop from 0 to AABBNODE_CHILD_NUMBER, and call DrawAABBTree(node.childs[i]). 
+
+Congratz, you created a recursive method.
+
+Now let's do the same with DrawQuadTree(), we have two types of render, OFF AXIS and AXIS ALIGNED (ISOMETRIC or ORTHOGRAPHIC). We can't render off axis quads, so we need to draw the quad line by line. This means that we need to see the quad of the node as some sort of vectors.
+
+I'll let the code commented here, so you just need to look at it, but try to understand what each DrawLine() means, basic vector knowledge should be enought. You also need to add the recursive part of the method, which is the same for loop as the DrawAABBTree() method but with QUADNODE_CHILD_NUMBER.
+
+##### **_TIP: Remember to check if the node.isDivided is true before rendering the childs, if the node is not divided, there is no childs to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
+
+
+You will know if you initialitze the trees corectly if it does look like this, if not, maybe you are using the wrong numbers. 
+
+<br>
+<p align="center">
+ <img src="assets/correctInit.gif">
+</p>
+<br>
+
 **_TODO 3: Make sure to update all the AABBTree nodes:_**
 
-**_TODO 4: Fill the code for CreateBuilding() method:_**
+Let's move to node update now, AABBTree is a dynamic tree, so we need to update it every frame. The diference with some trees is that they need to be destroyed and created again every frame, but we only use 2 points to work with AABBTrees so we just need to update this points as a recursive method with the data from the leaves.
 
-Make sure that two buildings can't spawn in the same tile
+We only have the data at the leaves, so to update the nodes we need to travel to the leaf, update it, and then go back to the parent and update it with the info of it's two childs. We do this until the node we are working on has no parent. If you want to know how this works, look up the code inside the UpdateNode() and UpdateAllNodes() methods.
 
-**_TODO 5: Fill the code for CreateUnit() method:_**
+Just go to your favorite Update() override and call aabbTree.UpdateAllNodes() with aabbTree.baseNode as input, we update the points with recursivity so let the tree handle all the work.
 
-Make sure that two units can't spawn in the same position
+##### **_TIP: If you move the units, update the tree AFTER all the units are moved in the frame, this can fix a lot of problems in the future._**
+
+**_TODO 4: Fill the code for CreateBuildingEntity() method:_**
+
+Now let's move to the file that manages entities, we already have a CreateUnitEntity() and CreateBuildingEntity() methods, but they are almost empty. To work with this trees we need to add pointers to the entities to the tree and it's nodes, but don't worry, the trees will handle almost all the work for you.
+
+_Use quadTree.AddEntityToNode() to add an entity by position._
+
+Make sure that two buildings can't spawn in the same tile, just use the "FindLowestNodeInPoint()" method to find the lowest node, and then iterate all the data elements of that node and compare their position with the input of CreateBuildingEntity(). 
+
+If any of those points is the same as yours (it's an isometric context, so you have to convert the check inside the **if** to App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) and the same with the the item you are checking agains (*it).position) then you can just return nullptr out of the function because you are trying to spawn a unit in the same place as an already existing one.
+
+**_TODO 5: Fill the code for CreateUnitEntity() method:_**
+
+Exactly the same as last TODO, but with units, so we use "App->scene->aabbTree.AddUnitToTree()" this time.
+
+Make sure that two units can't spawn in the same position.
 
 **_TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method:_**
+
+I'll keep the hardest parts of the code, but try to complete it yourself. This is the logic you need to follow:
+
+ - Check if the node is divided.
+ - Push AABBNODE_CHILD_NUMBER times an empty AABBNode() to the node.childs list
+ - Init the two new childs like (node.root, &node, ....) with child 0, init at node.minPos, with child 1 use node.maxPos.
+ - Distribute the data of the node to the new ones. This part is hard so i'll let the code commented inside, but try to understand what i'm doing here. We use the distance of the entity between the min and max node points and sent it to the closest one.
+ - Set this node isDivided as true and clear this node data list.
+ 
+ _YAY_ now you can add as much units as you want and you should see the AABBTree divinding every AABBNODE_CHILD_NUMBER units added.
+
 
 <p align="center">
   <img width="638" height="360" src="assets/AABBExp.png">
@@ -235,6 +322,8 @@ Make sure that two units can't spawn in the same position
 
 
 **_TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method:_**
+
+
 
 <p align="center">
   <img width="638" height="496" src="assets/QUADExp.png">
@@ -249,12 +338,14 @@ There will be a big difference in time between debug and release mode, keep that
   <img width="638" height="360" src="assets/goCrazy.png">
 </p>
 
-**_TODO 8: Test (el que sigui que fagi el quadtree amb les unitats):_**
+**_TODO 8: Test unit to building collision:_**
 
 
 **_TODO 9: Take some time to understand the code:_**
 
-You will modify the code will you? Then take some time to understand all the code. I tried to comment everything.
+You will modify the code will you? Then take some time to understand all the code. I tried to comment everything i could.
+
+That's it, you should be able to understand everything you've done until now with this TODO's, i hope this code helps you improve your game.
 
 
 ---
@@ -269,6 +360,12 @@ This tree structure can be modified to do anything you need, from 2D camera cull
 
 As we all know, this trees aren't perfect, there is a lot of room to work with, but this files povide a way to make anything you want, with just some knowlege about trees. The most important method in both clases is the one that loads the lowest leaf nodes inside a point. This gives you almost any information you need to work with in this kind of projects.
 
+Object lists iterate A LOT faster than pointer lists, but we are working with polymorphism, so we CAN'T store them as objects, because lists store only the template object size. Let's say our Entity class size is 2 bites and our Building child is 2 bites.
+
+If we try to store a Building object in a list<Entity>, our object will be 4 bites long (polymorphism object sizes are sizeof(parent) + sizeof(child)), but our list can store only 2 bite objects, so our Building object data will be lost and every time we try to use that object from the list, it won't be a Building, it will be a Entity, so all the Building info won't be there. 
+
+This can be used if we are storing only one type of object in our trees, and will speed up everything a bit.
+	
 **I dont know any more improvements lmao**
 
 ---
@@ -278,7 +375,3 @@ As we all know, this trees aren't perfect, there is a lot of room to work with, 
 [DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
 
 [Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
-
-# THINGS TO TALK ABOUT
-
-Making the list of entities not pointers also goes brbrbr, but if you are using polymorphism you must work with pointers.
