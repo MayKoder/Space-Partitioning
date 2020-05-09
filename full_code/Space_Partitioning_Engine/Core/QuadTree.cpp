@@ -15,7 +15,7 @@ void QuadNode::Init(QuadTree* s_root, QuadNode* s_parent, int s_x, int s_y, int 
 	x = s_x; y = s_y;
 	w = s_w; h = s_h;
 
-	childs.reserve(QUADNODE_CHILD_NUMBER);
+	childNodes.reserve(QUADNODE_CHILD_NUMBER);
 
 	isDivided = false;
 
@@ -23,8 +23,8 @@ void QuadNode::Init(QuadTree* s_root, QuadNode* s_parent, int s_x, int s_y, int 
 
 QuadNode::~QuadNode()
 {
-	//It's called by ~j1QuadTree and deletes all the childs of the base, entering in a recursive loop deleting all the childs of the tree
-	childs.clear();
+	//It's called by ~j1QuadTree and deletes all the children of the base, entering in a recursive loop deleting all the children of the tree
+	childNodes.clear();
 }
 
 void QuadNode::SetRect(int& s_x, int& s_y, int& s_w, int& s_h)
@@ -47,24 +47,24 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 		{
 			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-				node.childs.push_back(QuadNode());
+				node.childNodes.push_back(QuadNode());
 			}
 			switch (node.root->type)
 			{
 			case ORTHOGRAPHIC:
-				node.childs[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
-				node.childs[1].Init(node.root, &node, node.x + (node.w / 2), node.y, node.w / 2, node.h / 2);
+				node.childNodes[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
+				node.childNodes[1].Init(node.root, &node, node.x + (node.w / 2), node.y, node.w / 2, node.h / 2);
 								
-				node.childs[2].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
-				node.childs[3].Init(node.root, &node, node.x + (node.w / 2), node.y + (node.h / 2), node.w / 2, node.h / 2);
+				node.childNodes[2].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
+				node.childNodes[3].Init(node.root, &node, node.x + (node.w / 2), node.y + (node.h / 2), node.w / 2, node.h / 2);
 				break;			
 								 
 			case ISOMETRIC:		 
-				node.childs[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
-				node.childs[1].Init(node.root, &node, node.x + (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
+				node.childNodes[0].Init(node.root, &node, node.x, node.y, node.w / 2, node.h / 2);
+				node.childNodes[1].Init(node.root, &node, node.x + (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
 									 
-				node.childs[2].Init(node.root, &node, node.x - (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
-				node.childs[3].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
+				node.childNodes[2].Init(node.root, &node, node.x - (node.w / 4), node.y + (node.h / 4), node.w / 2, node.h / 2);
+				node.childNodes[3].Init(node.root, &node, node.x, node.y + (node.h / 2), node.w / 2, node.h / 2);
 				break;
 			}
 
@@ -72,7 +72,7 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 
 			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-				SubDivide(node.childs[i], divisionsLeft - 1);
+				SubDivide(node.childNodes[i], divisionsLeft - 1);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 
 //////////////// QUAD TREE ////////////////
 
-//TODO IMPORTANT: When checking close entities, check all childs, not only the data inside one child but the data inside all 4 childs
+//TODO IMPORTANT: When checking close entities, check all children, not only the data inside one child but the data inside all 4 children
 //to avoid an entity being close to the edge of a node and not detecting another entity in the next child node
 //Check if the point you are looking for is inside the current node, if not, get the new node
 QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(true)
@@ -114,7 +114,7 @@ void QuadTree::LoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point
 		{
 			for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-				LoadNodesToList(list, &node->childs[i], l2, r2);
+				LoadNodesToList(list, &node->childNodes[i], l2, r2);
 			}
 		}
 		else
@@ -174,10 +174,10 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 			{
 				for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 				{
-					rect = lowestNode->childs[i].GetRect();
+					rect = lowestNode->childNodes[i].GetRect();
 					if (MaykMath::IsPointInsideOffAxisRectangle({ rect.x, rect.y }, { rect.x + rect.w / 2, rect.y + rect.h / 2 }, { rect.x - rect.w / 2, rect.y + rect.h / 2 }, { rect.x, rect.y + rect.h }, {(int)(*it)->position.x, (int)(*it)->position.y }))
 					{
-						lowestNode->childs[i].data.push_back(*it);
+						lowestNode->childNodes[i].data.push_back(*it);
 						break;
 					}
 				}
@@ -202,7 +202,7 @@ void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
 		{
 			for (unsigned int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 			{
-				FindLowestNodeInPoint(&node->childs[i], p);
+				FindLowestNodeInPoint(&node->childNodes[i], p);
 			}
 		}
 		else

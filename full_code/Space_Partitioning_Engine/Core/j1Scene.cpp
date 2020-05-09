@@ -49,12 +49,6 @@ bool j1Scene::Start()
 
 	paused_game = false;
 
-	iPoint position;
-	iPoint size;
-	position = App->map->WorldToMap(0, 0);
-	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
-	quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
-
 	return true;
 }
 
@@ -93,22 +87,16 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(1000.0f * dt);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
-	{
-		quadTree.displayTree = !quadTree.displayTree;
-		aabbTree.displayTree = !aabbTree.displayTree;
-	}
-
 	App->map->Draw();
 
 	App->entityManager->DrawEverything();
 
 	//Quad draw
-	if(quadTree.displayTree)
-		App->render->DrawQuadTree(quadTree.type, quadTree.baseNode);
+	if(App->entityManager->quadTree.displayTree)
+		App->render->DrawQuadTree(App->entityManager->quadTree.type, App->entityManager->quadTree.baseNode);
 
-	if(aabbTree.displayTree)
-		App->render->DrawAABBTree(aabbTree.baseNode);
+	if(App->entityManager->aabbTree.displayTree)
+		App->render->DrawAABBTree(App->entityManager->aabbTree.baseNode);
 
 	iPoint p = App->map->GetMousePositionOnMap();
 	if (IN_RANGE(p.x, 0, App->map->data.width-1) == 1 && IN_RANGE(p.y, 0, App->map->data.height-1) == 1)

@@ -36,7 +36,7 @@ struct QuadNode
 	QuadTree* root;
 	QuadNode* parent;
 
-	std::vector<QuadNode> childs;
+	std::vector<QuadNode> childNodes;
 
 	//Data
 	std::list<Entity*> data;

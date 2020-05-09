@@ -29,6 +29,12 @@ bool EntityManager::Start()
 	buildingTex = App->tex->Load("assets/buildings/GENHouse.png");
 	entTex = App->tex->Load("assets/units/Slime.png");
 
+	iPoint position;
+	iPoint size;
+	position = App->map->WorldToMap(0, 0);
+	size = iPoint(App->map->data.width * App->map->data.tile_width, App->map->data.height * App->map->data.tile_height);
+	quadTree.Init(TreeType::ISOMETRIC, position.x + (App->map->data.tile_width / 2), position.y, size.x, size.y);
+
 	for (unsigned i = 0; i < entities.size(); i++)
 	{
 		for (std::list<Entity*>::iterator it = entities[(EntityType)i].begin(); it != entities[(EntityType)i].end(); it++)
@@ -83,10 +89,16 @@ bool EntityManager::Update(float dt)
 		}
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		quadTree.displayTree = !quadTree.displayTree;
+		aabbTree.displayTree = !aabbTree.displayTree;
+	}
+
 	if (IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
 	{
-		//Create building
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+		//Create building with 1
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 		{
 			iPoint mouse = App->map->GetMousePositionOnMap();
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
@@ -94,8 +106,8 @@ bool EntityManager::Update(float dt)
 
 			App->entityManager->CreateBuildingEntity(mouse);
 		}
-		//Create unit
-		if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
+		//Create unit with 2
+		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 		{
 			iPoint mouse = App->map->GetMousePositionOnMap();
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
@@ -104,19 +116,6 @@ bool EntityManager::Update(float dt)
 			mouse.y += App->map->data.tile_height / 2 + 10;
 
 			App->entityManager->CreateUnitEntity(mouse);
-
-			//for (int y = 1; y < App->map->data.height + 1; y++)
-			//{
-			//	for (int x = 0; x < App->map->data.height; x++)
-			//	{
-			//		iPoint pos = App->map->MapToWorld(x, y);
-			//		pos.x += 30;
-			//		pos.y += 5;
-
-			//		CreateUnitEntity(pos);
-			//		App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
-			//	}
-			//}
 
 			//for (int i = 0; i < 1000; i++)
 			//{
@@ -130,7 +129,26 @@ bool EntityManager::Update(float dt)
 			//	App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
 			//}
 		}
+		//Fill map with units wirh 3
+		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) 
+		{
+			for (int y = 1; y < App->map->data.height + 1; y++)
+			{
+				for (int x = 0; x < App->map->data.height; x++)
+				{
+					iPoint pos = App->map->MapToWorld(x, y);
+					pos.x += 30;
+					pos.y += 5;
+
+					CreateUnitEntity(pos);
+					aabbTree.UpdateAllNodes(aabbTree.baseNode);
+				}
+			}
+		}
+
 	}
+
+	//Move units
 	if (selectedUnit) 
 	{
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -156,7 +174,9 @@ bool EntityManager::Update(float dt)
 		//	selectedUnit = nullptr;
 		//}
 	}
-	App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
+
+	//Update all tree nodes
+	aabbTree.UpdateAllNodes(aabbTree.baseNode);
 
 	return true;
 }
@@ -173,7 +193,7 @@ bool EntityManager::PostUpdate()
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
 		std::vector<AABBNode*> nodesToCheck;
-		App->scene->aabbTree.LoadLeafNodesInsideRect(&App->scene->aabbTree.baseNode, nodesToCheck, (*it)->getCollisionMathRect());
+		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*it)->getCollisionMathRect());
 
 		//TIME: This takes almost no time
 		for (int i = 0; i < nodesToCheck.size(); i++)
@@ -202,11 +222,11 @@ bool EntityManager::PostUpdate()
 		int a = 0;
 		for (int i = 0; i < 4; i++)
 		{
-			App->scene->quadTree.FindLowestNodeInPoint(&App->scene->quadTree.baseNode, lmao[i]);
+			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, lmao[i]);
 
-			if (App->scene->quadTree.lowestNode)
+			if (quadTree.lowestNode)
 			{
-				for (std::list<Entity*>::iterator it2 = App->scene->quadTree.lowestNode->data.begin(); it2 != App->scene->quadTree.lowestNode->data.end(); it2++)
+				for (std::list<Entity*>::iterator it2 = quadTree.lowestNode->data.begin(); it2 != quadTree.lowestNode->data.end(); it2++)
 				{
 					App->render->DrawLine((int)lmao[i].x, (int)lmao[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
 					//if ((*it2)->position.DistanceNoSqrt(lmao[i]) <= 20000)
@@ -221,7 +241,7 @@ bool EntityManager::PostUpdate()
 					a++;
 				}
 
-				App->scene->quadTree.lowestNode = nullptr;
+				quadTree.lowestNode = nullptr;
 			}
 		}
 		//LOG("Building Checks: %i", a);
@@ -264,7 +284,6 @@ bool EntityManager::CleanUp()
 	}
 	entities.clear();
 
-	nodesToCheck.clear();
 	App->tex->UnLoad(buildingTex);
 	App->tex->UnLoad(entTex);
 
@@ -311,7 +330,7 @@ Entity* EntityManager::CreateUnitEntity(iPoint pos)
 
 	entities[EntityType::UNIT].sort(entity_Sort());
 
-	App->scene->aabbTree.AddUnitToTree(*ret);
+	aabbTree.AddUnitToTree(*ret);
 	selectedUnit = ret;
 
 	return ret;
@@ -326,8 +345,8 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 	bool exit = false;
 
 	//Figure lowest node out
-	App->scene->quadTree.FindLowestNodeInPoint(&App->scene->quadTree.baseNode, {pos.x, pos.y});
-	QuadNode* node = App->scene->quadTree.lowestNode;
+	quadTree.FindLowestNodeInPoint(&quadTree.baseNode, {pos.x, pos.y});
+	QuadNode* node = quadTree.lowestNode;
 
 	for (std::list<Entity*>::iterator it = node->data.begin(); it != node->data.end(); it++)
 	{
@@ -351,7 +370,7 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 
 	entities[EntityType::BUILDING].push_back(ret);
 
-	App->scene->quadTree.AddEntityToNode(*ret, {pos.x + App->map->data.tile_width / 2, pos.y});
+	quadTree.AddEntityToNode(*ret, {pos.x + App->map->data.tile_width / 2, pos.y});
 
 	entities[EntityType::BUILDING].sort(entity_Sort());
 

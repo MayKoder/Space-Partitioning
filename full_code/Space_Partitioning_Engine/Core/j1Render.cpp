@@ -312,7 +312,7 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 	{
 		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
 		{
-			DrawQuadTree(type, node.childs[i]);
+			DrawQuadTree(type, node.childNodes[i]);
 		}
 	}
 	return true;
@@ -334,7 +334,7 @@ bool j1Render::DrawAABBTree(AABBNode& node)
 		{
 			for (int i = 0; i < AABBNODE_CHILD_NUMBER; i++)
 			{
-				DrawAABBTree(node.childs[i]);
+				DrawAABBTree(node.childNodes[i]);
 			}
 		}
 	}

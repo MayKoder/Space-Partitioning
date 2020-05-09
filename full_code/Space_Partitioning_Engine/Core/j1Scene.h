@@ -54,11 +54,6 @@ public:
 
 	bool paused_game;
 	bool godMode;
-
-	QuadTree quadTree;
-	AABBTree aabbTree;
-
-
 };
 
 #endif // __j1SCENE_H__
