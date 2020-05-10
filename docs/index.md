@@ -39,7 +39,7 @@ So, we don't want to work with O(n²) because if we start adding objects, checks
 
 <br>
 <p align="center">
-This is a gif with a theroical tree construction:
+This is a gif with a theoretical tree construction:
 	<br>
  <img src="assets/TreeGif.gif">
 </p>
