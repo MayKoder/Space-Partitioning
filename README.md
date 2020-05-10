@@ -18,7 +18,7 @@ Now if you want to use the RELEASE version, these are the controls you need to k
  
   - Move the camera with the UP, DOWN, LEFT & RIGHT arrows.
   - Move the selected unit with W, A, S, D.
-  - You can select a unit with the mouse wheel click.
+  - You can select a unit with the left mouse click.
   
 <br>
 
