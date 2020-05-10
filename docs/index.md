@@ -286,7 +286,7 @@ _AABB Tree::_
 
 ![](assets/Debug_AABB.png)![](assets/Release_AABB.png)
 
-You can download the VS project with all the necessary files and the steps to complete the trees yourself [here](). The complete VS project with the trees working and the examples can we downloaded clicking [here](). If you want to download any file from the repository, you can go [here]().
+You can download the VS project with all the necessary files and the steps to complete the trees yourself [here](https://github.com/MayKoder/Space-Partitioning/archive/master.zip). The complete VS project with the trees working and the examples can we downloaded clicking [here](https://github.com/MayKoder/Space-Partitioning/archive/master.zip). If you want to download any file from the repository, you can go [here](https://github.com/MayKoder/Space-Partitioning).
 
 ##### **_NEVER remove the license or the name of the creator from the provided files. It's not your code, don't be "that" guy._**
 
