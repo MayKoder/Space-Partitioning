@@ -56,6 +56,8 @@ public:
 
 	bool DeleteEntity(Entity*);
 
+
+	//Entity creation
 	Entity* CreateUnitEntity(iPoint);
 	Entity* CreateBuildingEntity(iPoint);
 
@@ -69,11 +71,13 @@ public:
 
 	std::unordered_map<EntityType, std::list<Entity*>> entities;
 
-	QuadTree quadTree;
-	AABBTree aabbTree;
-
 	Entity* selectedUnit;
 	SDL_Texture* buildingTex;
 	SDL_Texture* entTex;
+
+	//TODO 1.1: Create tree variables
+	QuadTree quadTree;
+	AABBTree aabbTree;
+
 };
 #endif // !_ENTITYMANAGER_H

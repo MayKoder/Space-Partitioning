@@ -11,7 +11,7 @@ Unit::Unit()
 
 void Unit::Init(iPoint pos) 
 {
-	position = { (float)pos.x + 20, (float)pos.y };
+	position = { (float)pos.x, (float)pos.y };
 	blitRect = { 32, 24 };
 	collisionRect = { (int)position.x, (int)position.y, blitRect.x, -blitRect.y};
 }

@@ -5,7 +5,6 @@
 #include "j1Module.h"
 #include "PugiXml/src/pugixml.hpp"
 #include"j1Input.h"
-#include "EntityManager.h"
 
 // ----------------------------------------------------
 struct Properties

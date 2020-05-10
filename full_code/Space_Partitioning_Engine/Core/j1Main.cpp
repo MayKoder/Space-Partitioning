@@ -111,7 +111,7 @@ int main(int argc, char* args[])
 			break;
 		}
 
-		LOG("%f", timer.ReadMs() - oldTimer);
+		//LOG("%f", timer.ReadMs() - oldTimer);
 	}
 
 	LOG("... Bye! :)\n");

@@ -89,7 +89,7 @@ bool j1Scene::Update(float dt)
 
 	App->entityManager->DrawEverything();
 
-	//Quad draw
+	//TODO: Draw trees
 	if(App->entityManager->quadTree.displayTree)
 		App->render->DrawQuadTree(App->entityManager->quadTree.type, App->entityManager->quadTree.baseNode);
 

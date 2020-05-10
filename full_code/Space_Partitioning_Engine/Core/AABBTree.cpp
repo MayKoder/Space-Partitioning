@@ -58,6 +58,7 @@ void AABBNode::SetRect(int A_x, int A_y, int B_x, int B_y)
 	maxPos.y = B_y;
 }
 
+//TODO 9: Take some time to understand the code
 void AABBNode::UpdateNode()
 {
 
@@ -92,6 +93,7 @@ void AABBNode::UpdateNode()
 	}
 }
 
+//TODO 6.1: Complete the missing code in the AABBTree::SubDivide() method
 void AABBNode::SubDivide(AABBNode& node)
 {
 	if (!node.isDivided)

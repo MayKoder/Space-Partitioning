@@ -28,9 +28,6 @@
 #include<list>
 #include<vector>
 #include"MaykMath.h"
-
-//DELETE THIS AND MAKE IT A TEMPLATE
-//TODO: You need to delete all use of entity and change it to a template
 #include"Entity.h"
 
 #define AABBNODE_CHILD_NUMBER 2

@@ -55,7 +55,7 @@ void QuadNode::SetRect(int& s_x, int& s_y, int& s_w, int& s_h)
 	h = s_h;
 }
 
-//TODO MAYK: Maybe remove the divisionsLeft?
+//TODO 6.2: Complete the missing code in the QuadTree::SubDivide() method
 void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 {
 	if (node.root->lowest_height > node.h)
@@ -100,10 +100,6 @@ void QuadNode::SubDivide(QuadNode& node, int divisionsLeft)
 }
 
 //////////////// QUAD TREE ////////////////
-
-//TODO IMPORTANT: When checking close entities, check all children, not only the data inside one child but the data inside all 4 children
-//to avoid an entity being close to the edge of a node and not detecting another entity in the next child node
-//Check if the point you are looking for is inside the current node, if not, get the new node
 QuadTree::QuadTree() : type(TreeType::ORTHOGRAPHIC), lowest_height(0), tile_width(0), tile_height(0), displayTree(true)
 {
 }

@@ -281,31 +281,31 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
+
+//TODO 2: Create a way to draw the trees for debugging
 bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 {
-	//This method needs to be upgraded to a generic display type
 	SDL_Rect quad = { node.x , node.y , node.w,  node.h };
 
 	switch (type)
 	{
-	case ORTHOGRAPHIC:
-		App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
-		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
+		case ORTHOGRAPHIC:
+			App->render->DrawLine(quad.x, quad.y, quad.x, quad.y + quad.h, 255, 255, 255);
+			App->render->DrawLine(quad.x, quad.y, quad.x + quad.w, quad.y, 255, 255, 255);
 
-		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x + quad.w, quad.y, 255, 255, 255);
-		App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x, quad.y + quad.h, 255, 255, 255);
-		break;
+			App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x + quad.w, quad.y, 255, 255, 255);
+			App->render->DrawLine(quad.x + quad.w, quad.y + quad.h, quad.x, quad.y + quad.h, 255, 255, 255);
+			break;
 
 
-	case ISOMETRIC:
+		case ISOMETRIC:
 
-		App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
-		App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+			App->render->DrawLine(quad.x, quad.y, quad.x - quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
+			App->render->DrawLine(quad.x, quad.y, quad.x + quad.w / 2, quad.y + quad.h / 2, 255, 255, 255);
 
-		App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-		App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
-		break;
-
+			App->render->DrawLine(quad.x - quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+			App->render->DrawLine(quad.x + quad.w / 2, quad.y + quad.h / 2, quad.x, quad.y + quad.h, 255, 255, 255);
+			break;
 	}
 
 	if (node.isDivided) 
@@ -318,10 +318,9 @@ bool j1Render::DrawQuadTree(TreeType type, QuadNode& node)
 	return true;
 }
 
+//TODO 2: Create a way to draw the trees for debugging
 bool j1Render::DrawAABBTree(AABBNode& node)
 {
-
-	//This method needs to be upgraded to a generic display type
 	Rect r = node.GetRect();
 	SDL_Rect quad = {r.x , r.y , r.w,  r.h};
 
