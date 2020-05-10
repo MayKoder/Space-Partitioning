@@ -18,7 +18,6 @@
 #include"MaykMath.h"
 
 class Entity;
-class Player;
 
 //Temporal sorting function
 struct entity_Sort
