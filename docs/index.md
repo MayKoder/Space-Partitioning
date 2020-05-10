@@ -218,7 +218,7 @@ _QuadNode_ :
 | void         | Init(QuadTree*, QuadNode*, int, int, int, int)  | Initialize node data     |
 | void         | SetRect(int&, int&, int&, int&)   | Sets the rect info |
 | Rect        | GetRect()    | Returns the node rect    |
-| const std::list<Entity*>*         | GetContent()    | Resturs a pointer to the data list    |
+| const std::list<Entity*>*         | GetContent()    | Return a pointer to the data list    |
 | static void          | SubDivide(QuadNode&, int)  | Subdivides the tree X number of times     |
 
 <br>
