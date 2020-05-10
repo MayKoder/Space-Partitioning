@@ -35,16 +35,19 @@ struct Point
 {
 	int x = 0, y = 0;
 
+	//Overrides the operator* to allow dot product between Points
 	float operator*(Point const &b) 
 	{
 		return (x * b.x) + (y * b.y);
 	}
 
+	//Returns the Manhattan distance between two points
 	float DistanceManhattan(const Point& v) const
 	{
 		return ABS(v.x - x) + ABS(v.y - y);
 	}
 
+	//Returns true if X and Y are equal to 0
 	bool IsZero() 
 	{
 		return (x == 0 && y == 0);
@@ -55,6 +58,7 @@ struct Rect
 {
 	int x = 0, y = 0, w = 0, h = 0;
 
+	//Returns the rect’s central point
 	Point GetCentralPoint() 
 	{
 		return {x + w / 2, y + h / 2};
@@ -83,13 +87,25 @@ struct Vector4
 
 namespace MaykMath
 {
+	//Calculate a vector from two points and invert the Y (we need this for OA detection)
 	Point NegatedYVectorFromPoints(Point, Point);
+
+	//Calculate and return the area of any triangle
 	float GetTriangleArea(Point, Point, Point);
+
+	//Returns true if the Point is inside an OA rectangle
 	bool IsPointInsideOffAxisRectangle(Point, Point, Point, Point, Point);
+
+	//Returns true is the point is inside the AA rectangle
 	bool IsPointInsideAxisAlignedRectangle(Rect, Point);
+
+	//Returns true if the input rects are overlaping
 	bool CheckRectCollision(const Rect&, const Rect&);
 
+	//Returns a Point with the minimum values of the two input Points
 	Point GetMinPoint(Point, Point);
+
+	//Returns a Point with the maximum values of the two input Points
 	Point GetMaxPoint(Point, Point);
 }
 

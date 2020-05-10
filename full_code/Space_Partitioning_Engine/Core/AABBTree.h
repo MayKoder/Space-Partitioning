@@ -43,6 +43,7 @@ struct AABBNode
 	AABBNode();
 	~AABBNode();
 
+	//Initialize node data
 	void Init(AABBTree*, AABBNode*, int, int, int, int);
 
 	//Min and Max node positions that construct the rect
@@ -67,21 +68,28 @@ struct AABBNode
 
 	void SetRect(int, int, int, int);
 
+	//Returns the node rect
 	Rect GetRect() 
 	{ 
 			return {minPos.x, minPos.y, maxPos.x - minPos.x, maxPos.y - minPos.y};
 	}
+
+	//Returns a pointer to the node data list
 	std::list<Entity*>* GetData() 
 	{
 		return &data;
 	}
+
+	//Returns a copy of the node data list
 	std::list<Entity*> GetDataValue() 
 	{
 		return data;
 	}
 
-	//Updates the node points (min and max) with the data elements
+	//Updates the node min and max positions
 	void UpdateNode();
+
+	//Creates a node subdivision and distributes the old node data
 	static void SubDivide(AABBNode&);
 };
 
@@ -99,19 +107,25 @@ public:
 	//Display variable, debug info won't be rendered if this is false
 	bool displayTree;
 
-
+	//Initialize tree data
 	void Init(int, int, int, int);
-	//Adds a unit to the tree and manages subdivisions
+
+	//Adds a unit to the tree by positions and manages subdivisions
 	void AddUnitToTree(Entity&);
 
+	//Updates all tree nodes with recursivity
 	void UpdateAllNodes(AABBNode& node);
+
+	//Returns a pointer to the lowest node inside a point
 	AABBNode* FindLowestNodeInPoint(AABBNode*, const Point);
 
+	//Loads all the leaves in a list
 	void LoadLeavesToList(AABBNode*, std::list<AABBNode*>&);
+
+	//Loads all leaves inside the rect
 	void LoadLeafNodesInsideRect(AABBNode*, std::vector<AABBNode*>&, Rect& collider);
 
-	void DeleteDataElement(AABBNode&, Entity*);
-
+	//Deletes the tree if it’s a pointer
 	void Clear();
 
 };

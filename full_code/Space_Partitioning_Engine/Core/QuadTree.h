@@ -41,6 +41,7 @@ struct QuadNode
 	QuadNode();
 	~QuadNode();
 
+	//Initialize node data
 	void Init(QuadTree*, QuadNode*, int, int, int, int);
 
 	//Positions
@@ -58,11 +59,16 @@ struct QuadNode
 	//Data
 	std::list<Entity*> data;
 
+	//Sets the rect info
 	void SetRect(int&, int&, int&, int&);
 
+	//Returns the node rect
 	Rect GetRect() { return {x, y, w, h}; };
+
+	//Return a pointer to the data list
 	const std::list<Entity*>* GetContent() { return &data; }
 
+	//Subdivides the tree X number of times
 	static void SubDivide(QuadNode&, int);
 };
 
@@ -73,6 +79,7 @@ public:
 	QuadTree();
 	~QuadTree();
 
+	//Initialize tree data
 	void Init(TreeType, int, int, int, int);
 
 	QuadNode baseNode;
@@ -85,15 +92,22 @@ public:
 	int lowest_height = 0;
 	QuadNode* lowestNode = nullptr;
 
+	//Adds an entity to the tree by positions and manages subdivisions
 	void AddEntityToNode(Entity&, Point);
 
+	//Loads all nodes overlaping with the point in a list
 	void LoadNodesToList(std::list<QuadNode*>*, QuadNode*, Point, Point);
+
+	//Finds the leaf inside a point
 	void FindLowestNodeInPoint(QuadNode*, const Point&);
 	
+	//Checks off axis rect overlap
 	static bool CheckNodeOverLap(Rect, Rect);
+
+	//Transforms input to isometric space
 	static Point CoordsToIsometricInt(Point, Point);
 
-	//Delete and free all the tree memory
+	//Deletes the tree if it’s a pointer
 	void Clear();
 
 };
