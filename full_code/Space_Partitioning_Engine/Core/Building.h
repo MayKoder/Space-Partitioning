@@ -18,8 +18,6 @@ public:
 
 private:
 
-	bool Awake(pugi::xml_node&);
-
 	//Settigns
 	int tileLenght;
 };

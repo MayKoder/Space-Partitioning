@@ -126,10 +126,6 @@ void QuadTree::LoadNodesToList(std::list<QuadNode*>* list, QuadNode* node, Point
 
 bool QuadTree::CheckNodeOverLap(Rect rect, Rect r)
 {
-	//OPT: Needs a big update, detection can't be hardcoded with a +350...
-	//Use off axis collision detection
-	//TODO: Use scale to avoid culling bugs when zooming in or out
-
 	if (r.x > rect.x && r.x < rect.x + rect.w && r.y > rect.y && r.y < rect.y + rect.h)
 		return true;
 
@@ -143,7 +139,6 @@ bool QuadTree::CheckNodeOverLap(Rect rect, Rect r)
 		return true;
 
 	return false;
-
 }
 
 Point QuadTree::CoordsToIsometricInt(Point input, Point tileSize) 
@@ -189,8 +184,8 @@ void QuadTree::AddEntityToNode(Entity& ent, Point p)
 	}
 }
 
-//This MUST return the lowest node, and you MUST remove the lowestNode variable
-//TODO: Adding an element also means adding it to parents
+//This CAN'T return the lowestNode and it must be a class variable because there is the option that a point is outside a node
+//and we can't return nullptr or node.
 void QuadTree::FindLowestNodeInPoint(QuadNode* node, const Point& p)
 {
 	Rect rect = node->GetRect();

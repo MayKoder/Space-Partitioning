@@ -44,6 +44,8 @@ public:
 		return {(float)x, (float)y};
 	}
 
+
+	//Cast operator override
 	operator Point() const
 	{
 		return {(int)x, (int)y };

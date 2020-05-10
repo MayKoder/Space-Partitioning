@@ -27,12 +27,6 @@ Building::~Building()
 {
 }
 
-bool Building::Awake(pugi::xml_node& a)
-{
-	int blitWidth = tileLenght * App->map->data.tile_width;
-	return true;
-}
-
 bool Building::Draw(float dt)
 {
 	App->render->Blit(tex, (int)position.x, (int)position.y - blitRect.y + 16, blitRect);

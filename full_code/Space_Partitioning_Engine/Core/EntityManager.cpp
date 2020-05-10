@@ -1,6 +1,5 @@
 #include "EntityManager.h"
 #include "Building.h"
-#include "j1Gui.h"
 #include "Unit.h"
 #include"j1Window.h"
 
@@ -26,9 +25,11 @@ bool EntityManager::Awake(pugi::xml_node& a)
 bool EntityManager::Start()
 {
 
+	//Debug texture loading
 	buildingTex = App->tex->Load("assets/buildings/GENHouse.png");
 	entTex = App->tex->Load("assets/units/Slime.png");
 
+	//QuadTree init
 	iPoint position;
 	iPoint size;
 	position = App->map->WorldToMap(0, 0);
@@ -69,36 +70,18 @@ bool EntityManager::Update(float dt)
 		}
 	}
 
-
-	iPoint p = App->map->GetMousePositionOnMap();
-
-	//Select unit
-	if (App->input->GetMouseButtonDown(2) == KEY_DOWN)
-	{
-		iPoint p;
-		App->input->GetMousePosition(p.x, p.y);
-		p = App->render->ScreenToWorld(p.x, p.y);
-
-		for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
-		{
-			if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
-			{
-				selectedUnit = (*it);
-				break;
-			}
-		}
-	}
-
+	//------- INPUTS ---------//
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
 		quadTree.displayTree = !quadTree.displayTree;
 		aabbTree.displayTree = !aabbTree.displayTree;
 	}
 
+	iPoint p = App->map->GetMousePositionOnMap();
 	if (IN_RANGE(p.x, 0, App->map->data.width - 1) == 1 && IN_RANGE(p.y, 0, App->map->data.height - 1) == 1)
 	{
-		//Create building with 1
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		//Create building
+		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		{
 			iPoint mouse = App->map->GetMousePositionOnMap();
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
@@ -106,8 +89,8 @@ bool EntityManager::Update(float dt)
 
 			App->entityManager->CreateBuildingEntity(mouse);
 		}
-		//Create unit with 2
-		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		//Create unit
+		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		{
 			iPoint mouse = App->map->GetMousePositionOnMap();
 			mouse = App->map->MapToWorld(mouse.x, mouse.y);
@@ -129,8 +112,8 @@ bool EntityManager::Update(float dt)
 			//	App->scene->aabbTree.UpdateAllNodes(App->scene->aabbTree.baseNode);
 			//}
 		}
-		//Fill map with units wirh 3
-		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) 
+		//Fill map with units
+		if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) 
 		{
 			for (int y = 1; y < App->map->data.height + 1; y++)
 			{
@@ -148,7 +131,24 @@ bool EntityManager::Update(float dt)
 
 	}
 
-	//Move units
+	//Select unit
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+	{
+		iPoint p;
+		App->input->GetMousePosition(p.x, p.y);
+		p = App->render->ScreenToWorld(p.x, p.y);
+
+		for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
+		{
+			if (MaykMath::IsPointInsideAxisAlignedRectangle((*it)->getCollisionMathRect(), p))
+			{
+				selectedUnit = (*it);
+				break;
+			}
+		}
+	}
+
+	//------- Unit movement ---------//
 	if (selectedUnit) 
 	{
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -189,18 +189,22 @@ bool EntityManager::PostUpdate()
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
 
-	//Solutin
+	//Tree collision detection
 	for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	{
+
+		//Get the nodes to check inside this unit position
 		std::vector<AABBNode*> nodesToCheck;
 		aabbTree.LoadLeafNodesInsideRect(&aabbTree.baseNode, nodesToCheck, (*it)->getCollisionMathRect());
 
-		//TIME: This takes almost no time
+		//Iterate all nodes
 		for (int i = 0; i < nodesToCheck.size(); i++)
 		{
+
+			//Iterate all data in that node
 			for (std::list<Entity*>::iterator it2 = nodesToCheck[i]->data.begin(); it2 != nodesToCheck[i]->data.end(); it2++)
 			{
-				//Calculte collisions
+				//Check for collisions
 				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
 				{
 					//LOG("Collision");
@@ -210,35 +214,43 @@ bool EntityManager::PostUpdate()
 				}
 			}
 		}
+
+		//Clear the node vector
 		nodesToCheck.clear();
 
-		//Check with every building if its close
-		fPoint lmao[4];
-		lmao[0] = (*it)->position;
-		lmao[1] = { (*it)->position.x, (*it)->position.y - (*it)->blitRect.y};
-		lmao[2] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y};
-		lmao[3] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y - (*it)->blitRect.y };
+		//Units can collide with buildings, so we use the QuadTree to check that
+		fPoint points[4];
+		points[0] = (*it)->position;
+		points[1] = { (*it)->position.x, (*it)->position.y - (*it)->blitRect.y};
+		points[2] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y};
+		points[3] = { (*it)->position.x + (*it)->blitRect.x, (*it)->position.y - (*it)->blitRect.y };
 
-		int a = 0;
-		for (int i = 0; i < 4; i++)
+		int checks = 0;
+
+		//Iterate all 4 points
+		for (int i = 0; i < sizeof(points) / sizeof(fPoint); i++)
 		{
-			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, lmao[i]);
 
+			//Find the lowest node in this point
+			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, points[i]);
 			if (quadTree.lowestNode)
 			{
+
+				//Check every data element in this node
 				for (std::list<Entity*>::iterator it2 = quadTree.lowestNode->data.begin(); it2 != quadTree.lowestNode->data.end(); it2++)
 				{
-					App->render->DrawLine((int)lmao[i].x, (int)lmao[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
+					App->render->DrawLine((int)points[i].x, (int)points[i].y, (int)(*it2)->position.x, (int)(*it2)->position.y, 255, 0, 0);
 					//if ((*it2)->position.DistanceNoSqrt(lmao[i]) <= 20000)
 					//{
 
 					//}
 
+					//Check if they are colliding
 					if (MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionAsrect())) 
 					{
 						//
 					}
-					a++;
+					checks++;
 				}
 
 				quadTree.lowestNode = nullptr;
@@ -248,12 +260,15 @@ bool EntityManager::PostUpdate()
 
 	}
 
-	////BruteForce
+	//BruteForce
+	////Iterate every entity
 	//for (std::list<Entity*>::iterator A = entities[EntityType::UNIT].begin(); A != entities[EntityType::UNIT].end(); A++)
 	//{
+
+	//	//Check with every other entity
 	//	for (std::list<Entity*>::iterator B = entities[EntityType::UNIT].begin(); B != entities[EntityType::UNIT].end(); B++)
 	//	{
-	//		//Calculte collisions
+	//		//Check collisions
 	//		if (A._Ptr->_Myval != B._Ptr->_Myval && MaykMath::CheckRectCollision((*A)->getCollisionMathRect(), (*B)->getCollisionMathRect()))
 	//		{
 	//			LOG("Collision");
@@ -346,9 +361,8 @@ Entity* EntityManager::CreateBuildingEntity(iPoint pos)
 
 	//Figure lowest node out
 	quadTree.FindLowestNodeInPoint(&quadTree.baseNode, {pos.x, pos.y});
-	QuadNode* node = quadTree.lowestNode;
 
-	for (std::list<Entity*>::iterator it = node->data.begin(); it != node->data.end(); it++)
+	for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin(); it != quadTree.lowestNode->data.end(); it++)
 	{
 		if (App->map->WorldToMap(pos.x + App->map->data.tile_width / 2, pos.y) == App->map->WorldToMap((*it)->position.x + App->map->data.tile_width / 2, (*it)->position.y))
 		{

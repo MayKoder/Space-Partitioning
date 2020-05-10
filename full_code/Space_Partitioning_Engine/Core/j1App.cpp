@@ -10,8 +10,6 @@
 #include "j1Textures.h"
 #include "j1Scene.h"
 #include "j1Map.h"
-#include "j1Fonts.h"
-#include "j1Gui.h"
 #include "EntityManager.h"
 #include "j1App.h"
 
@@ -27,8 +25,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	scene = new j1Scene();
 	map = new j1Map();
-	font = new j1Fonts();
-	gui = new j1Gui();
 	entityManager = new EntityManager();
 
 	// Ordered for awake / Start / Update
@@ -37,13 +33,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(map);
-	AddModule(font);
 
 
 	// scene last
 	AddModule(scene);
-
-	AddModule(gui);
 
 	// entities
 	AddModule(entityManager);

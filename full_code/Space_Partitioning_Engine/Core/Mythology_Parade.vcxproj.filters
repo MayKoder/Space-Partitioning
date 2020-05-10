@@ -37,12 +37,6 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="j1Fonts.cpp">
-      <Filter>Core\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Gui.cpp">
-      <Filter>Core\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>Core\Tools\Trees</Filter>
     </ClCompile>
@@ -107,12 +101,6 @@
     </ClInclude>
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Fonts.h">
-      <Filter>Core\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Gui.h">
-      <Filter>Core\Modules</Filter>
     </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Core\Tools\Trees</Filter>

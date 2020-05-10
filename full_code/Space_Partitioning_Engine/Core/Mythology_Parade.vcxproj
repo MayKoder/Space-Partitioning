@@ -79,8 +79,6 @@
     <ClCompile Include="AABBTree.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="j1Fonts.cpp" />
-    <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Input.cpp" />
@@ -102,8 +100,6 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="j1Fonts.h" />
-    <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="MaykMath.h" />

@@ -6,8 +6,6 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Gui.h"
-#include "j1Fonts.h"
 #include "EntityManager.h"
 #include "j1Scene.h"
 

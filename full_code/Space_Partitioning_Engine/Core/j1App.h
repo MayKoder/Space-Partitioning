@@ -15,8 +15,6 @@ class j1Render;
 class j1Textures;
 class j1Scene;
 class j1Map;
-class j1Fonts;
-class j1Gui;
 class EntityManager;
 
 class j1App
@@ -83,8 +81,6 @@ public:
 	j1Textures*			tex = NULL;
 	j1Scene*			scene = NULL;
 	j1Map*				map = NULL;
-	j1Fonts*			font = NULL;
-	j1Gui*				gui = NULL;
 	EntityManager*		entityManager = NULL;
  
 	bool				restart_scene = false;

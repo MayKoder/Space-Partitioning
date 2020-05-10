@@ -9,7 +9,6 @@
 #include "PugiXml\src\pugixml.hpp"
 
 class j1App;
-class UI;
 
 class j1Module
 {
@@ -60,11 +59,6 @@ public:
 	virtual bool CleanUp()
 	{
 		return true;
-	}
-
-	virtual void OnClick(UI* element, float argument = -1)
-	{
-
 	}
 
 	void Disable(){
