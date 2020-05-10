@@ -525,3 +525,10 @@ This can be used if we are storing only one type of object in our trees, and wil
  - [Medieval Building 01 - Bleed's Game Art](https://opengameart.org/content/medieval-building-01-bleeds-game-art-0)
  - [DOOM under the hood](https://www.youtube.com/watch?v=e0W65ScZmQw)
  - [Fantasy isometric tileset](https://pixelation.org/index.php?topic=15067.0)
+  - [Introductory Guide to AABB Tree Collision Detection](https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/)
+ - [Binary Search Trees](https://brilliant.org/wiki/binary-search-trees/)
+ - [Binary Trees by Nick Parlante](http://cslibrary.stanford.edu/110/BinaryTrees.html)
+  - [Binary Trees](https://www.codesdope.com/blog/article/binary-trees/)
+ 
+ 
+ 
