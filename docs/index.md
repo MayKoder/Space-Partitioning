@@ -2,8 +2,6 @@ I am [Miquel Suau](https://www.linkedin.com/in/miquel-suau-gonz%C3%A0lez-346b561
 
 ---
 
-<br>
-
 # Index
 
  - [Why is Space Partitioning necessary](#why-is-space-partitioning-necessary)
