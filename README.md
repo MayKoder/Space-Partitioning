@@ -24,9 +24,9 @@ Now if you want to use the RELEASE version, these are the controls you need to k
 
 # Spawn objects
   
-   - You can spawn a building at the mouse cursor with the key F1.
-   - You can spawn a slime unit at the mouse cursor with the key F2.
-   - You can fill the map with slime units with the key F3.
+   - You can spawn a building at the cursor position with the F1 key.
+   - You can spawn a slime unit at the cursor position with the F2 key.
+   - You can fill the map with slime units with the F3 key.
    
 <br>
 
