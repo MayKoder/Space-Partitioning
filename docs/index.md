@@ -68,7 +68,7 @@ There are a lot of games using Space Partitioning these days, it's almost a "mus
 
 DOOM used a BSP (Binary Space Partitioning) tree to solve the VSD problem. This BSP allowed the DOOM developers to build complex 3D maps that could be rendered in real with slow PC's.
 
-Wolfenstein in the other hand used a marching request method and build the maps in a grid, making the rendering process fast enough for slow computers, but this also created a limiting factor on the level design aspect in the game.
+Wolfenstein in the other hand used a marching raycast method and build the maps in a grid, making the rendering process fast enough for slow computers, but this also created a limiting factor on the level design aspect in the game.
 
 You can read more about VSD and BSP [here](https://twobithistory.org/2019/11/06/doom-bsp.html).
 
