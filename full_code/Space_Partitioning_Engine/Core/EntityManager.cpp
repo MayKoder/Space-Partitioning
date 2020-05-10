@@ -183,7 +183,7 @@ bool EntityManager::PostUpdate()
 	j1PerfTimer timer;
 	double startTimer = timer.ReadMs();
 
-	////TODO 7: Test collision detection in Debug and Release mode
+	//TODO 7: Test collision detection in Debug and Release mode
 	//for (std::list<Entity*>::iterator it = entities[EntityType::UNIT].begin(); it != entities[EntityType::UNIT].end(); it++)
 	//{
 
@@ -210,7 +210,7 @@ bool EntityManager::PostUpdate()
 
 	//	//Units can collide with buildings, so we use the QuadTree to check that
 
-	//  //TODO 8: Test unit to building collision
+	//	//TODO 8: Test unit to building collision
 	//	fPoint points[4];
 	//	points[0] = (*it)->position;
 	//	points[1] = { (*it)->position.x, (*it)->position.y - (*it)->blitRect.y};
