@@ -282,7 +282,7 @@ Now, first off, we need to initialize the QuadTree, AABBTree does **not** need i
 
 _Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._
 
-_map->data.width is the number of tiles, map->data.tile_width is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_
+_Map->data.width is the number of tiles, map->data.tile_width is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_
 
 You can look up to find out how the Init method works, but its really simple, just set the map type, the starting X and Y and the width  and height in pixels.
 	
