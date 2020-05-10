@@ -12,7 +12,6 @@
 #include<vector>
 #include <algorithm>
 
-//Can delete
 #include "j1Scene.h"
 #include"j1Textures.h"
 #include"MaykMath.h"
