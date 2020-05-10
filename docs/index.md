@@ -278,11 +278,11 @@ AABBTree aabbTree;
 
 **_TODO 1.2: Initialize quadTree:_**
 
-Now, first off, we need to initialize the QuadTree, AABBTree does NOT need initialization because it's dynamic.
+Now, first off, we need to initialize the QuadTree, AABBTree does **not** need initialization because it's dynamic.
 
-_TIP: Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._
+_Don't get fooled, {0, 0} in orthographic is not the same as {0, 0} in isometric. Trees work in pixels not in isometric._
 
-_TIP 2: App->map->data.width is the NUMBER of tiles,  "App->map->data.tile_width" is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_
+_map->data.width is the number of tiles, map->data.tile_width is the size of an individual tile. And maybe you need to add half a tile width to the tree X. ;)_
 
 You can look up to find out how the Init method works, but its really simple, just set the map type, the starting X and Y and the width  and height in pixels.
 	
@@ -323,7 +323,7 @@ Now let's do the same with DrawQuadTree(), we have two types of render, OFF AXIS
 
 I'll let the code commented here, so you just need to look at it, but try to understand what each DrawLine() means, basic vector knowledge should be enough. You also need to add the recursive part of the method, which is the same for loop as the DrawAABBTree() method but with QUADNODE_CHILD_NUMBER.
 
-**_TIP: Remember to check if the node.isDivided is true before rendering the  children, if the node is not divided, there is no  child to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
+**_Remember to check if the node.isDivided is true before rendering the  children, if the node is not divided, there is no  child to render and the code will fail. Also this for loop needs to be called AFTER we render the current node._**
 
 
 You will know if you initialize the trees correctly if it does look like this, if not, maybe you are using the wrong numbers.
