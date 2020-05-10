@@ -4,6 +4,31 @@ I am [Miquel Suau](https://www.linkedin.com/in/miquel-suau-gonz%C3%A0lez-346b561
 
 <br>
 
+# Index
+
+ - [Why is Space Partitioning necessary](#why-is-space-partitioning-necessary)
+ 
+ - [Different approaches by different games](#different-approaches-by-different-games)
+ 
+ - [How can we solve this problem](#how-can-we-solve-this-problem)
+ 
+ - [Custom trees documentation](#custom-trees-documentation)
+ 
+ - [Links to more documentation](#links-to-more-documentation)
+ 
+ - [C++ Implementation](#lets-code-c-implementation)
+ 
+ - [Homework](#homework)
+ 
+ - [Explanation of any other improvements on the system](#explanation-of-any-other-improvements-on-the-system)
+ 
+ - [Sources](#sources)
+
+
+---
+
+<br>
+
 # Why is Space Partitioning necessary
 
 Let's set up a context, let's say you have 100 objects in a scene, and some are really close, some are really far away. We as humans who can see distances, instinctively only look around an object to check if something is colliding with it, right?
