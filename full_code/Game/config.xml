@@ -1,0 +1,35 @@
+<!-- Config file for the game -->
+
+<config>
+  <app>
+    <title>Space Partitioning</title>
+    <organization>MayKoder</organization>
+  </app>
+	
+  <renderer>
+    <vsync value="false"/>
+  </renderer>
+
+  <window>
+    <resolution width="1280" height="720" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <gui>
+    <atlas_0 file="gui/ui.png"/>
+    <atlas_1 file="gui/Portaits.png"/>
+  </gui>
+
+  <fonts>
+    <default_font file="fonts/cinzel_family/Cinzel/Cinzel-Regular.ttf"/>
+  </fonts>
+  
+  <map>
+    <folder>maps/</folder>
+  </map>
+  
+
+</config>
