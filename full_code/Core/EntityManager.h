@@ -66,6 +66,7 @@ public:
 	void DrawEverything();
 
 	static bool IsPointInsideQuad(SDL_Rect rect, int x, int y);
+	SDL_Rect SDLRectToMaykRect(Rect r);
 
 public:
 

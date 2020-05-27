@@ -129,6 +129,64 @@ bool EntityManager::Update(float dt)
 			}
 		}
 
+		//Delete Building
+		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		{
+			iPoint mouse = App->map->GetMousePositionOnMap();
+			mouse = App->map->MapToWorld(mouse.x, mouse.y);
+
+			mouse.x += App->map->data.tile_width / 2;
+			mouse.y += App->map->data.tile_height / 2;
+
+			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, mouse);
+
+			for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin() ; it != quadTree.lowestNode->data.end(); it++)
+			{
+				if (IsPointInsideQuad((*it)->getCollisionRect(), mouse.x, mouse.y)) 
+				{
+					//Delete building
+
+					quadTree.lowestNode->data.remove((*it));
+
+					QuadNode* parent = quadTree.lowestNode->parent;
+
+					bool isEmpty = true;
+
+					//Same as aabbTree, you need to check if every possible child inside a child is empty before merging
+					if (parent) 
+					{
+						for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+						{
+							if (parent->childNodes[i].data.size() > 0)
+							{
+								isEmpty = false;
+							}
+						}
+
+						if (isEmpty && parent != nullptr)
+						{
+							for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+							{
+								parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+								parent->childNodes[i].data.clear();
+							}
+
+							parent->isDivided = false;
+							parent->childNodes.clear();
+							parent->childNodes.shrink_to_fit();
+
+						}
+					}
+
+					DeleteEntity((*it));
+
+				}
+			}
+
+
+			quadTree.lowestNode = nullptr;
+		}
+
 	}
 
 	//Select unit
@@ -167,6 +225,45 @@ bool EntityManager::Update(float dt)
 		{
 			selectedUnit->position.x -= 100.f * dt;
 		}
+
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) 
+		{
+			//Delete from AABBtree
+			AABBNode* node = aabbTree.FindLowestNodeInPoint(&aabbTree.baseNode, static_cast<Point>(selectedUnit->position));
+
+			node->data.remove(selectedUnit);
+			
+			if (node->data.size() <= 0)
+			{
+				AABBNode* parent = node->parent;
+
+				//if (parent) 
+				//{
+				//	for (int i = 0; i < parent->childNodes.size(); i++)
+				//	{
+				//		if (parent->childNodes[i].data.size() > 0)
+				//		{
+				//			//parent->data.merge(parent->childNodes[i].data);
+				//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+
+				//			parent->childNodes[i].data.clear();
+				//		}
+				//	}
+				//}
+
+				//parent->isDivided = false;
+				//parent->childNodes.clear();
+				//parent->childNodes.shrink_to_fit();
+
+
+			}
+
+			//Delete from world
+			DeleteEntity(selectedUnit);
+			selectedUnit = nullptr;
+
+		}
+
 	}
 
 	//TODO 3: Make sure to update all the AABBTree nodes
@@ -202,6 +299,8 @@ bool EntityManager::PostUpdate()
 				if (it._Ptr->_Myval != it2._Ptr->_Myval && MaykMath::CheckRectCollision((*it)->getCollisionMathRect(), (*it2)->getCollisionMathRect()))
 				{
 					//LOG("Unit to unit collision");
+					fPoint direction = (*it)->position - (*it2)->position;
+					(*it2)->position -= fPoint::Normalize(direction);
 				}
 			}
 		}
@@ -381,6 +480,7 @@ bool EntityManager::DeleteEntity(Entity* e)
 	{
 		entities[e->type].remove(e);
 		delete e;
+
 		return true;
 	}
 	return false;
@@ -398,4 +498,9 @@ bool EntityManager::IsPointInsideQuad(SDL_Rect rect, int x, int y)
 		return true;
 
 	return false;
+}
+
+SDL_Rect EntityManager::SDLRectToMaykRect(Rect r)
+{
+	return {r.x, r.y, r.w, r.h};
 }

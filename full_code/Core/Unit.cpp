@@ -27,6 +27,9 @@ bool Unit::Update(float dt)
 	collisionRect.x = (int)position.x;
 	collisionRect.y = (int)position.y;
 
+
+	App->render->DrawQuad({ getMiddlePoint().x, getMiddlePoint().y, 3, 3}, 255, 255, 0);
+
 	//Return
 	return ret;
 }

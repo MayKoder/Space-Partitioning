@@ -91,6 +91,11 @@ public:
 		return {collisionRect.x, collisionRect.y + collisionRect.h, collisionRect.w, -collisionRect.h};
 	}
 
+	iPoint getMiddlePoint()
+	{
+		return { collisionRect.x + (collisionRect.w / 2), collisionRect.y + (collisionRect.h / 2)};
+	}
+
 protected:
 	SDL_Rect collisionRect;
 };
