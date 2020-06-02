@@ -148,35 +148,35 @@ bool EntityManager::Update(float dt)
 
 					quadTree.lowestNode->data.remove((*it));
 
-					QuadNode* parent = quadTree.lowestNode->parent;
+					//QuadNode* parent = quadTree.lowestNode->parent;
 
-					bool isEmpty = true;
+					//bool isEmpty = true;
 
-					//Same as aabbTree, you need to check if every possible child inside a child is empty before merging
-					if (parent) 
-					{
-						for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-						{
-							if (parent->childNodes[i].data.size() > 0)
-							{
-								isEmpty = false;
-							}
-						}
+					////Same as aabbTree, you need to check if every possible child inside a child is empty before merging
+					//if (parent) 
+					//{
+					//	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+					//	{
+					//		if (parent->childNodes[i].data.size() > 0)
+					//		{
+					//			isEmpty = false;
+					//		}
+					//	}
 
-						if (isEmpty && parent != nullptr)
-						{
-							for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-							{
-								parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
-								parent->childNodes[i].data.clear();
-							}
+					//	if (isEmpty && parent != nullptr)
+					//	{
+					//		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+					//		{
+					//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+					//			parent->childNodes[i].data.clear();
+					//		}
 
-							parent->isDivided = false;
-							parent->childNodes.clear();
-							parent->childNodes.shrink_to_fit();
+					//		parent->isDivided = false;
+					//		parent->childNodes.clear();
+					//		parent->childNodes.shrink_to_fit();
 
-						}
-					}
+					//	}
+					//}
 
 					DeleteEntity((*it));
 
