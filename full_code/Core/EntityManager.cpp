@@ -130,62 +130,62 @@ bool EntityManager::Update(float dt)
 		}
 
 		//Delete Building
-		if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
-		{
-			iPoint mouse = App->map->GetMousePositionOnMap();
-			mouse = App->map->MapToWorld(mouse.x, mouse.y);
+		//if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		//{
+		//	iPoint mouse = App->map->GetMousePositionOnMap();
+		//	mouse = App->map->MapToWorld(mouse.x, mouse.y);
 
-			mouse.x += App->map->data.tile_width / 2;
-			mouse.y += App->map->data.tile_height / 2;
+		//	mouse.x += App->map->data.tile_width / 2;
+		//	mouse.y += App->map->data.tile_height / 2;
 
-			quadTree.FindLowestNodeInPoint(&quadTree.baseNode, mouse);
+		//	quadTree.FindLowestNodeInPoint(&quadTree.baseNode, mouse);
 
-			for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin() ; it != quadTree.lowestNode->data.end(); it++)
-			{
-				if (IsPointInsideQuad((*it)->getCollisionRect(), mouse.x, mouse.y)) 
-				{
-					//Delete building
+		//	for (std::list<Entity*>::iterator it = quadTree.lowestNode->data.begin() ; it != quadTree.lowestNode->data.end(); it++)
+		//	{
+		//		if (IsPointInsideQuad((*it)->getCollisionRect(), mouse.x, mouse.y)) 
+		//		{
+		//			//Delete building
 
-					quadTree.lowestNode->data.remove((*it));
+		//			quadTree.lowestNode->data.remove((*it));
 
-					//QuadNode* parent = quadTree.lowestNode->parent;
+		//			//QuadNode* parent = quadTree.lowestNode->parent;
 
-					//bool isEmpty = true;
+		//			//bool isEmpty = true;
 
-					////Same as aabbTree, you need to check if every possible child inside a child is empty before merging
-					//if (parent) 
-					//{
-					//	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-					//	{
-					//		if (parent->childNodes[i].data.size() > 0)
-					//		{
-					//			isEmpty = false;
-					//		}
-					//	}
+		//			////Same as aabbTree, you need to check if every possible child inside a child is empty before merging
+		//			//if (parent) 
+		//			//{
+		//			//	for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+		//			//	{
+		//			//		if (parent->childNodes[i].data.size() > 0)
+		//			//		{
+		//			//			isEmpty = false;
+		//			//		}
+		//			//	}
 
-					//	if (isEmpty && parent != nullptr)
-					//	{
-					//		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
-					//		{
-					//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
-					//			parent->childNodes[i].data.clear();
-					//		}
+		//			//	if (isEmpty && parent != nullptr)
+		//			//	{
+		//			//		for (int i = 0; i < QUADNODE_CHILD_NUMBER; i++)
+		//			//		{
+		//			//			parent->data.insert(parent->data.end(), parent->childNodes[i].data.begin(), parent->childNodes[i].data.end());
+		//			//			parent->childNodes[i].data.clear();
+		//			//		}
 
-					//		parent->isDivided = false;
-					//		parent->childNodes.clear();
-					//		parent->childNodes.shrink_to_fit();
+		//			//		parent->isDivided = false;
+		//			//		parent->childNodes.clear();
+		//			//		parent->childNodes.shrink_to_fit();
 
-					//	}
-					//}
+		//			//	}
+		//			//}
 
-					DeleteEntity((*it));
+		//			DeleteEntity((*it));
 
-				}
-			}
+		//		}
+		//	}
 
 
-			quadTree.lowestNode = nullptr;
-		}
+		//	quadTree.lowestNode = nullptr;
+		//}
 
 	}
 
