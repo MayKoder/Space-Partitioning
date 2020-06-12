@@ -24,6 +24,7 @@
 #define _MAYKMATH_H_
 
 #define ABS(N) ( (N < 0) ? -(N) : (N))
+#define MAX(A, B) ( (A > B) ? (A) : (B) )
 
 enum TreeType
 {
@@ -107,6 +108,9 @@ namespace MaykMath
 
 	//Returns a Point with the maximum values of the two input Points
 	Point GetMaxPoint(Point, Point);
+
+	//Checks collisions between AA circle and rectangle
+	bool CircleToRectCollision(Point, float, Rect);
 }
 
 

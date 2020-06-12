@@ -16,7 +16,7 @@ enum class EntityType
 class Entity
 {
 public:
-	Entity(/*EntityTypes type*/) : tex(nullptr)
+	Entity(/*EntityTypes type*/) : tex(nullptr), range(0.f)
 	{
 
 	}
@@ -75,6 +75,9 @@ public:
 
 	//W and H for the blit
 	iPoint blitRect;
+
+	//Detection range
+	float range;
 
 	SDL_Rect getCollisionRect()
 	{

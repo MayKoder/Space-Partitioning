@@ -102,6 +102,8 @@ bool j1Scene::Update(float dt)
 		App->render->Blit(debugBlue_tex, p.x, p.y);
 	}
 
+	App->render->DrawCircle(0, 0, 50, 255, 0, 0, 255, false);
+
 	return true;
 }
 

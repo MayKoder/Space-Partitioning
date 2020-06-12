@@ -90,3 +90,10 @@ Point MaykMath::GetMaxPoint(Point A, Point B)
 
 	return temp;
 }
+
+bool MaykMath::CircleToRectCollision(Point circleCenter, float circleRadius, Rect r)
+{
+	float dx = MAX(circleCenter.x - r.x, (r.x+r.w) - circleCenter.x);
+	float dy = MAX(circleCenter.y - r.y, (r.y + r.h) - circleCenter.y);
+	return circleRadius * circleRadius >= dx * dx + dy * dy;
+}

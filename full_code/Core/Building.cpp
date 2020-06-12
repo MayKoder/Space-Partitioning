@@ -6,6 +6,7 @@ Building::Building() : tileLenght(0)
 
 	spriteRect = {0, 0, 0, 0};
 	blitRect = {0, 0};
+	range = 50.f;
 
 	collisionRect = { (int)position.x, (int)position.y + ((App->map->data.tile_height / 2) * tileLenght), blitRect.x, -blitRect.y};
 }
@@ -30,5 +31,9 @@ Building::~Building()
 bool Building::Draw(float dt)
 {
 	App->render->Blit(tex, (int)position.x, (int)position.y - blitRect.y + 16, blitRect);
+	if (range != 0.f) 
+	{
+		App->render->DrawCircle(position.x, position.y, range, 0, 255, 0);
+	}
 	return true;
 }

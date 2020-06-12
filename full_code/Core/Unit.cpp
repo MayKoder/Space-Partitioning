@@ -7,6 +7,7 @@ Unit::Unit()
 {
 	collisionRect = { 0, 0, 30, -55 };
 	position = {(float)0, (float)0};
+	range = 20.f;
 }
 
 void Unit::Init(iPoint pos) 
@@ -38,6 +39,9 @@ bool Unit::Draw(float dt)
 {
 	//App->render->DrawQuad({(int)position.x, (int)position.y, blitRect.x, -blitRect.y}, 255, 255, 255);
 	App->render->Blit(tex, (int)position.x, (int)position.y - blitRect.y, blitRect);
-	//App->render->DrawQuad(collisionRect, 255, 0, 0, 50);
+	if (range != 0.f)
+	{
+		App->render->DrawCircle(getMiddlePoint().x, getMiddlePoint().y, range, 0, 255, 0);
+	}
 	return true;
 }
