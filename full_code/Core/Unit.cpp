@@ -7,7 +7,7 @@ Unit::Unit()
 {
 	collisionRect = { 0, 0, 30, -55 };
 	position = {(float)0, (float)0};
-	range = 20.f;
+	range = 100.f;
 }
 
 void Unit::Init(iPoint pos) 

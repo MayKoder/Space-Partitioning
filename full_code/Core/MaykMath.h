@@ -24,7 +24,9 @@
 #define _MAYKMATH_H_
 
 #define ABS(N) ( (N < 0) ? -(N) : (N))
-#define MAX(A, B) ( (A > B) ? (A) : (B) )
+#define MAX(a, b) (a < b) ? b : a;
+
+#include <cmath>
 
 enum TreeType
 {

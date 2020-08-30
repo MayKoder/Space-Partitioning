@@ -93,7 +93,30 @@ Point MaykMath::GetMaxPoint(Point A, Point B)
 
 bool MaykMath::CircleToRectCollision(Point circleCenter, float circleRadius, Rect r)
 {
-	float dx = MAX(circleCenter.x - r.x, (r.x+r.w) - circleCenter.x);
-	float dy = MAX(circleCenter.y - r.y, (r.y + r.h) - circleCenter.y);
-	return circleRadius * circleRadius >= dx * dx + dy * dy;
+	//float dx = MAX(circleCenter.x - r.x, (r.x+r.w) - circleCenter.x);
+	//float dy = MAX(circleCenter.y - r.y, (r.y + r.h) - circleCenter.y);
+	//return circleRadius * circleRadius >= dx * dx + dy * dy;
+
+	  // temporary variables to set edges for testing
+	float testX = circleCenter.x;
+	float testY = circleCenter.y;
+
+	// which edge is closest?
+	if (circleCenter.x < r.x)           testX = r.x;      // test left edge
+	else if (circleCenter.x > r.x + r.w) testX = r.x + r.w;   // right edge
+	if (circleCenter.y < r.y)           testY = r.y;      // top edge
+	else if (circleCenter.y > r.y + r.h) testY = r.y + r.h;   // bottom edge
+
+	// get distance from closest edges
+	float distX = circleCenter.x - testX;
+	float distY = circleCenter.y - testY;
+	float distance = std::sqrt((distX*distX) + (distY*distY));
+
+	// if the distance is less than the radius, collision!
+	if (distance <= circleRadius)
+	{
+		return true;
+	}
+	return false;
+
 }

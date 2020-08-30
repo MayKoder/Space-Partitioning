@@ -342,6 +342,16 @@ bool EntityManager::PostUpdate()
 						//LOG("Unit to building collision");
 					}
 					checks++;
+
+
+					Point p = { (int)(*it2)->position.x + ((*it2)->getCollisionRect().w / 2), (int)(*it2)->position.y }; //Is working ok
+					Rect rcl = { (int)(*it)->position.x , (int)(*it)->position.y + (*it)->getCollisionRect().h , (*it)->getCollisionRect().w, -(*it)->getCollisionRect().h }; // Is not working ok
+
+					if (MaykMath::CircleToRectCollision(p, (*it2)->range, rcl))
+					{
+						fPoint direction = (*it2)->position - (*it)->position;
+						(*it)->position -= fPoint::Normalize(direction);
+					}
 				}
 
 				quadTree.lowestNode = nullptr;

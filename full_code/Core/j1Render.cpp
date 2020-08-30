@@ -359,11 +359,13 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	SDL_Point points[360];
 
 	float factor = (float)M_PI / 180.0f;
+	x = (camera.x + x * scale);
+	y = (camera.y + y * scale);
 
 	for (uint i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)((camera.x * 1.f) + x * scale) + (x + radius * cos(i * factor));
-		points[i].y = (int)((camera.y * 1.f) + y * scale) + (y + radius * sin(i * factor));
+		points[i].x = static_cast<int>(x + radius * cos(i * factor));
+		points[i].y = static_cast<int>(y + radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
